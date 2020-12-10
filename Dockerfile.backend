@@ -1,0 +1,50 @@
+FROM alpine:3.11.2 as build-worker
+
+ENV PROJECT_ROOT .
+RUN mkdir $PROJECT_ROOT
+RUN mkdir -p /tmp && chmod 777 /tmp
+WORKDIR /$PROJECT_ROOT
+
+RUN apk --no-cache add openjdk11-jdk
+
+COPY ./gradle /gradle
+
+COPY ./buildSrc /buildSrc
+COPY ./build.gradle.kts \
+    ./gradle.properties \
+    ./settings.gradle.kts \
+    ./gradlew.bat \
+    ./detekt-config.yml \
+    ./gradlew /
+
+COPY ./common/src /common/src
+COPY ./common/build.gradle.kts \
+     /common/
+
+COPY ./backend/build.gradle.kts \
+    /backend/
+
+COPY ./model/build.gradle.kts \
+    /model/
+
+RUN ./gradlew assemble --no-daemon
+
+COPY ./.git /.git
+COPY ./backend/ /backend/
+
+#### first only processResources to prevent deleting version.properties
+RUN ./gradlew :backend:processResources --no-daemon
+
+RUN ./gradlew :backend:bootDistZip --no-daemon
+
+### Run
+FROM alpine:3.11.2
+
+RUN apk --no-cache add openjdk11-jre-headless
+
+COPY --from=build-worker /backend/build/distributions/backend-boot.zip /app/
+RUN unzip /app/backend-boot.zip -d /app && rm /app/backend-boot.zip
+
+WORKDIR /app/backend-boot/bin
+
+CMD /app/backend-boot/bin/backend

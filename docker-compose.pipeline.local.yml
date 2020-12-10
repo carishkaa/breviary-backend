@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  db:
+    env_file: .env
+  breviary-api:
+    env_file: .env
+    environment:
+      VERSION: local_pipeline_test
+      GIT_BRANCH: local_pipeline_test

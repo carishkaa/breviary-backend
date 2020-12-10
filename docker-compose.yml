@@ -1,33 +1,40 @@
-version: '3.8'
+version: "3.8"
 services:
   db:
-    container_name: breviary-db
     image: postgres:13.0
-    env_file:
-      - .env
+    container_name: breviary-db
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    expose:
+      - 5433
     ports:
-      - 5452:5432
-    volumes:
-      - breviary-db:/var/lib/postgresql/data/
+      - 5433:5432
     networks:
-      - breviary-network
+      - breviary
+    volumes:
+      - db-data:/var/lib/postgresql/data
 
-  backend:
-    container_name: breviary-backend
-    image: mildblue/breviary
-    env_file:
-      - .env
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.backend
+    image: breviary-api
+    container_name: breviary-api
+    env_file: .env
+    environment:
+      PORT: 80
     ports:
-      - 8090:8080
-    restart: always
+      - 8081:80
     depends_on:
       - db
     networks:
-      - breviary-network
-
-volumes:
-  breviary-db:
+      - breviary
 
 networks:
-  breviary-network:
+  breviary:
     driver: bridge
+
+volumes:
+  db-data:

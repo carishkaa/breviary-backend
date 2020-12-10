@@ -1,51 +1,57 @@
-.PHONY: help
+-include .env
+export
 
-.DEFAULT: help
-help:
-	@echo "TODO"
+pipeline-local:
+	docker build . -f ./backend/Dockerfile --target build-worker -t breviary-api
+	docker run --rm breviary-api ./gradlew detekt
+	docker-compose -f docker-compose.pipeline.yml -f docker-compose.pipeline.local.yml up --abort-on-container-exit breviary-api
+	docker-compose -f docker-compose.pipeline.yml -f docker-compose.pipeline.local.yml down
 
-CONDA_ENV=breviary
+detekt:
+	./gradlew detekt
 
-# creates environment from the file
-conda-create:
-	conda env create -f conda.yml --name $(CONDA_ENV)
+docker-login:
+	TODO
 
-# exports all changes made locally - then one must copy the changes to conda.yml
-conda-export:
-	conda env export --from-history
+docker-up: docker-login
+	docker-compose up --build
 
-# updates environment when some changes were applied to the file
-conda-update:
-	conda env update --file conda.yml --prune --name $(CONDA_ENV)
+docker-purge:
+	docker-compose down
+	docker volume rm breviary_db-data
 
-# does not actually work, has to be called manually
-conda-activate:
-	conda activate $(CONDA_ENV)
+backend-up: docker-login
+	docker-compose up api
 
-db:
-	docker-compose up -d db
+docker-start-local-db:
+	 docker-compose -f docker-compose.yml up -d db
 
-run:
-	export FLASK_APP=backend.app:app; \
-	export FLASK_ENV=development; \
-	export FLASK_DEBUG=true; \
-	flask run --port=8080 --host=localhost
+docker-stop-local-db:
+	 docker-compose -f docker-compose.yml down db
 
-# get logs from the running service
-logs:
-	docker-compose -f docker-compose.yml logs --follow backend
+regenerate-types:
+	./gradlew --no-daemon :backend:cleanTest :backend:test --tests "blue.mild.breviary.backend.generators.GenerateSwaggerTest"
 
-clean-db:
-	docker-compose stop db || true
-	docker-compose rm -f db || true
-	docker volume rm breviary_breviary-db || true
-	docker-compose up -d db
+regenerate-localization-messages:
+	./gradlew --no-daemon :backend:cleanTest :backend:test --tests "blue.mild.breviary.backend.generators.GenerateLocalizationTest"
 
-build_and_push_worker:
-	. ./devops/build_and_push_to_dockerhub.sh && build_and_push_worker
+# Gitbook helper scripts.
+# Initialize Gitbook.
+book-init:
+	docker run -t -i --rm -v "${PWD}":/gitbook -w /gitbook/book billryan/gitbook:latest gitbook install
 
-build_and_push_backend:
-	. ./devops/build_and_push_to_dockerhub.sh && build_and_push_backend
+# Kills Gitbook
+book-kill:
+	docker kill tasp-paas-gitbook
 
-redeploy_staging:
-	. ./devops/redeploy_staging.sh
+# Run Gitbook as a website.
+book-serve: book-init
+	docker run -t -i --rm --name tasp-paas-gitbook -v "${PWD}":/gitbook -p 4000:4000 -p 35729:35729 -w /gitbook/book \
+		billryan/gitbook:latest gitbook serve
+
+# Generates Gitbook PDF version.
+book-pdf: book-init
+	docker run -t -i --rm -v "${PWD}":/gitbook -w /gitbook/book billryan/gitbook:latest gitbook pdf && \
+	cp "${PWD}/book/book.pdf" "${PWD}/book/breviary.pdf" && \
+	rm "${PWD}/book/book.pdf" && \
+	open "${PWD}/book/breviary.pdf"

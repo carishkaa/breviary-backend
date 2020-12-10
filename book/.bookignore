@@ -1,0 +1,12 @@
+../.*/
+../scripts
+../docker-compose.yml
+../Dockerfile.*
+../dockerImages
+../docs/*.pdf
+../Makefile
+../*.yml
+../common/venv
+../db/venv
+../image_recognition/venv
+../keys

@@ -1,0 +1,16 @@
+server.port: 8081
+
+#######################
+# FLYWAY properties
+#######################
+spring.flyway:
+  enabled: true
+  baselineOnMigrate: true
+
+#######################
+# DB properties
+#######################
+spring.datasource:
+  url: ${DB_URL:jdbc:postgresql://db:5432/postgres}
+  username: ${DB_USERNAME:postgres}
+  password: ${DB_PASSWORD:}
