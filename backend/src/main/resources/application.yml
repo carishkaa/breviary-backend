@@ -1,45 +1,65 @@
-server.port: ${PORT:8081}
-spring.data.rest.base-path: /api
 springfox.documentation.swagger.v2.path: /v2/api-docs
 
-spring.servlet.multipart:
-  max-file-size: 250MB
-  max-request-size: 250MB
-
 # Enable response compression
-server.compression:
-  enabled: true
-  mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json,image/jpeg,image/png,image/gif
-  min-response-size: 1024
-
-server.error.whitelabel.enabled: false # Disable Whitelabel Error Page
-
-#######################
-# FLYWAY properties
-#######################
-spring.flyway:
-  enabled: true
-  baselineOnMigrate: true
+server:
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json,image/jpeg,image/png,image/gif
+    min-response-size: 1024
+  port: ${PORT:8081}
+  error.whitelabel.enabled: false # Disable Whitelabel Error Page
 
 #######################
-# DB properties
+# Spring
 #######################
-spring.datasource:
-  url: ${DB_URL:jdbc:postgresql://db:5432/postgres}
-  username: ${DB_USERNAME}
-  password: ${DB_PASSWORD}
-  driver-class-name: org.postgresql.Driver
-
-spring.jpa:
-  properties.hibernate.jdbc.lob.non_contextual_creation: true
-  open-in-view: false
-  database-platform: org.hibernate.dialect.PostgreSQL9Dialect
-
 spring:
+  #######################
+  # FLYWAY properties
+  #######################
+  flyway:
+    enabled: true
+    baselineOnMigrate: true
+
+  #######################
+  # DB properties
+  #######################
+  datasource:
+    url: ${DB_URL:}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  #######################
+  # App properties
+  #######################
   application:
     name: ${APPLICATION_NAME:breviary}
     email: ${APPLICATION_EMAIL:}
     allowedOrigins: ${ALLOWED_ORIGINS:}
 
+  #######################
+  # JPA properties
+  #######################
+  jpa:
+    properties.hibernate.jdbc.lob.non_contextual_creation: true
+    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+
+  #######################
+  # Servlet properties
+  #######################
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  #######################
+  # REST properties
+  #######################
+  data:
+    rest:
+      base-path: /api
+
 management.endpoints.web.exposure.include: health
 management.endpoint.health.show-details: when_authorized
+

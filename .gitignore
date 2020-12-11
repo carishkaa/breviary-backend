@@ -29,6 +29,5 @@ client/types
 **/venv
 /Users/marekpolak/Projects/breviary/.idea/breviary.iml
 /backend/src/main/resources/application.properties
-/tasp-cli/
-!/tasp-cli/README.md
-!/tasp-cli/Makefile
+.env
+.env.breviary-dev
