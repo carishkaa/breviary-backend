@@ -1,7 +1,5 @@
 package blue.mild.breviary.backend.db.entities
 
-import org.hibernate.annotations.ResultCheckStyle
-import org.hibernate.annotations.SQLDelete
 import java.util.Objects
 import javax.persistence.CascadeType
 import javax.persistence.Column
@@ -15,7 +13,6 @@ import javax.persistence.Table
 import javax.persistence.UniqueConstraint
 
 @Entity
-@SQLDelete(sql = "UPDATE users SET deleted = now() WHERE id = ?", check = ResultCheckStyle.COUNT)
 @Table(
     name = "users",
     schema = "public",

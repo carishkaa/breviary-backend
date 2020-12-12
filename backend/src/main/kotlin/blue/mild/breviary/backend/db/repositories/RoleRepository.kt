@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository
 
 interface RoleRepository : CrudRepository<RoleEntity, Long> {
 
-    @Query("SELECT re from RoleEntity re WHERE re.name IN :names")
+    @Query("SELECT re FROM RoleEntity re WHERE re.name IN :names")
     fun findAllByName(names: Set<UserRole>): Iterable<RoleEntity>
 }

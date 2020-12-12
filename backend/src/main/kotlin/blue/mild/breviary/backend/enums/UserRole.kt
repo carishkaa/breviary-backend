@@ -6,6 +6,7 @@ package blue.mild.breviary.backend.enums
  */
 enum class UserRole {
     ADMINISTRATOR,
+    SERVICE,
     DOCTOR,
     NURSE
 }

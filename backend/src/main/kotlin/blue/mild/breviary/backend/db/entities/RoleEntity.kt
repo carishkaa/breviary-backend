@@ -1,6 +1,9 @@
 package blue.mild.breviary.backend.db.entities
 
 import blue.mild.breviary.backend.enums.UserRole
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.TypeDef
 import java.util.Objects
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -22,6 +25,10 @@ import javax.persistence.UniqueConstraint
         UniqueConstraint(columnNames = ["id"], name = "pk_roles__id")
     ]
 )
+@TypeDef(
+    name = "pgsql_enum",
+    typeClass = PostgreSQLEnumType::class
+)
 /**
  * RoleEntity.
  */
@@ -31,6 +38,7 @@ data class RoleEntity(
     @SequenceGenerator(name = "roles_generator", sequenceName = "roles_seq", allocationSize = 50)
     val id: Long = 0,
 
+    @Type(type = "pgsql_enum")
     @Column(name = "name", nullable = false, length = 512)
     @Enumerated(EnumType.STRING)
     val name: UserRole
