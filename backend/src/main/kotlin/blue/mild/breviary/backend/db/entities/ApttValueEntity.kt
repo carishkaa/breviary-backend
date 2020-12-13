@@ -32,7 +32,7 @@ data class ApttValueEntity(
     val id: Long = 0,
 
     @Column(name = "value", nullable = false)
-    val value: Int,
+    val value: Float,
 
     @ManyToOne
     @JoinColumn(
@@ -40,7 +40,15 @@ data class ApttValueEntity(
         nullable = false,
         foreignKey = ForeignKey(name = "fk_aptt_values__heparin_patients__patient_id")
     )
-    val heparinPatient: HeparinPatientEntity
+    val heparinPatient: HeparinPatientEntity,
+
+    @ManyToOne
+    @JoinColumn(
+        name = "created_by",
+        nullable = false,
+        foreignKey = ForeignKey(name = "fk_aptt_values__users__user_id")
+    )
+    val createdBy: UserEntity
 
 ) : BaseEntity() {
     override fun equals(other: Any?): Boolean {

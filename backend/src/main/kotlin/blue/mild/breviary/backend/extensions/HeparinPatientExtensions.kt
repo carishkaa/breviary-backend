@@ -12,9 +12,9 @@ import blue.mild.breviary.backend.utils.encodeID
 fun HeparinPatientEntity.toDtoOut(): HeparinPatientDtoOut = HeparinPatientDtoOut(
     id = this.id.encodeID("heparin-patient"),
     patient = this.patient.toDtoOut(),
-    targetApptLow = this.targetApptLow,
-    targetApptHigh = this.targetApptHigh,
-    solutionHeparinIu = this.solutionHeparinIu,
+    targetApttLow = this.targetApttLow,
+    targetApttHigh = this.targetApttHigh,
+    solutionHeparinUnits = this.solutionHeparinUnits,
     solutionMl = this.solutionMl,
     weight = this.weight
 )

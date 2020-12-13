@@ -1,20 +1,21 @@
 package blue.mild.breviary.backend.dtos
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.Instant
 
 /**
- * HeparinPatientDtoOut.
+ * HeparinRecommendationDto.
  */
-data class InsulinPatientDtoOut(
+data class HeparinRecommendationDto(
     @JsonProperty(required = true)
-    val id: String,
+    val dosageHeparinContinuous: Float,
 
     @JsonProperty(required = true)
-    val patient: PatientDtoOut,
+    val dosageHeparinBolus: Float,
 
     @JsonProperty(required = true)
-    val targetGlycemia: Float,
+    val nextRemainder: Instant,
 
     @JsonProperty(required = true)
-    val tddi: Float
+    val doctorWarning: String
 )

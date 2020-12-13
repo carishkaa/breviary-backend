@@ -32,15 +32,23 @@ data class InsulinDosageEntity(
     val id: Long = 0,
 
     @Column(name = "dosage_insulin", nullable = false)
-    val dosageInsulin: Int,
+    val dosageInsulin: Float,
 
     @ManyToOne
     @JoinColumn(
         name = "heparin_patient_id",
         nullable = false,
-        foreignKey = ForeignKey(name = "fk_insulin_dosages__heparin_patients__patient_id")
+        foreignKey = ForeignKey(name = "fk_insulin_dosages__insulin_patients__patient_id")
     )
-    val heparinPatient: HeparinPatientEntity
+    val insulinPatient: InsulinPatientEntity,
+
+    @ManyToOne
+    @JoinColumn(
+        name = "created_by",
+        nullable = false,
+        foreignKey = ForeignKey(name = "fk_insulin_dosages__users__user_id")
+    )
+    val createdBy: UserEntity
 
 ) : BaseEntity() {
     override fun equals(other: Any?): Boolean {

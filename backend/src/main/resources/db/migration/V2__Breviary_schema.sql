@@ -41,22 +41,19 @@ EXECUTE PROCEDURE set_updated();
 
 -- Create table heparin_patients
 
-CREATE SEQUENCE heparin_patients_seq INCREMENT 50;
-
 CREATE TABLE heparin_patients
 (
-    id                  BIGINT DEFAULT NEXTVAL('heparin_patients_seq') NOT NULL,
-    target_aptt_low     NUMERIC                                        NOT NULL,
-    target_aptt_high    NUMERIC                                        NOT NULL,
-    solution_heparin_iu NUMERIC                                        NOT NULL,
-    solution_ml         NUMERIC                                        NOT NULL,
-    weight              NUMERIC                                        NOT NULL,
-    patient_id          BIGINT                                         NOT NULL,
-    created             timestamptz                                    NOT NULL,
-    deleted             timestamptz,
-    updated             timestamptz                                    NOT NULL,
-    created_by          BIGINT                                         NOT NULL,
-    CONSTRAINT pk_heparin_patients__id PRIMARY KEY (id),
+    target_aptt_low        NUMERIC     NOT NULL,
+    target_aptt_high       NUMERIC     NOT NULL,
+    solution_heparin_units NUMERIC     NOT NULL,
+    solution_ml            NUMERIC     NOT NULL,
+    weight                 NUMERIC     NOT NULL,
+    patient_id             BIGINT      NOT NULL,
+    created                timestamptz NOT NULL,
+    deleted                timestamptz,
+    updated                timestamptz NOT NULL,
+    created_by             BIGINT      NOT NULL,
+    CONSTRAINT pk_heparin_patients__patient_id PRIMARY KEY (patient_id),
     CONSTRAINT fk_heparin_patients__patients__patient_id FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_heparin_patients__users__user_id FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -75,19 +72,16 @@ EXECUTE PROCEDURE set_updated();
 
 -- Create table insulin_patients
 
-CREATE SEQUENCE insulin_patients_seq INCREMENT 50;
-
 CREATE TABLE insulin_patients
 (
-    id              BIGINT DEFAULT NEXTVAL('insulin_patients_seq') NOT NULL,
-    tddi            NUMERIC                                        NOT NULL,
-    target_glycemia NUMERIC                                        NOT NULL,
-    patient_id      BIGINT                                         NOT NULL,
-    created         timestamptz                                    NOT NULL,
+    tddi            NUMERIC     NOT NULL,
+    target_glycemia NUMERIC     NOT NULL,
+    patient_id      BIGINT      NOT NULL,
+    created         timestamptz NOT NULL,
     deleted         timestamptz,
-    updated         timestamptz                                    NOT NULL,
-    created_by      BIGINT                                         NOT NULL,
-    CONSTRAINT pk_insulin_patients__id PRIMARY KEY (id),
+    updated         timestamptz NOT NULL,
+    created_by      BIGINT      NOT NULL,
+    CONSTRAINT pk_insulin_patients__patient_id PRIMARY KEY (patient_id),
     CONSTRAINT fk_insulin_patients__patients__patient_id FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_insulin_patients__users__user_id FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -118,7 +112,7 @@ CREATE TABLE aptt_values
     updated            timestamptz                               NOT NULL,
     created_by         BIGINT                                    NOT NULL,
     CONSTRAINT pk_aptt_values__id PRIMARY KEY (id),
-    CONSTRAINT fk_aptt_values__heparin_patients__patient_id FOREIGN KEY (heparin_patient_id) REFERENCES heparin_patients (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_aptt_values__heparin_patients__patient_id FOREIGN KEY (heparin_patient_id) REFERENCES heparin_patients (patient_id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_aptt_values__users__user_id FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -149,7 +143,7 @@ CREATE TABLE heparin_dosages
     updated                   timestamptz                                   NOT NULL,
     created_by                BIGINT                                        NOT NULL,
     CONSTRAINT pk_heparin_dosages__id PRIMARY KEY (id),
-    CONSTRAINT fk_heparin_dosages__heparin_patients__patient_id FOREIGN KEY (heparin_patient_id) REFERENCES heparin_patients (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_heparin_dosages__heparin_patients__patient_id FOREIGN KEY (heparin_patient_id) REFERENCES heparin_patients (patient_id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_heparin_dosages__users__user_id FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -179,7 +173,7 @@ CREATE TABLE glycemia_values
     updated            timestamptz                                   NOT NULL,
     created_by         BIGINT                                        NOT NULL,
     CONSTRAINT pk_glycemia_values__id PRIMARY KEY (id),
-    CONSTRAINT fk_glycemia_values__insulin_patients__patient_id FOREIGN KEY (insulin_patient_id) REFERENCES insulin_patients (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_glycemia_values__insulin_patients__patient_id FOREIGN KEY (insulin_patient_id) REFERENCES insulin_patients (patient_id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_glycemia_values__users__user_id FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -209,7 +203,7 @@ CREATE TABLE carbohydrate_intake_values
     updated            timestamptz                                              NOT NULL,
     created_by         BIGINT                                                   NOT NULL,
     CONSTRAINT pk_carbohydrate_intake_values__id PRIMARY KEY (id),
-    CONSTRAINT fk_carbohydrate_intake_values__insulin_patients__patient_id FOREIGN KEY (insulin_patient_id) REFERENCES insulin_patients (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_carbohydrate_intake_values__insulin_patients__patient_id FOREIGN KEY (insulin_patient_id) REFERENCES insulin_patients (patient_id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_carbohydrate_intake_values__users__user_id FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -239,7 +233,7 @@ CREATE TABLE insulin_dosages
     updated            timestamptz                                   NOT NULL,
     created_by         BIGINT                                        NOT NULL,
     CONSTRAINT pk_insulin_dosages__id PRIMARY KEY (id),
-    CONSTRAINT fk_insulin_dosages__insulin_patients__patient_id FOREIGN KEY (insulin_patient_id) REFERENCES insulin_patients (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_insulin_dosages__insulin_patients__patient_id FOREIGN KEY (insulin_patient_id) REFERENCES insulin_patients (patient_id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_insulin_dosages__users__user_id FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 

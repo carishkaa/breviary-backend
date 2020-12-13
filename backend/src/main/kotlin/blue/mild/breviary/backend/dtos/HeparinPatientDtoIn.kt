@@ -10,17 +10,17 @@ data class HeparinPatientDtoIn(
     val patient: PatientDtoIn,
 
     @JsonProperty(required = true)
-    val targetApptLow: Int,
+    val targetApttLow: Float,
 
     @JsonProperty(required = true)
-    val targetApptHigh: Int,
+    val targetApttHigh: Float,
 
     @JsonProperty(required = true)
-    val solutionHeparinIu: Int,
+    val solutionHeparinUnits: Float,
 
     @JsonProperty(required = true)
-    val solutionMl: Int,
+    val solutionMl: Float,
 
     @JsonProperty(required = true)
-    val weight: Int
+    val weight: Float
 )

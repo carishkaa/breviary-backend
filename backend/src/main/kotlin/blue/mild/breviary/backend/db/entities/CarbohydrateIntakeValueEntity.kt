@@ -36,7 +36,7 @@ data class CarbohydrateIntakeValueEntity(
     val id: Long = 0,
 
     @Column(name = "value", nullable = false)
-    val value: Int,
+    val value: Float,
 
     @ManyToOne
     @JoinColumn(
@@ -44,7 +44,15 @@ data class CarbohydrateIntakeValueEntity(
         nullable = false,
         foreignKey = ForeignKey(name = "fk_carbohydrate_intake_values__insulin_patients__patient_id")
     )
-    val insulinPatient: InsulinPatientEntity
+    val insulinPatient: InsulinPatientEntity,
+
+    @ManyToOne
+    @JoinColumn(
+        name = "created_by",
+        nullable = false,
+        foreignKey = ForeignKey(name = "fk_carbohydrate_intake_values__users__user_id")
+    )
+    val createdBy: UserEntity
 
 ) : BaseEntity() {
     override fun equals(other: Any?): Boolean {

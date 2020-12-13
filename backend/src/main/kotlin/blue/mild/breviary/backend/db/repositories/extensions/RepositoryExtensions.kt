@@ -19,6 +19,14 @@ inline fun <reified T, ID> CrudRepository<T, ID>.findByIdOrThrow(id: ID): T =
     findById(id).orElseThrow { EntityNotFoundBreviaryException("${T::class.simpleName} with id $id not found.") }
 
 /**
+ * Maps deleted entities to null.
+ */
+fun <T : BaseEntity> BaseEntity.mapDeletedToNull(): T? {
+    return if (this.deleted == null) this as T?
+    else null
+}
+
+/**
  * Find user by username or throw an exception.
  *
  * @param username The username to be found.
@@ -27,7 +35,7 @@ inline fun <reified T, ID> CrudRepository<T, ID>.findByIdOrThrow(id: ID): T =
  */
 fun UserRepository.findByUsernameOrThrow(username: String): UserEntity =
     findByUsername(username)
-        ?.mapDeletedToNull() as UserEntity?
+        ?.mapDeletedToNull<UserEntity>()
         ?: throw EntityNotFoundBreviaryException("User with email '$username' not found.")
 
 /**
@@ -44,12 +52,4 @@ fun UserRepository.findByIdOrThrow(userId: Long): UserEntity {
         throw EntityNotFoundBreviaryException("User with id '$userId' not found.")
     }
     return user.get()
-}
-
-/**
- * Maps deleted entities to null.
- */
-fun BaseEntity.mapDeletedToNull(): BaseEntity? {
-    return if (this.deleted == null) this
-    else null
 }

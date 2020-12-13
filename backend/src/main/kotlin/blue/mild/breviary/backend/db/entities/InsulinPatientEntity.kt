@@ -3,13 +3,13 @@ package blue.mild.breviary.backend.db.entities
 import java.util.Objects
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.ForeignKey
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
-import javax.persistence.SequenceGenerator
+import javax.persistence.MapsId
+import javax.persistence.OneToOne
 import javax.persistence.Table
 import javax.persistence.UniqueConstraint
 
@@ -18,7 +18,7 @@ import javax.persistence.UniqueConstraint
     name = "insulin_patients",
     schema = "public",
     uniqueConstraints = [
-        UniqueConstraint(columnNames = ["id"], name = "pk_insulin_patients__id")
+        UniqueConstraint(columnNames = ["patient_id"], name = "pk_insulin_patients__patient_id")
     ]
 )
 /**
@@ -26,15 +26,18 @@ import javax.persistence.UniqueConstraint
  */
 data class InsulinPatientEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "insulin_patients_generator")
-    @SequenceGenerator(name = "insulin_patients_generator", sequenceName = "insulin_patients_seq", allocationSize = 50)
+    @Column(name = "patient_id", nullable = false)
     val id: Long = 0,
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    val patient: PatientEntity,
+
     @Column(name = "tddi", nullable = false)
-    val tddi: Int,
+    val tddi: Float,
 
     @Column(name = "target_glycemia", nullable = false)
-    val targetGlycemia: Int,
+    val targetGlycemia: Float,
 
     @ManyToOne
     @JoinColumn(
@@ -42,16 +45,7 @@ data class InsulinPatientEntity(
         nullable = false,
         foreignKey = ForeignKey(name = "fk_insulin_patients__users__user_id")
     )
-    val createdBy: UserEntity,
-
-    @ManyToOne
-    @JoinColumn(
-        name = "patient_id",
-        nullable = false,
-        foreignKey = ForeignKey(name = "fk_insulin_patients__patients__patient_id")
-    )
-    val patient: PatientEntity
-
+    val createdBy: UserEntity
 ) : BaseEntity() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -3,13 +3,13 @@ package blue.mild.breviary.backend.db.entities
 import java.util.Objects
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.ForeignKey
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
-import javax.persistence.SequenceGenerator
+import javax.persistence.MapsId
+import javax.persistence.OneToOne
 import javax.persistence.Table
 import javax.persistence.UniqueConstraint
 
@@ -18,7 +18,7 @@ import javax.persistence.UniqueConstraint
     name = "heparin_patients",
     schema = "public",
     uniqueConstraints = [
-        UniqueConstraint(columnNames = ["id"], name = "pk_heparin_patients__id")
+        UniqueConstraint(columnNames = ["patient_id"], name = "pk_heparin_patients__patient_id")
     ]
 )
 /**
@@ -26,24 +26,27 @@ import javax.persistence.UniqueConstraint
  */
 data class HeparinPatientEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "heparin_patients_generator")
-    @SequenceGenerator(name = "heparin_patients_generator", sequenceName = "heparin_patients_seq", allocationSize = 50)
+    @Column(name = "patient_id", nullable = false)
     val id: Long = 0,
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    val patient: PatientEntity,
+
     @Column(name = "target_aptt_low", nullable = false)
-    val targetApptLow: Int,
+    val targetApttLow: Float,
 
     @Column(name = "target_aptt_high", nullable = false)
-    val targetApptHigh: Int,
+    val targetApttHigh: Float,
 
-    @Column(name = "solution_heparin_iu", nullable = false)
-    val solutionHeparinIu: Int,
+    @Column(name = "solution_heparin_units", nullable = false)
+    val solutionHeparinUnits: Float,
 
     @Column(name = "solution_ml", nullable = false)
-    val solutionMl: Int,
+    val solutionMl: Float,
 
     @Column(name = "weight", nullable = false)
-    val weight: Int,
+    val weight: Float,
 
     @ManyToOne
     @JoinColumn(
@@ -51,15 +54,7 @@ data class HeparinPatientEntity(
         nullable = false,
         foreignKey = ForeignKey(name = "fk_heparin_patients__users__user_id")
     )
-    val createdBy: UserEntity,
-
-    @ManyToOne
-    @JoinColumn(
-        name = "patient_id",
-        nullable = false,
-        foreignKey = ForeignKey(name = "fk_heparin_patients__patients__patient_id")
-    )
-    val patient: PatientEntity
+    val createdBy: UserEntity
 
 ) : BaseEntity() {
     override fun equals(other: Any?): Boolean {
