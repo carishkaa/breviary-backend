@@ -103,8 +103,8 @@ class LogoutApiListing : ApiListingBuilderPlugin {
                 listOf(
                     Operation(
                         HttpMethod.POST,
-                        "/api/logout",
-                        "",
+                        "Logout user from the application.",
+                        "Logout Controller",
                         null,
                         null,
                         "logoutUsingPOST",
