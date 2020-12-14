@@ -32,8 +32,11 @@ object ApiRoutes {
     const val LOGOUT = "logout"
     const val VERSION = "version"
     const val USER = "user"
-    const val BULK = "bulk"
     const val ERROR = "error"
+    const val HEPARIN_PATIENTS = "heparin-patients"
+    const val INSULIN_PATIENTS = "insulin-patients"
+    const val HEPARIN_RECOMMENDATION = "heparin-recommendation"
+    const val INSULIN_RECOMMENDATION = "insulin-recommendation"
 
     /**
      * Password reset routes.
@@ -49,7 +52,7 @@ object ApiRoutes {
     object PasswordChange {
         const val BASE = "password-change"
     }
- }
+}
 
 /**
  * Some of timezones defined in https://data.iana.org/time-zones/releases/.

@@ -2,6 +2,7 @@ package blue.mild.breviary.backend.controllers
 
 import blue.mild.breviary.backend.ApiRoutes.ERROR
 import blue.mild.breviary.backend.config.handlers.GlobalErrorHandler
+import io.swagger.annotations.ApiOperation
 import org.springframework.boot.web.servlet.error.ErrorController
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -12,7 +13,7 @@ import javax.servlet.RequestDispatcher
 import javax.servlet.http.HttpServletRequest
 
 /**
- * Whitelabel Error Page Controller.
+ *  Whitelabel Error Page Controller.
  *
  */
 @Controller
@@ -23,6 +24,7 @@ class CustomErrorController : ErrorController {
      * @param request
      * @return
      */
+    @ApiOperation("Represents and replaces White label page that displays critical application errors.")
     @Suppress("ReturnCount")
     @RequestMapping("/$ERROR", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun handleError(request: HttpServletRequest): ResponseEntity<Any> {

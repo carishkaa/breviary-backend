@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service
 /**
  * DBUserDetailsService.
  *
- * @property userRepository
+ * @property userRepository [UserRepository]
+ * @property authenticationService [AuthenticationService]
  */
 @Service("DBUserDetails")
 class DbUserDetailsService(

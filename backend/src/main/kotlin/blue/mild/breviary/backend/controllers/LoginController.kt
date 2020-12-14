@@ -9,6 +9,7 @@ import blue.mild.breviary.backend.errors.InvalidArgumentBreviaryException
 import blue.mild.breviary.backend.services.AuthenticationService
 import blue.mild.breviary.backend.services.UserService
 import blue.mild.breviary.backend.utils.isNullOrEmpty
+import io.swagger.annotations.ApiOperation
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -23,9 +24,9 @@ import javax.validation.Valid
 /**
  * LoginController.
  *
- * @property usersService
- * @property bCryptPasswordEncoder
- * @property authenticationService
+ * @property usersService [UserService]
+ * @property bCryptPasswordEncoder [BCryptPasswordEncoder]
+ * @property authenticationService [AuthenticationService]
  */
 @RestController
 @RequestMapping("${ApiRoutes.BASE_PATH}/${ApiRoutes.LOGIN}")
@@ -35,15 +36,18 @@ class LoginController(
     private val authenticationService: AuthenticationService
 ) {
     /**
-     * Login.
+     * User login.
      *
-     * @param user
-     * @return
+     * @param user [LoginDtoIn]
+     * @return [ResponseEntity<Any>]
      */
     @Suppress("ReturnCount")
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ApiOperation("Login user into the application.")
+    @PostMapping(
+        consumes = [MediaType.APPLICATION_JSON_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
     fun login(@Valid @RequestBody user: LoginDtoIn): ResponseEntity<Any> {
-
         if (isNullOrEmpty(user.email)) {
             return getErrorResponse(
                 InvalidArgumentBreviaryException(

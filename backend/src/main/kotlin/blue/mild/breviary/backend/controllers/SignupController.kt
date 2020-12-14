@@ -4,6 +4,7 @@ import blue.mild.breviary.backend.ApiRoutes
 import blue.mild.breviary.backend.dtos.UserSignupDtoIn
 import blue.mild.breviary.backend.services.AuthenticationService
 import blue.mild.breviary.backend.services.UserService
+import io.swagger.annotations.ApiOperation
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -17,8 +18,8 @@ import javax.validation.Valid
 /**
  * SignupController.
  *
- * @property UserService
- * @property authenticationService
+ * @property userService [UserService]
+ * @property authenticationService [AuthenticationService]
  */
 @RestController
 @RequestMapping("${ApiRoutes.BASE_PATH}/${ApiRoutes.SIGNUP}")
@@ -29,11 +30,14 @@ class SignupController(
     /**
      * Sign up new user.
      *
-     * @param user
-     * @return
+     * @param user [UserSignupDtoIn]
+     * @return [ResponseEntity<Any>]
      */
-    @Suppress("ReturnCount")
-    @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ApiOperation("Sign up new user.")
+    @PostMapping(
+        consumes = [MediaType.APPLICATION_JSON_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
     fun signup(@Valid @RequestBody user: UserSignupDtoIn): ResponseEntity<Any> {
         val newUser = userService.signUpUser(user)
         SecurityContextHolder.getContext().authentication =

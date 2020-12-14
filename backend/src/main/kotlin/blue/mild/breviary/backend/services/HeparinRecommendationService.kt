@@ -24,7 +24,7 @@ class HeparinRecommendationService(
 ) {
 
     /**
-     * Created heparin recommendation.
+     * Creates heparin recommendation.
      *
      * @param heparinPatientId
      * @param currentAptt

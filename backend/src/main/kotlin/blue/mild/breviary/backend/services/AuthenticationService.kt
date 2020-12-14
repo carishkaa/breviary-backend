@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service
 /**
  * AuthenticationService.
  *
- * @property userRepository
+ * @property userRepository [UserRepository]
  */
 @Service
 @Suppress("TooManyFunctions")
