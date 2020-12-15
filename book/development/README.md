@@ -1,28 +1,22 @@
 # Development
 
-This document contains some basic information about project (BSS) infrastructure, best practises and *must have* project parts. 
+This document contains some basic information about project (Mild Blue) infrastructure, best practises and *must have* project parts.
+
+Ask [Marek](marek.polak@mild.blue) or [Lukas](lukas.forst@mild.blue) to gie you all required accesses.
 
 ## MildBlue Infrastructure
 
 ### Project Repository
 
 Source code is hosted in [MildBlue GitHub](https://github.com/mild-blue/breviary).
-Access can be given by some project administrator, but better is to ask [Eliska](eliska.grendelova@mild.blue)
-to add you into project group `breviary`.
 
 #### Code Review
 
 For code review of this project we are using [MildBlue GitHub](https://github.com/mild-blue/breviary).
 
-#### Bitbucket Pipelines
-
-For automatic tests, we are using Bitbucket Pipelines. Definition file is */bitbucket-pipelines.yml*.
-All used Docker images are stored in [Docker Hub](https://vault.bitwarden.com/).
-
 #### DevOps and Pipelines
 
 For automatic tests, we are using GitHub Actions. Definition files are `.github`.
-Ask [Lukas](lukas.forst@mild.blue) or [Marek](marek.polak@mild.blue) to add you into the project.
 
 ### Task Management
 
@@ -33,13 +27,11 @@ to add you into project group `breviary`.
 ### Repository Management
 
 For storing Docker images and Java modules we are using [Docker Hub](https://hub.docker.com).
-Ask [Marek](marek.polak@mild.blue) or [Lukas](lukas.forst@mild.blue) to create an account for you.
 Definition of all Docker images stored in Nexus must be stored in */docker_images* directory.
 
 ### Password Management
 
 For storing password and certificates we are using [Bitwarden](https://vault.bitwarden.com).
-Ask [Lukas](lukas.forst@mild.blue) to create an account for you.
 
 #### Application Logs
 
@@ -114,7 +106,7 @@ You can create `application.propeties` file or use `.env.template` file.
 ### Run Local DB
 
 To run local DB, there is prepared make task.
-To start DB in Docker running on port `5433` execute `make docker-start-local-test-db`. To stop DB, run `make docker-stop-local-test-db`.
+To start DB in Docker running on port `5433` execute `make docker-start-local-db`. To stop DB, run `make docker-stop-local-db`.
 
 ### Run Backend Locally
 
@@ -123,7 +115,6 @@ Just run app in your IDE.
 ### Run Detekt
 
 To run Detekt code style check, run `make detekt`.
-
 
 ## Github Actions
 
@@ -151,26 +142,12 @@ TODO LINKS AND DESCRIPTION
 @startuml
 
 (*)  --> "Merge to master"
---> "Run BB pipeline"
-if "Pipeline success" then
-
-  -->[true] "Push to Azure DevOps"
-  --> "Run DevOps pipeline"
-
-  if "Pipeline success" then
-    -left-> [true] "Deploy DEV"
-  else
-    -> [false] (*)
-  endif
-
+--> "Run Github action"
+if "Action success" then
+  -left-> [true] "Deploy to Staging"
 else
-
   -> [false] (*)
-
 endif
-
-
-@enduml
 
 @enduml
 
