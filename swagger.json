@@ -18,6 +18,18 @@
   "host" : "localhost",
   "basePath" : "/",
   "tags" : [ {
+    "name" : "heparin-patient-controller",
+    "description" : "Heparin Patient Controller"
+  }, {
+    "name" : "heparin-recommendation-controller",
+    "description" : "Heparin Recommendation Controller"
+  }, {
+    "name" : "insulin-patient-controller",
+    "description" : "Insulin Patient Controller"
+  }, {
+    "name" : "insulin-recommendation-controller",
+    "description" : "Insulin Recommendation Controller"
+  }, {
     "name" : "login-controller",
     "description" : "Login Controller"
   }, {
@@ -74,10 +86,432 @@
         }
       }
     },
+    "/api/heparin-patients" : {
+      "get" : {
+        "tags" : [ "heparin-patient-controller" ],
+        "summary" : "Returns list of active heparin patients.",
+        "operationId" : "getActiveHeparinPatientsUsingGET",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/HeparinPatientDtoOut"
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "heparin-patient-controller" ],
+        "summary" : "Creates new heparin patient.",
+        "operationId" : "createHeparinPatientUsingPOST",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "heparinPatient",
+          "description" : "heparinPatient",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/HeparinPatientDtoIn"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/HeparinPatientDtoOut"
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
+    "/api/heparin-patients/{heparinPatientId}" : {
+      "get" : {
+        "tags" : [ "heparin-patient-controller" ],
+        "summary" : "Return heparin patient by its id.",
+        "operationId" : "getHeparinPatientByIdUsingGET",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "heparinPatientId",
+          "in" : "path",
+          "description" : "heparinPatientId",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/HeparinPatientDtoOut"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "heparin-patient-controller" ],
+        "summary" : "Updates heparin patient with data by its id.",
+        "operationId" : "updateHeparinPatientUsingPUT",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "heparinPatientId",
+          "in" : "path",
+          "description" : "heparinPatientId",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "patient",
+          "description" : "patient",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/PatientDtoIn"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/HeparinPatientDtoOut"
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
+    "/api/heparin-patients/{heparinPatientId}/with-data" : {
+      "get" : {
+        "tags" : [ "heparin-patient-controller" ],
+        "summary" : "Return heparin patient with data by its id.",
+        "operationId" : "getHeparinPatientWithDataByIdUsingGET",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "heparinPatientId",
+          "in" : "path",
+          "description" : "heparinPatientId",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/HeparinPatientWithDataDtoOut"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
+    "/api/heparin-recommendation" : {
+      "post" : {
+        "tags" : [ "heparin-recommendation-controller" ],
+        "summary" : "Creates heparin recommendation for particular patient from provided data.",
+        "operationId" : "createHeparinRecommendationUsingPOST",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "heparinRecommendation",
+          "description" : "heparinRecommendation",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/HeparinRecommendationDtoIn"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/HeparinRecommendationDtoOut"
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
+    "/api/insulin-patients" : {
+      "get" : {
+        "tags" : [ "insulin-patient-controller" ],
+        "summary" : "Returns list of active insulin patients.",
+        "operationId" : "getActiveInsulinPatientsUsingGET",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/InsulinPatientDtoOut"
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "insulin-patient-controller" ],
+        "summary" : "Creates new insulin patient.",
+        "operationId" : "createInsulinPatientUsingPOST",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "insulinPatient",
+          "description" : "insulinPatient",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/InsulinPatientDtoIn"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/InsulinPatientDtoOut"
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
+    "/api/insulin-patients/{insulinPatientId}" : {
+      "get" : {
+        "tags" : [ "insulin-patient-controller" ],
+        "summary" : "Return insulin patient by its id.",
+        "operationId" : "getInsulinPatientByIdUsingGET",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "insulinPatientId",
+          "in" : "path",
+          "description" : "insulinPatientId",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/InsulinPatientDtoOut"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "insulin-patient-controller" ],
+        "summary" : "Updates insulin patient with data by its id.",
+        "operationId" : "updateInsulinPatientUsingPUT",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "insulinPatientId",
+          "in" : "path",
+          "description" : "insulinPatientId",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "patient",
+          "description" : "patient",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/PatientDtoIn"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/InsulinPatientDtoOut"
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
+    "/api/insulin-patients/{insulinPatientId}/with-data" : {
+      "get" : {
+        "tags" : [ "insulin-patient-controller" ],
+        "summary" : "Return insulin patient with data by its id.",
+        "operationId" : "getInsulinPatientWithDataByIdUsingGET",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "insulinPatientId",
+          "in" : "path",
+          "description" : "insulinPatientId",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/InsulinPatientWithDataDtoOut"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
+    "/api/insulin-recommendation" : {
+      "post" : {
+        "tags" : [ "insulin-recommendation-controller" ],
+        "summary" : "Creates heparin recommendation for particular patient from provided data.",
+        "operationId" : "createInsulinRecommendationUsingPOST",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "insulinRecommendation",
+          "description" : "insulinRecommendation",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/InsulinRecommendationDtoIn"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/InsulinRecommendationDtoOut"
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
     "/api/login" : {
       "post" : {
         "tags" : [ "login-controller" ],
-        "summary" : "login",
+        "summary" : "Login user into the application.",
         "operationId" : "loginUsingPOST",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
@@ -115,7 +549,8 @@
     "/api/logout" : {
       "post" : {
         "tags" : [ "logout-controller" ],
-        "summary" : "/api/logout",
+        "summary" : "Logout user from the application.",
+        "description" : "Logout Controller",
         "operationId" : "logoutUsingPOST",
         "responses" : {
           "200" : {
@@ -140,8 +575,8 @@
     "/api/password-change" : {
       "post" : {
         "tags" : [ "password-change-controller" ],
-        "summary" : "change",
-        "operationId" : "changeUsingPOST",
+        "summary" : "Changes user password.",
+        "operationId" : "changePasswordUsingPOST",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
@@ -178,8 +613,8 @@
     "/api/password-reset" : {
       "post" : {
         "tags" : [ "password-reset-controller" ],
-        "summary" : "reset",
-        "operationId" : "resetUsingPOST",
+        "summary" : "Resets user password.",
+        "operationId" : "resetPasswordUsingPOST",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
@@ -216,7 +651,7 @@
     "/api/password-reset/request" : {
       "post" : {
         "tags" : [ "password-reset-controller" ],
-        "summary" : "createPasswordResetRequest",
+        "summary" : "Creates user password reset request.",
         "operationId" : "createPasswordResetRequestUsingPOST",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
@@ -254,7 +689,7 @@
     "/api/signup" : {
       "post" : {
         "tags" : [ "signup-controller" ],
-        "summary" : "signup",
+        "summary" : "Sign up new user.",
         "operationId" : "signupUsingPOST",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
@@ -292,7 +727,7 @@
     "/api/version" : {
       "get" : {
         "tags" : [ "version-controller" ],
-        "summary" : "getVersion",
+        "summary" : "Get application version info.",
         "operationId" : "getVersionUsingGET",
         "produces" : [ "application/json" ],
         "responses" : {
@@ -316,6 +751,221 @@
     }
   },
   "definitions" : {
+    "HeparinPatientDtoIn" : {
+      "type" : "object",
+      "required" : [ "patient", "solutionHeparinUnits", "solutionMl", "targetApttHigh", "targetApttLow", "weight" ],
+      "properties" : {
+        "patient" : {
+          "$ref" : "#/definitions/PatientDtoIn"
+        },
+        "solutionHeparinUnits" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "solutionMl" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "targetApttHigh" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "targetApttLow" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "weight" : {
+          "type" : "number",
+          "format" : "float"
+        }
+      },
+      "title" : "HeparinPatientDtoIn"
+    },
+    "HeparinPatientDtoOut" : {
+      "type" : "object",
+      "required" : [ "id", "patient", "solutionHeparinUnits", "solutionMl", "targetApttHigh", "targetApttLow", "weight" ],
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "patient" : {
+          "$ref" : "#/definitions/PatientDtoOut"
+        },
+        "solutionHeparinUnits" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "solutionMl" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "targetApttHigh" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "targetApttLow" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "weight" : {
+          "type" : "number",
+          "format" : "float"
+        }
+      },
+      "title" : "HeparinPatientDtoOut"
+    },
+    "HeparinPatientWithDataDtoOut" : {
+      "type" : "object",
+      "required" : [ "heparinPatient" ],
+      "properties" : {
+        "actualAptt" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "actualApttUpdatedOn" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "actualDosage" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "heparinPatient" : {
+          "$ref" : "#/definitions/HeparinPatientDtoOut"
+        },
+        "previousAptt" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "previousDosage" : {
+          "type" : "number",
+          "format" : "float"
+        }
+      },
+      "title" : "HeparinPatientWithDataDtoOut"
+    },
+    "HeparinRecommendationDtoIn" : {
+      "type" : "object",
+      "required" : [ "currentAptt", "heparinPatientId" ],
+      "properties" : {
+        "currentAptt" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "heparinPatientId" : {
+          "type" : "string"
+        }
+      },
+      "title" : "HeparinRecommendationDtoIn"
+    },
+    "HeparinRecommendationDtoOut" : {
+      "type" : "object",
+      "required" : [ "actualHeparinBolusDosage", "actualHeparinContinuousDosage", "doctorWarning", "nextRemainder" ],
+      "properties" : {
+        "actualHeparinBolusDosage" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "actualHeparinContinuousDosage" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "doctorWarning" : {
+          "type" : "string"
+        },
+        "nextRemainder" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "previousHeparinBolusDosage" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "previousHeparinContinuousDosage" : {
+          "type" : "number",
+          "format" : "float"
+        }
+      },
+      "title" : "HeparinRecommendationDtoOut"
+    },
+    "InsulinPatientDtoIn" : {
+      "type" : "object",
+      "required" : [ "patient", "targetGlycemia", "tddi" ],
+      "properties" : {
+        "patient" : {
+          "$ref" : "#/definitions/PatientDtoIn"
+        },
+        "targetGlycemia" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "tddi" : {
+          "type" : "number",
+          "format" : "float"
+        }
+      },
+      "title" : "InsulinPatientDtoIn"
+    },
+    "InsulinPatientDtoOut" : {
+      "type" : "object",
+      "required" : [ "id", "patient", "targetGlycemia", "tddi" ],
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "patient" : {
+          "$ref" : "#/definitions/PatientDtoOut"
+        },
+        "targetGlycemia" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "tddi" : {
+          "type" : "number",
+          "format" : "float"
+        }
+      },
+      "title" : "InsulinPatientDtoOut"
+    },
+    "InsulinPatientWithDataDtoOut" : {
+      "type" : "object",
+      "required" : [ "insulinPatient" ],
+      "properties" : {
+        "insulinPatient" : {
+          "$ref" : "#/definitions/InsulinPatientDtoOut"
+        }
+      },
+      "title" : "InsulinPatientWithDataDtoOut"
+    },
+    "InsulinRecommendationDtoIn" : {
+      "type" : "object",
+      "required" : [ "currentGlycemia", "expectedCarbohydrateIntake", "insulinPatientId" ],
+      "properties" : {
+        "currentGlycemia" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "expectedCarbohydrateIntake" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "insulinPatientId" : {
+          "type" : "string"
+        }
+      },
+      "title" : "InsulinRecommendationDtoIn"
+    },
+    "InsulinRecommendationDtoOut" : {
+      "type" : "object",
+      "required" : [ "dosage" ],
+      "properties" : {
+        "dosage" : {
+          "type" : "number",
+          "format" : "float"
+        }
+      },
+      "title" : "InsulinRecommendationDtoOut"
+    },
     "LoginDtoIn" : {
       "type" : "object",
       "required" : [ "email", "password" ],
@@ -377,6 +1027,71 @@
         }
       },
       "title" : "PasswordResetRequestDtoOut"
+    },
+    "PatientDtoIn" : {
+      "type" : "object",
+      "required" : [ "dateOfBirth", "firstName", "height", "lastName", "otherParams", "sex" ],
+      "properties" : {
+        "dateOfBirth" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "firstName" : {
+          "type" : "string"
+        },
+        "height" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "lastName" : {
+          "type" : "string"
+        },
+        "otherParams" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "sex" : {
+          "type" : "string",
+          "enum" : [ "FEMALE", "MALE" ]
+        }
+      },
+      "title" : "PatientDtoIn"
+    },
+    "PatientDtoOut" : {
+      "type" : "object",
+      "required" : [ "dateOfBirth", "firstName", "height", "id", "lastName", "otherParams", "sex" ],
+      "properties" : {
+        "dateOfBirth" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "firstName" : {
+          "type" : "string"
+        },
+        "height" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "lastName" : {
+          "type" : "string"
+        },
+        "otherParams" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "sex" : {
+          "type" : "string",
+          "enum" : [ "FEMALE", "MALE" ]
+        }
+      },
+      "title" : "PatientDtoOut"
     },
     "UserSignupDtoIn" : {
       "type" : "object",
