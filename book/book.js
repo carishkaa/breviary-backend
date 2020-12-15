@@ -1,11 +1,11 @@
 const pkg = require("./package.json");
 
 module.exports = {
-  "title": "TASP Covid",
-  "author": "Blindspot Solutions",
+  "title": "Breviary",
+  "author": "Mild Blue",
   "variables": {
     "version": pkg.version,
-    "projectName": "TASP Covid"
+    "projectName": "Breviary"
   },
   "plugins": [
     "fontsettings",

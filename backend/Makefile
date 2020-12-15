@@ -10,7 +10,7 @@ test: clean
 check-all:
 	../gradlew --no-daemon :backend:clean && ../gradlew :backend:test && ../gradlew :backend:check
 
-generate-swagger-json-to-client: clean
+generate-swagger-json: clean
 	../gradlew --no-daemon :backend:cleanTest :backend:test --tests "blue.mild.breviary.backend.generators.GenerateSwaggerTest"
 
 run-pipeline: check-all

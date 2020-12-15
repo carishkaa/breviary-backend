@@ -33,5 +33,10 @@ Application generates *Swagger REST API Specification* to be able to implement (
 This is done by special unit test `generateSwagger`. There is also make task `generate-swagger-json-to-client` that generates a JSON file with specification 
 and copy in into `/client` folder.
 
+## Application Run
 
-TODO...
+To run the application, do following steps:
+
+1. Create `.env` file based on template `.env.template` and set proper variables.
+1. Execute `make docker-start-local-db` in root directory to start the database in Docker.
+1. Run the backend application in Idea (`BackendApplication.kt`) or other IDE.

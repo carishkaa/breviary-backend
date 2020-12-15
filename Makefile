@@ -11,16 +11,16 @@ detekt:
 	./gradlew detekt
 
 docker-login:
-	TODO
+	docker login
 
 docker-up: docker-login
 	docker-compose up --build
 
-docker-purge:
+docker-prune:
 	docker-compose down
-	docker volume rm breviary_db-data
+	docker volume rm breviary_breviary-db
 
-backend-up: docker-login
+api-up: docker-login
 	docker-compose up api
 
 docker-start-local-db:
@@ -40,13 +40,13 @@ regenerate-localization-messages:
 book-init:
 	docker run -t -i --rm -v "${PWD}":/gitbook -w /gitbook/book billryan/gitbook:latest gitbook install
 
-# Kills Gitbook
+# Kill Gitbook
 book-kill:
-	docker kill tasp-paas-gitbook
+	docker kill breviary-gitbook
 
 # Run Gitbook as a website.
 book-serve: book-init
-	docker run -t -i --rm --name tasp-paas-gitbook -v "${PWD}":/gitbook -p 4000:4000 -p 35729:35729 -w /gitbook/book \
+	docker run -t -i --rm --name breviary-gitbook -v "${PWD}":/gitbook -p 4000:4000 -p 35729:35729 -w /gitbook/book \
 		billryan/gitbook:latest gitbook serve
 
 # Generates Gitbook PDF version.
