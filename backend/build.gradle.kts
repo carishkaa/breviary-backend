@@ -1,5 +1,3 @@
-import org.ajoberstar.grgit.Grgit
-import org.ajoberstar.grgit.Tag
 import java.util.Properties
 
 group = "blue.mild.breviary.backend"
@@ -11,6 +9,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.noarg") version Versions.kotlin // JPA default constructors plugin
     id("org.jetbrains.kotlin.plugin.jpa") version Versions.kotlin
     id("com.adarshr.test-logger") version "1.7.0"
+    id("net.nemerosa.versioning") version Versions.nemerosaVersioning
 }
 
 val mainClass = "blue.mild.breviary.backend.BackendApplicationKt"
@@ -29,7 +28,7 @@ dependencies {
     implementation(Libs.kotlinStdlib)
     implementation(Libs.kotlinReflection)
     implementation(Libs.kotlinCoroutines)
-    implementation(Libs.jackson) // json serializer
+    implementation(Libs.jackson)
 
     implementation(Libs.springBootWeb) {
         exclude("org.springframework.boot", "spring-boot-starter-logging")
@@ -46,7 +45,7 @@ dependencies {
 
     implementation(Libs.javaxXmlJaxb)
 
-    implementation(Libs.flyway) // flyway db migration tool
+    implementation(Libs.flyway)
 
     implementation(Libs.hibernateTypes)
 
@@ -106,19 +105,8 @@ tasks {
     }
 }
 
-val git: Grgit? = runCatching { Grgit.open(mapOf("currentDir" to project.rootDir)) }.getOrNull()
 
-val version: String = git?.let {
-    val head = git.head()
-    val tagPrefix = "breviary-"
-
-    @Suppress("UNRESOLVED_REFERENCE")
-    val tags: List<Tag> = git.tag.list()
-    val tagVersion = tags.find { it.commit == head }?.name?.let {
-        if (it.startsWith(tagPrefix)) it.substring(tagPrefix.length) else it
-    }
-    tagVersion ?: head.abbreviatedId
-} ?: "unknown"
+val version: String = versioning.info?.tag ?: versioning.info?.lastTag ?: "development"
 
 task("createVersionFile") {
     val resources = requireNotNull(sourceSets.main.get().output.resourcesDir) { "Could not access resources." }

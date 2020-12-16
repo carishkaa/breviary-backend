@@ -29,8 +29,6 @@ object Libs {
 
     const val detektPlugin = "io.gitlab.arturbosch.detekt:detekt-formatting:${Versions.detekt}"
 
-    const val grgitPlugin = "org.ajoberstar.grgit:grgit-core:${Versions.grgitVersion}"
-
     const val jacksonDataformat = "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${Versions.jacksonDataformatVersion}"
 
     const val slf4j = "org.slf4j:slf4j-api:${Versions.slf4j}"

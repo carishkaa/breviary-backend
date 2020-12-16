@@ -9,12 +9,6 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version Versions.detekt
 }
 
-buildscript {
-    dependencies {
-        classpath(Libs.grgitPlugin)
-    }
-}
-
 fun RepositoryHandler.setup() {
     jcenter()
 }
@@ -35,10 +29,6 @@ detekt {
  * Folder with stored jacoco test coverage results
  */
 val jacocoReportDir = "$buildDir${File.separator}${Consts.jacocoReportDir}"
-
-val git: org.ajoberstar.grgit.Grgit? by lazy { runCatching { org.ajoberstar.grgit.Grgit.open(mapOf("currentDir" to project.rootDir)) }.getOrNull() }
-
-val branchName: String = git?.branch?.current()?.name ?: ""
 
 tasks {
     jacocoTestCoverageVerification {
@@ -103,13 +93,6 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs += "-Xjvm-default=enable"
     }
 }
-
-//configurations {
-//    all {
-//        exclude("org.springframework.boot", "spring-boot-starter-logging")
-////        exclude("ch.qos.logback", "logback-classic")
-//    }
-//}
 
 subprojects {
 

@@ -28,7 +28,7 @@ object Versions {
     const val springMockK = "3.0.0"
 
     // build script plugins
-    const val grgitVersion = "3.1.1"
+    const val nemerosaVersioning = "2.14.0"
 
     const val okHttp3 = "4.9.0"
 }
