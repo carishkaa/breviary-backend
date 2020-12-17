@@ -4,6 +4,7 @@ import Constants.TEST_PASSWORD
 import Constants.TEST_USERNAME
 import blue.mild.breviary.backend.BackendApplication
 import blue.mild.breviary.backend.dtos.UserDtoIn
+import blue.mild.breviary.backend.dtos.UserDtoOut
 import blue.mild.breviary.backend.enums.UserRole
 import org.flywaydb.core.Flyway
 import org.junit.jupiter.api.BeforeEach
@@ -41,7 +42,7 @@ open class ServiceTestWithDb {
     /**
      * Helper test authentication.
      */
-    fun createAndAuthenticateUser() {
+    protected fun createAndAuthenticateUser() {
         val user = userService.addUser(
             UserDtoIn(
                 email = TEST_USERNAME,
@@ -53,8 +54,15 @@ open class ServiceTestWithDb {
         authenticateUser()
     }
 
-    fun authenticateUser() {
+    protected fun authenticateUser() {
         SecurityContextHolder.getContext().authentication =
             authenticationService.createdAuthenticationToken(TEST_USERNAME)
+    }
+
+    protected fun createUser(): UserDtoOut {
+        return userService.addUser(
+            user = UserDtoIn(TEST_USERNAME, TEST_PASSWORD),
+            active = true
+        )
     }
 }

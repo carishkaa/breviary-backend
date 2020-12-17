@@ -5,7 +5,6 @@ import Constants.TEST_USERNAME
 import blue.mild.breviary.backend.EMPTY_PASSWORD
 import blue.mild.breviary.backend.EMPTY_USERNAME
 import blue.mild.breviary.backend.dtos.UserDtoIn
-import blue.mild.breviary.backend.dtos.UserDtoOut
 import blue.mild.breviary.backend.enums.UserRole
 import blue.mild.breviary.backend.errors.EntityAlreadyExistsBreviaryException
 import blue.mild.breviary.backend.errors.EntityNotFoundBreviaryException
@@ -18,13 +17,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class UserServiceTest : ServiceTestWithDb() {
-    private fun createUser(): UserDtoOut {
-        return userService.addUser(
-            user = UserDtoIn(TEST_USERNAME, TEST_PASSWORD),
-            active = true
-        )
-    }
-
     @Test
     fun `should set user roles`() {
         val createdUser = createUser()

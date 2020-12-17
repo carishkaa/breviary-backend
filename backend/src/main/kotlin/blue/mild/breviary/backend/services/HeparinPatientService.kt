@@ -11,9 +11,12 @@ import blue.mild.breviary.backend.dtos.HeparinPatientDtoIn
 import blue.mild.breviary.backend.dtos.HeparinPatientDtoOut
 import blue.mild.breviary.backend.dtos.HeparinPatientWithDataDtoOut
 import blue.mild.breviary.backend.dtos.PatientDtoIn
+import blue.mild.breviary.backend.errors.EntityNotFoundBreviaryException
 import blue.mild.breviary.backend.extensions.toDtoOut
 import org.springframework.stereotype.Service
+import java.time.temporal.ChronoUnit
 import javax.transaction.Transactional
+import kotlin.jvm.Throws
 
 /**
  * HeparinPatientService.
@@ -39,7 +42,7 @@ class HeparinPatientService(
     /**
      * Creates heparin patient.
      *
-     * @param heparinPatient
+     * @param heparinPatient [HeparinPatientDtoIn]
      * @return [HeparinPatientDtoOut]
      */
     @Transactional
@@ -50,7 +53,7 @@ class HeparinPatientService(
                 id = 0,
                 firstName = heparinPatient.patient.firstName,
                 lastName = heparinPatient.patient.lastName,
-                dateOfBirth = heparinPatient.patient.dateOfBirth,
+                dateOfBirth = heparinPatient.patient.dateOfBirth.truncatedTo(ChronoUnit.DAYS),
                 height = heparinPatient.patient.height,
                 sex = heparinPatient.patient.sex,
                 active = true,
@@ -76,18 +79,20 @@ class HeparinPatientService(
     /**
      * Gets heparin patient.
      *
-     * @param heparinPatientId
-     * @return
+     * @param heparinPatientId [Long]
+     * @return [HeparinPatientDtoOut]
      */
+    @Throws(EntityNotFoundBreviaryException::class)
     fun getHeparinPatientById(heparinPatientId: Long): HeparinPatientDtoOut =
         heparinPatientRepository.findByIdOrThrow(heparinPatientId).toDtoOut()
 
     /**
      * Gets heparin patient with data.
      *
-     * @param heparinPatientId
-     * @return
+     * @param heparinPatientId [Long]
+     * @return [HeparinPatientWithDataDtoOut]
      */
+    @Throws(EntityNotFoundBreviaryException::class)
     fun getHeparinPatientWithDataById(heparinPatientId: Long): HeparinPatientWithDataDtoOut {
         val heparinPatient = heparinPatientRepository.findByIdOrThrow(heparinPatientId).toDtoOut()
 
@@ -110,10 +115,11 @@ class HeparinPatientService(
     /**
      * Updates heparin patient.
      *
-     * @param heparinPatientId
-     * @param patient
-     * @return
+     * @param heparinPatientId [Long]
+     * @param patient [PatientDtoIn]
+     * @return [HeparinPatientDtoOut]
      */
+    @Throws(EntityNotFoundBreviaryException::class)
     @Transactional
     fun updateHeparinPatient(heparinPatientId: Long, patient: PatientDtoIn): HeparinPatientDtoOut {
         val patientEntity = patientRepository.findByIdOrThrow(heparinPatientId)
@@ -121,7 +127,7 @@ class HeparinPatientService(
             patientEntity.copy(
                 firstName = patient.firstName,
                 lastName = patient.lastName,
-                dateOfBirth = patient.dateOfBirth,
+                dateOfBirth = patient.dateOfBirth.truncatedTo(ChronoUnit.DAYS),
                 height = patient.height,
                 sex = patient.sex,
                 otherParams = patient.otherParams

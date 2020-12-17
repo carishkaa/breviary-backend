@@ -9,9 +9,12 @@ import blue.mild.breviary.backend.dtos.InsulinPatientDtoIn
 import blue.mild.breviary.backend.dtos.InsulinPatientDtoOut
 import blue.mild.breviary.backend.dtos.InsulinPatientWithDataDtoOut
 import blue.mild.breviary.backend.dtos.PatientDtoIn
+import blue.mild.breviary.backend.errors.EntityNotFoundBreviaryException
 import blue.mild.breviary.backend.extensions.toDtoOut
 import org.springframework.stereotype.Service
+import java.time.temporal.ChronoUnit
 import javax.transaction.Transactional
+import kotlin.jvm.Throws
 
 /**
  * InsulinPatientService.
@@ -24,7 +27,7 @@ class InsulinPatientService(
     private val authenticationService: AuthenticationService
 ) {
     /**
-     * Gets active insuline patients.
+     * Gets active insulin patients.
      *
      * @return [List<InsulinPatientDtoOut>]
      */
@@ -45,7 +48,7 @@ class InsulinPatientService(
                 id = 0,
                 firstName = insulinPatient.patient.firstName,
                 lastName = insulinPatient.patient.lastName,
-                dateOfBirth = insulinPatient.patient.dateOfBirth,
+                dateOfBirth = insulinPatient.patient.dateOfBirth.truncatedTo(ChronoUnit.DAYS),
                 height = insulinPatient.patient.height,
                 sex = insulinPatient.patient.sex,
                 active = true,
@@ -67,20 +70,22 @@ class InsulinPatientService(
     }
 
     /**
-     * Gets inslin patient.
+     * Gets insulin patient.
      *
-     * @param insulinPatientId
-     * @return
+     * @param insulinPatientId [Long]
+     * @return [InsulinPatientDtoOut]
      */
+    @Throws(EntityNotFoundBreviaryException::class)
     fun getInsulinPatientById(insulinPatientId: Long): InsulinPatientDtoOut =
         insulinPatientRepository.findByIdOrThrow(insulinPatientId).toDtoOut()
 
     /**
      * Gets insulin patient with data.
      *
-     * @param insulinPatientId
-     * @return
+     * @param insulinPatientId [Long]
+     * @return [InsulinPatientWithDataDtoOut]
      */
+    @Throws(EntityNotFoundBreviaryException::class)
     fun getInsulinPatientWithDataById(insulinPatientId: Long): InsulinPatientWithDataDtoOut {
         val insulinPatient = insulinPatientRepository.findByIdOrThrow(insulinPatientId).toDtoOut()
 
@@ -92,18 +97,19 @@ class InsulinPatientService(
     /**
      * Update insulin patient.
      *
-     * @param insulinPatientId
-     * @param patient
-     * @return
+     * @param insulinPatientId [Long]
+     * @param patient [PatientDtoIn]
+     * @return [InsulinPatientDtoOut]
      */
     @Transactional
+    @Throws(EntityNotFoundBreviaryException::class)
     fun updateInsulinPatient(insulinPatientId: Long, patient: PatientDtoIn): InsulinPatientDtoOut {
         val patientEntity = patientRepository.findByIdOrThrow(insulinPatientId)
         patientRepository.save(
             patientEntity.copy(
                 firstName = patient.firstName,
                 lastName = patient.lastName,
-                dateOfBirth = patient.dateOfBirth,
+                dateOfBirth = patient.dateOfBirth.truncatedTo(ChronoUnit.DAYS),
                 height = patient.height,
                 sex = patient.sex,
                 otherParams = patient.otherParams

@@ -1,6 +1,7 @@
 package blue.mild.breviary.backend.dtos
 
 import blue.mild.breviary.backend.enums.Sex
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant
 import java.util.HashMap
@@ -10,7 +11,8 @@ import java.util.HashMap
  * PatientDtoOut.
  */
 open class PatientDtoOut(
-    @JsonProperty(required = true)
+    @JsonProperty(required = false)
+    @JsonIgnore
     val id: String,
 
     @JsonProperty(required = true)
