@@ -1,5 +1,6 @@
 package blue.mild.breviary.backend.dtos
 
+import blue.mild.breviary.backend.enums.InsulinType
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
@@ -13,5 +14,8 @@ data class InsulinPatientDtoIn(
     val targetGlycemia: Float,
 
     @JsonProperty(required = true)
-    val tddi: Float
+    val tddi: Float,
+
+    @JsonProperty(required = true)
+    val insulinType: InsulinType
 )

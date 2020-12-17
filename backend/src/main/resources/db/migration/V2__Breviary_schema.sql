@@ -5,6 +5,14 @@ CREATE TYPE SEX AS ENUM (
     'FEMALE'
     );
 
+CREATE TYPE INSULIN_TYPE AS ENUM (
+    'HUMALOG',
+    'NOVORAPID',
+    'APIDRA',
+    'FIASP',
+    'LYUMJEV'
+    );
+
 -- Create table patients
 
 CREATE SEQUENCE patients_seq INCREMENT 50;
@@ -12,8 +20,8 @@ CREATE SEQUENCE patients_seq INCREMENT 50;
 CREATE TABLE patients
 (
     id            BIGINT               DEFAULT NEXTVAL('patients_seq') NOT NULL,
-    first_name    TEXT,
-    last_name     TEXT,
+    first_name    TEXT        NOT NULL,
+    last_name     TEXT        NOT NULL,
     date_of_birth DATE,
     height        NUMERIC,
     sex           SEX,
@@ -74,13 +82,14 @@ EXECUTE PROCEDURE set_updated();
 
 CREATE TABLE insulin_patients
 (
-    tddi            NUMERIC     NOT NULL,
-    target_glycemia NUMERIC     NOT NULL,
-    patient_id      BIGINT      NOT NULL,
-    created         timestamptz NOT NULL,
+    tddi            NUMERIC      NOT NULL,
+    target_glycemia NUMERIC      NOT NULL,
+    insulin_type    INSULIN_TYPE NOT NULL,
+    patient_id      BIGINT       NOT NULL,
+    created         timestamptz  NOT NULL,
     deleted         timestamptz,
-    updated         timestamptz NOT NULL,
-    created_by      BIGINT      NOT NULL,
+    updated         timestamptz  NOT NULL,
+    created_by      BIGINT       NOT NULL,
     CONSTRAINT pk_insulin_patients__patient_id PRIMARY KEY (patient_id),
     CONSTRAINT fk_insulin_patients__patients__patient_id FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_insulin_patients__users__user_id FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -134,14 +143,14 @@ CREATE SEQUENCE heparin_dosages_seq INCREMENT 50;
 
 CREATE TABLE heparin_dosages
 (
-    id                        BIGINT DEFAULT NEXTVAL('heparin_dosages_seq') NOT NULL,
-    heparin_patient_id        BIGINT                                        NOT NULL,
-    dosage_heparin_continuous NUMERIC                                       NOT NULL,
-    dosage_heparin_bolus      NUMERIC                                       NOT NULL,
-    created                   timestamptz                                   NOT NULL,
-    deleted                   timestamptz,
-    updated                   timestamptz                                   NOT NULL,
-    created_by                BIGINT                                        NOT NULL,
+    id                 BIGINT DEFAULT NEXTVAL('heparin_dosages_seq') NOT NULL,
+    heparin_patient_id BIGINT                                        NOT NULL,
+    dosage_continuous  NUMERIC                                       NOT NULL,
+    dosage_bolus       NUMERIC                                       NOT NULL,
+    created            timestamptz                                   NOT NULL,
+    deleted            timestamptz,
+    updated            timestamptz                                   NOT NULL,
+    created_by         BIGINT                                        NOT NULL,
     CONSTRAINT pk_heparin_dosages__id PRIMARY KEY (id),
     CONSTRAINT fk_heparin_dosages__heparin_patients__patient_id FOREIGN KEY (heparin_patient_id) REFERENCES heparin_patients (patient_id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_heparin_dosages__users__user_id FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -227,7 +236,7 @@ CREATE TABLE insulin_dosages
 (
     id                 BIGINT DEFAULT NEXTVAL('insulin_dosages_seq') NOT NULL,
     insulin_patient_id BIGINT                                        NOT NULL,
-    dosage_insulin     NUMERIC                                       NOT NULL,
+    dosage             NUMERIC                                       NOT NULL,
     created            timestamptz                                   NOT NULL,
     deleted            timestamptz,
     updated            timestamptz                                   NOT NULL,

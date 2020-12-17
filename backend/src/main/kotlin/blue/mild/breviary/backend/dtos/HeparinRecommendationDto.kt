@@ -8,10 +8,10 @@ import java.time.Instant
  */
 data class HeparinRecommendationDto(
     @JsonProperty(required = true)
-    val dosageHeparinContinuous: Float,
+    val dosageContinuous: Float,
 
     @JsonProperty(required = true)
-    val dosageHeparinBolus: Float,
+    val dosageBolus: Float,
 
     @JsonProperty(required = true)
     val nextRemainder: Instant,

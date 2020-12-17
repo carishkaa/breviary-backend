@@ -36,7 +36,7 @@ data class GlycemiaValueEntity(
 
     @ManyToOne
     @JoinColumn(
-        name = "heparin_patient_id",
+        name = "insulin_patient_id",
         nullable = false,
         foreignKey = ForeignKey(name = "fk_glycemia_values__insulin_patients__patient_id")
     )

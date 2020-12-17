@@ -19,14 +19,13 @@ import kotlin.math.min
 @Suppress("LongParameterList")
 @Service
 class PatientHistoryEntriesService(
-    val heparinPatientRepository: HeparinPatientRepository,
-    val insulinPatientRepository: InsulinPatientRepository,
-    val authenticationService: AuthenticationService,
-    val heparinDosageRepository: HeparinDosageRepository,
-    val apttValueRepository: ApttValueRepository,
-    val insulinDosageRepository: InsulinDosageRepository,
-    val carbohydrateIntakeValueRepository: CarbohydrateIntakeValueRepository,
-    val glycemiaValueRepository: GlycemiaValueRepository
+    private val heparinPatientRepository: HeparinPatientRepository,
+    private val insulinPatientRepository: InsulinPatientRepository,
+    private val heparinDosageRepository: HeparinDosageRepository,
+    private val apttValueRepository: ApttValueRepository,
+    private val insulinDosageRepository: InsulinDosageRepository,
+    private val carbohydrateIntakeValueRepository: CarbohydrateIntakeValueRepository,
+    private val glycemiaValueRepository: GlycemiaValueRepository
 ) {
 
     /**
@@ -47,8 +46,8 @@ class PatientHistoryEntriesService(
             HeparinPatientHistoryEntryDtoOut(
                 date = heparinDosage.created,
                 aptt = apttValue.value,
-                bolus = heparinDosage.dosageHeparinBolus,
-                heparinContinuous = heparinDosage.dosageHeparinContinuous
+                bolus = heparinDosage.dosageBolus,
+                heparinContinuous = heparinDosage.dosageContinuous
             )
         }
     }
@@ -72,7 +71,7 @@ class PatientHistoryEntriesService(
             val glycemiaValue = glycemiaValues.elementAt(i)
             InsulinPatientHistoryEntryDtoOut(
                 date = insulinDosage.created,
-                dosage = insulinDosage.dosageInsulin,
+                dosage = insulinDosage.dosage,
                 carbohydrateIntake = carbohydrateIntakeValue.value,
                 glycemiaValue = glycemiaValue.value
             )

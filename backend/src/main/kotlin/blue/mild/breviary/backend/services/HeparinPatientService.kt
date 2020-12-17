@@ -21,11 +21,11 @@ import javax.transaction.Transactional
 @Suppress("LongParameterList")
 @Service
 class HeparinPatientService(
-    val patientRepository: PatientRepository,
-    val heparinPatientRepository: HeparinPatientRepository,
-    val authenticationService: AuthenticationService,
-    val apttValueRepository: ApttValueRepository,
-    val heparinDosageRepository: HeparinDosageRepository
+    private val patientRepository: PatientRepository,
+    private val heparinPatientRepository: HeparinPatientRepository,
+    private val authenticationService: AuthenticationService,
+    private val apttValueRepository: ApttValueRepository,
+    private val heparinDosageRepository: HeparinDosageRepository
 ) {
 
     /**
@@ -102,8 +102,8 @@ class HeparinPatientService(
             actualAptt = actualAptt?.value,
             actualApttUpdatedOn = actualAptt?.created,
             previousAptt = previousAptt?.value,
-            actualDosage = actualHeparinDosage?.dosageHeparinContinuous,
-            previousDosage = previousHeparinDosage?.dosageHeparinContinuous
+            actualDosage = actualHeparinDosage?.dosageContinuous,
+            previousDosage = previousHeparinDosage?.dosageContinuous
         )
     }
 

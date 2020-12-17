@@ -105,7 +105,6 @@ tasks {
     }
 }
 
-
 val version: String = versioning.info?.tag ?: versioning.info?.lastTag ?: "development"
 
 task("createVersionFile") {

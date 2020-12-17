@@ -1,8 +1,12 @@
 package blue.mild.breviary.backend.db.entities
 
+import blue.mild.breviary.backend.enums.InsulinType
+import org.hibernate.annotations.Type
 import java.util.Objects
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.FetchType
 import javax.persistence.ForeignKey
 import javax.persistence.Id
@@ -38,6 +42,11 @@ data class InsulinPatientEntity(
 
     @Column(name = "target_glycemia", nullable = false)
     val targetGlycemia: Float,
+
+    @Type(type = "pgsql_enum")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "insulin_type", nullable = false)
+    val insulinType: InsulinType,
 
     @ManyToOne
     @JoinColumn(

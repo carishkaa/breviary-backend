@@ -31,12 +31,12 @@ data class InsulinDosageEntity(
     @SequenceGenerator(name = "insulin_dosages_generator", sequenceName = "insulin_dosages_seq", allocationSize = 50)
     val id: Long = 0,
 
-    @Column(name = "dosage_insulin", nullable = false)
-    val dosageInsulin: Float,
+    @Column(name = "dosage", nullable = false)
+    val dosage: Float,
 
     @ManyToOne
     @JoinColumn(
-        name = "heparin_patient_id",
+        name = "insulin_patient_id",
         nullable = false,
         foreignKey = ForeignKey(name = "fk_insulin_dosages__insulin_patients__patient_id")
     )

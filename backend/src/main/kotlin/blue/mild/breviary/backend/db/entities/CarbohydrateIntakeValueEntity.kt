@@ -40,7 +40,7 @@ data class CarbohydrateIntakeValueEntity(
 
     @ManyToOne
     @JoinColumn(
-        name = "heparin_patient_id",
+        name = "insulin_patient_id",
         nullable = false,
         foreignKey = ForeignKey(name = "fk_carbohydrate_intake_values__insulin_patients__patient_id")
     )

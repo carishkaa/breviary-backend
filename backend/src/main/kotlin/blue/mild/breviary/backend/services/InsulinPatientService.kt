@@ -2,7 +2,6 @@ package blue.mild.breviary.backend.services
 
 import blue.mild.breviary.backend.db.entities.InsulinPatientEntity
 import blue.mild.breviary.backend.db.entities.PatientEntity
-import blue.mild.breviary.backend.db.repositories.ApttValueRepository
 import blue.mild.breviary.backend.db.repositories.InsulinPatientRepository
 import blue.mild.breviary.backend.db.repositories.PatientRepository
 import blue.mild.breviary.backend.db.repositories.extensions.findByIdOrThrow
@@ -20,10 +19,9 @@ import javax.transaction.Transactional
 @Suppress("LongParameterList")
 @Service
 class InsulinPatientService(
-    val patientRepository: PatientRepository,
-    val insulinPatientRepository: InsulinPatientRepository,
-    val authenticationService: AuthenticationService,
-    val apttValueRepository: ApttValueRepository,
+    private val patientRepository: PatientRepository,
+    private val insulinPatientRepository: InsulinPatientRepository,
+    private val authenticationService: AuthenticationService
 ) {
     /**
      * Gets active insuline patients.
@@ -62,7 +60,8 @@ class InsulinPatientService(
                 patient = patientEntity,
                 tddi = insulinPatient.tddi,
                 targetGlycemia = insulinPatient.targetGlycemia,
-                createdBy = user
+                createdBy = user,
+                insulinType = insulinPatient.insulinType
             )
         ).toDtoOut()
     }

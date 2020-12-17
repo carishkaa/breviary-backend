@@ -31,11 +31,11 @@ data class HeparinDosageEntity(
     @SequenceGenerator(name = "heparin_dosages_generator", sequenceName = "heparin_dosages_seq", allocationSize = 50)
     val id: Long = 0,
 
-    @Column(name = "dosage_heparin_continuous", nullable = false)
-    val dosageHeparinContinuous: Float,
+    @Column(name = "dosage_continuous", nullable = false)
+    val dosageContinuous: Float,
 
-    @Column(name = "dosage_heparin_bolus", nullable = false)
-    val dosageHeparinBolus: Float,
+    @Column(name = "dosage_bolus", nullable = false)
+    val dosageBolus: Float,
 
     @ManyToOne
     @JoinColumn(

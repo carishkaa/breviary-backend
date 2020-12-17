@@ -890,8 +890,12 @@
     },
     "InsulinPatientDtoIn" : {
       "type" : "object",
-      "required" : [ "patient", "targetGlycemia", "tddi" ],
+      "required" : [ "insulinType", "patient", "targetGlycemia", "tddi" ],
       "properties" : {
+        "insulinType" : {
+          "type" : "string",
+          "enum" : [ "APIDRA", "FIASP", "HUMALOG", "LYUMJEV", "NOVORAPID" ]
+        },
         "patient" : {
           "$ref" : "#/definitions/PatientDtoIn"
         },
