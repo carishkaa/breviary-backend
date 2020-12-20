@@ -110,7 +110,7 @@ To start DB in Docker running on port `5433` execute `make docker-start-local-db
 
 ### Run Backend Locally
 
-Just run app in your IDE.
+Just run app in your IDE. You have to run it twice on the first run.
 
 ### Run Detekt
 
