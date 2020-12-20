@@ -6,7 +6,7 @@ server:
     enabled: true
     mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json,image/jpeg,image/png,image/gif
     min-response-size: 1024
-  port: ${PORT:8081}
+  port: ${PORT:8080}
   error.whitelabel.enabled: false # Disable Whitelabel Error Page
 
 #######################

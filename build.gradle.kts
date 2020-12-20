@@ -1,4 +1,3 @@
-import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -21,7 +20,7 @@ dependencies {
 
 detekt {
     parallel = true
-    input = files(subprojects.map { it.projectDir }.filter { it -> !it.name.contains("model") }, "buildSrc")
+    input = files(subprojects.map { it.projectDir }.filterNot { it.name.contains("model") }, "buildSrc")
     config = files(rootDir.resolve("detekt-config.yml"))
 }
 
@@ -72,29 +71,34 @@ tasks {
             kotlinOptions.allWarningsAsErrors = false
         }
     }
-}
 
-tasks.test {
-    @Suppress("UnstableApiUsage") // Required for running tests, however the api is still incubating
-    useJUnitPlatform()
+    test {
+        @Suppress("UnstableApiUsage") // Required for running tests, however the api is still incubating
+        useJUnitPlatform()
 
-    testLogging {
-        events("passed", "skipped", "failed")
+        testLogging {
+            events("passed", "skipped", "failed")
+        }
+
+        systemProperty("spring.profiles.active", "test")
     }
 
-    systemProperty("spring.profiles.active", "test")
-}
-
-tasks.withType<KotlinCompile> {
-    dependsOn(":backend:createVersionFile")
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs += "-Xjvm-default=enable"
+    register("resolveDependencies") {
+        doLast {
+            project.allprojects.forEach { subProject ->
+                with(subProject) {
+                    buildscript.configurations.forEach { if (it.isCanBeResolved) it.resolve() }
+                    configurations.compileClasspath.get().resolve()
+                    configurations.testCompileClasspath.get().resolve()
+                }
+            }
+        }
     }
 }
+
 
 subprojects {
+    group = rootProject.group
 
     apply(plugin = "java")
     apply(plugin = "kotlin")
@@ -105,7 +109,7 @@ subprojects {
         implementation(Libs.kotlinReflection)
         implementation(Libs.kotlinCoroutines)
 
-        implementation(Libs.ktoolz)
+        implementation(Libs.katlib)
 
         implementation(Libs.kotlinLogging) // logging DSL
         implementation(Libs.jackson) // json serializer
@@ -117,7 +121,7 @@ subprojects {
         testImplementation(TestLibs.junitApi) // junit testing framework
         testImplementation(TestLibs.junitParams) // generated parameters for tests
 
-        testRuntime(TestLibs.junitEngine) // testing runtime
+        testRuntimeOnly(TestLibs.junitEngine) // testing runtime
     }
 
     configurations.all {
@@ -135,10 +139,6 @@ subprojects {
             maxHeapSize = "2048M"
         }
 
-        withType<KotlinCompile> {
-            kotlinOptions.jvmTarget = "1.8"
-            kotlinOptions.freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi" // coroutines support in web flux
-        }
 
         withType<io.gitlab.arturbosch.detekt.Detekt> {
             exclude()
@@ -146,14 +146,13 @@ subprojects {
 
         withType<KotlinCompile> {
             kotlinOptions {
-                kotlinOptions.allWarningsAsErrors = false
+                allWarningsAsErrors = false
+                jvmTarget = "1.8"
             }
 
-            sourceCompatibility = JavaVersion.VERSION_11.name
+            sourceCompatibility = JavaVersion.VERSION_1_8.name
         }
     }
-
-    group = rootProject.group
 }
 
 /**

@@ -12,7 +12,7 @@ services:
     image: breviary-api
     container_name: breviary-api
     environment:
-      PORT: 8081
+      PORT: 8080
     depends_on:
       - db
     networks:
