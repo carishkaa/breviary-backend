@@ -13,7 +13,7 @@ import java.io.File
 @SpringBootTest
 class GenerateSwaggerTest(val context: WebApplicationContext) {
 
-    @Value(value = "\${springfox.documentation.swagger.v2.path}")
+    @Value(value = "\${springfox.documentation.swagger.v3.path}")
     val docApi: String? = null
 
     @Test
