@@ -10,7 +10,6 @@ module.exports = {
   "plugins": [
     "fontsettings",
     "katex",
-    "uml",
   ],
   "root": "..",
   "pluginsConfig": {
@@ -18,10 +17,6 @@ module.exports = {
       "theme": 'white', // 'sepia', 'night' or 'white',
       "family": 'sans', // 'serif' or 'sans',
       "size": 2         // 1 - 4
-    },
-    "uml": {
-      "format": "png",
-      "nailgun": false
     },
   },
   // Options for PDF generation

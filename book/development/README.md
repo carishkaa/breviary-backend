@@ -27,7 +27,7 @@ to add you into project group `breviary`.
 ### Repository Management
 
 For storing Docker images and Java modules we are using [Docker Hub](https://hub.docker.com).
-Definition of all Docker images stored in Nexus must be stored in */docker_images* directory.
+Definition of all Docker images stored in Docker Hub must be stored in */docker_images* directory.
 
 ### Password Management
 

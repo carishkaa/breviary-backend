@@ -45,26 +45,6 @@ all cases (graphs/UMLs update). In case it did not run correctly, kill the `serv
 ### Inline Math
 $$\int_{-\infty}^\infty g(x) dx$$
 
-### PlantUML
-
-For various diagrams, we use [PlantUML](https://plantuml.com/). There are multiple online editors:
-- [https://www.planttext.com](https://www.planttext.com)
-- [https://plantuml-editor.kkeisuke.com](https://plantuml-editor.kkeisuke.com)
-- [https://liveuml.com](https://liveuml.com)
-
-{% uml %}
-@startuml
-    Class Stage
-    Class Timeout {
-        +constructor:function(cfg)
-        +timeout:function(ctx)
-        +overdue:function(ctx)
-        +stage: Stage
-    }
- 	Stage <|-- Timeout
-@enduml
-{% enduml %}
-
 Upon adding a new plugin, please run `rm -rf book/_book book/node_modules`.
 
 
