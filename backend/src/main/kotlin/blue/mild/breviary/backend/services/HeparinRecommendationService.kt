@@ -122,14 +122,14 @@ class HeparinRecommendationService(
         targetApttHigh: Float,
         currentAptt: Float?,
         solutionHeparinUnits: Float,
-        solutionMl: Float,
+        solutionMilliliters: Float,
         currentContinuousDosage: Float?,
         previousContinuousDosage: Float?,
     ): RecommendedHeparinDosage {
         if (currentAptt == null || currentContinuousDosage == null) {
             // initial setup, no measurements yet
             return RecommendedHeparinDosage(
-                defaultHeparinContinuousDosage(weight, solutionHeparinUnits, solutionMl),
+                defaultHeparinContinuousDosage(weight, solutionHeparinUnits, solutionMilliliters),
                 0f
             )
         }
@@ -141,7 +141,7 @@ class HeparinRecommendationService(
                     weight,
                     HIGHEST_APTT_DOSAGE_PER_KG_CHANGE,
                     solutionHeparinUnits,
-                    solutionMl
+                    solutionMilliliters
                 ),
                 0f
             )
@@ -154,9 +154,9 @@ class HeparinRecommendationService(
                     weight,
                     LOWEST_APTT_DOSAGE_PER_KG_CHANGE,
                     solutionHeparinUnits,
-                    solutionMl
+                    solutionMilliliters
                 ),
-                calculateBolus(weight, solutionHeparinUnits, solutionMl, LOWEST_APTT_BOLUS)
+                calculateBolus(weight, solutionHeparinUnits, solutionMilliliters, LOWEST_APTT_BOLUS)
             )
         }
 
@@ -167,9 +167,9 @@ class HeparinRecommendationService(
                     weight,
                     LOW_APTT_DOSAGE_PER_KG_CHANGE,
                     solutionHeparinUnits,
-                    solutionMl
+                    solutionMilliliters
                 ),
-                calculateBolus(weight, solutionHeparinUnits, solutionMl, LOW_APTT_BOLUS)
+                calculateBolus(weight, solutionHeparinUnits, solutionMilliliters, LOW_APTT_BOLUS)
             )
         }
 
@@ -180,7 +180,7 @@ class HeparinRecommendationService(
                     weight,
                     BELOW_STANDARD_APTT_DOSAGE_PER_KG_CHANGE,
                     solutionHeparinUnits,
-                    solutionMl
+                    solutionMilliliters
                 ),
                 0f
             )
@@ -197,7 +197,7 @@ class HeparinRecommendationService(
                     weight,
                     ABOVE_STANDARD_APTT_DOSAGE_PER_KG_CHANGE,
                     solutionHeparinUnits,
-                    solutionMl
+                    solutionMilliliters
                 ),
                 0f
             )
@@ -210,7 +210,7 @@ class HeparinRecommendationService(
                     weight,
                     HIGH_APTT_DOSAGE_PER_KG_CHANGE,
                     solutionHeparinUnits,
-                    solutionMl
+                    solutionMilliliters
                 ),
                 0f
             )
