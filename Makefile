@@ -55,3 +55,8 @@ book-pdf: book-init
 	cp "${PWD}/book/book.pdf" "${PWD}/book/breviary.pdf" && \
 	rm -f "${PWD}/book/book.pdf" && \
 	open "${PWD}/book/breviary.pdf"
+
+# generate client stubs
+generate-stubs:
+	openapi-generator-cli generate -g typescript-angular \
+		-i swagger.json -o client-stubs --additional-properties npmName=@mildblue/breviary-api,snapshot=true,ngVersion=10.0.0

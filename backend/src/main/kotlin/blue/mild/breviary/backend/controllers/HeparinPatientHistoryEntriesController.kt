@@ -6,6 +6,7 @@ import blue.mild.breviary.backend.services.PatientHistoryEntriesService
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -29,6 +30,6 @@ class HeparinPatientHistoryEntriesController(
         "/{heparinPatientId}",
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun getHeparinPatientHistoryEntries(heparinPatientId: Long): List<HeparinPatientHistoryEntryDtoOut> =
+    fun getHeparinPatientHistoryEntries(@PathVariable heparinPatientId: Long): List<HeparinPatientHistoryEntryDtoOut> =
         patientHistoryEntriesService.getHeparinPatientHistoryEntries(heparinPatientId)
 }
