@@ -53,5 +53,5 @@ book-serve: book-init
 book-pdf: book-init
 	docker run -t -i --rm -v "${PWD}":/gitbook -w /gitbook/book billryan/gitbook:latest gitbook pdf && \
 	cp "${PWD}/book/book.pdf" "${PWD}/book/breviary.pdf" && \
-	rm "${PWD}/book/book.pdf" && \
+	rm -f "${PWD}/book/book.pdf" && \
 	open "${PWD}/book/breviary.pdf"

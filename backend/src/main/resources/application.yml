@@ -1,4 +1,4 @@
-springfox.documentation.swagger.v2.path: /v2/api-docs
+springfox.documentation.swagger.v3.path: /v3/api-docs
 
 # Enable response compression
 server:
