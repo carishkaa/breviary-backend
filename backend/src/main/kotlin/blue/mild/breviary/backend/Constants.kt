@@ -35,6 +35,8 @@ object ApiRoutes {
     const val ERROR = "error"
     const val HEPARIN_PATIENTS = "heparin-patients"
     const val INSULIN_PATIENTS = "insulin-patients"
+    const val HEPARIN_PATIENT_HISTORY_ENTRIES = "$HEPARIN_PATIENTS/history-entries"
+    const val INSULIN_PATIENTS_HISTORY_ENTRIES = "$INSULIN_PATIENTS/history-entries"
     const val HEPARIN_RECOMMENDATION = "heparin-recommendation"
     const val INSULIN_RECOMMENDATION = "insulin-recommendation"
 
