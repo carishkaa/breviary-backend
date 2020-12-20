@@ -303,7 +303,7 @@ class HeparinRecommendationService(
             return "APTT below $LOWEST_APTT for 2 consecutive measurements."
         }
 
-        if (currentAptt > HIGHEST_APTT && previousAptt > LOWEST_APTT) {
+        if (currentAptt > HIGHEST_APTT && previousAptt > HIGHEST_APTT) {
             return "APTT above $HIGHEST_APTT for 2 consecutive measurements."
         }
 
