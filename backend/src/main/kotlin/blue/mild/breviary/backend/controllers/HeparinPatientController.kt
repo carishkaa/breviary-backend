@@ -25,7 +25,8 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("${ApiRoutes.BASE_PATH}/${ApiRoutes.HEPARIN_PATIENTS}")
 class HeparinPatientController(
-    private val heparinPatientService: HeparinPatientService
+    private val heparinPatientService: HeparinPatientService,
+
 ) {
     /**
      * Gets list of active heparin patients.
