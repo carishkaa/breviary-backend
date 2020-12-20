@@ -32,7 +32,7 @@ class JWTAuthenticationFilter(
 ) : UsernamePasswordAuthenticationFilter() {
 
     companion object {
-        const val RANDOM_VALUE_HEADER = "random_value"
+        private const val RANDOM_VALUE_HEADER = "random_value"
 
         /**
          * Function to create JWT token.
@@ -56,11 +56,11 @@ class JWTAuthenticationFilter(
          * @return
          */
         fun createHeadersWithJsonWebToken(username: String, cookieKey: String): HttpHeaders {
-            JWTAuthenticationFilter.createJsonWebToken(
+            createJsonWebToken(
                 username, getCookieDuration()
             ).apply {
                 val headers = HttpHeaders()
-                headers.add(cookieKey, WebSecurityConfig.createCookie(this))
+                headers.add(cookieKey, createCookie(this))
                 return headers
             }
         }
