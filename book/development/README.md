@@ -105,7 +105,7 @@ You can create `application.propeties` file or use `.env.template` file.
 
 ### Run Local DB
 
-To run local DB, there is prepared make task.
+To run DB locally, there is prepared make task.
 To start DB in Docker running on port `5433` execute `make docker-start-local-db`. To stop DB, run `make docker-stop-local-db`.
 
 ### Run Backend Locally
