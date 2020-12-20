@@ -35,8 +35,8 @@ and copy in into `/client` folder.
 
 ## Application Run
 
-To run the application, do following steps:
+To run the application, do the following steps:
 
 1. Create `.env` file based on template `.env.template` and set proper variables.
 1. Execute `make docker-start-local-db` in root directory to start the database in Docker.
-1. Run the backend application in Idea (`BackendApplication.kt`) or other IDE.
+1. Run the backend application in Idea (`BackendApplication.kt`) or other IDE. (You have to run it twice on the first run.)
