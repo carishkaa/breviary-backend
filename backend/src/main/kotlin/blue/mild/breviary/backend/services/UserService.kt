@@ -1,6 +1,5 @@
 package blue.mild.breviary.backend.services
 
-import ai.blindspot.ktoolz.extensions.mapToSet
 import blue.mild.breviary.backend.EMPTY_PASSWORD
 import blue.mild.breviary.backend.PropertiesNames
 import blue.mild.breviary.backend.db.entities.UserEntity
@@ -25,6 +24,7 @@ import blue.mild.breviary.backend.utils.isEmail
 import blue.mild.breviary.backend.utils.isNotNullOrEmpty
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
+import pw.forst.tools.katlib.mapToSet
 import javax.transaction.Transactional
 
 /**

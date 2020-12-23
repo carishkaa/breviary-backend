@@ -53,5 +53,10 @@ book-serve: book-init
 book-pdf: book-init
 	docker run -t -i --rm -v "${PWD}":/gitbook -w /gitbook/book billryan/gitbook:latest gitbook pdf && \
 	cp "${PWD}/book/book.pdf" "${PWD}/book/breviary.pdf" && \
-	rm "${PWD}/book/book.pdf" && \
+	rm -f "${PWD}/book/book.pdf" && \
 	open "${PWD}/book/breviary.pdf"
+
+# generate client stubs
+generate-stubs:
+	openapi-generator-cli generate -g typescript-angular \
+		-i swagger.json -o client-stubs --additional-properties npmName=@mildblue/breviary-api,snapshot=true,ngVersion=10.0.0

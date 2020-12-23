@@ -62,7 +62,7 @@ class SwaggerConfig {
             "v1.0.0",
             "https://mild.blue",
             Contact("Breviary", "https://breviary.mild.blue", "breviary@mild.blue"),
-            "Mild Blue",
+            "Mild Blue s.r.o.",
             "https://mild.blue",
             listOf()
         )

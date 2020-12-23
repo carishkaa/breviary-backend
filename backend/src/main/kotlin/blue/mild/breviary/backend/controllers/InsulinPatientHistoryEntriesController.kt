@@ -6,6 +6,7 @@ import blue.mild.breviary.backend.services.PatientHistoryEntriesService
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
  * @property patientHistoryEntriesService [PatientHistoryEntriesService]
  */
 @RestController
-@RequestMapping("${ApiRoutes.BASE_PATH}/${ApiRoutes.HEPARIN_PATIENT_HISTORY_ENTRIES}")
+@RequestMapping("${ApiRoutes.BASE_PATH}/${ApiRoutes.INSULIN_PATIENTS_HISTORY_ENTRIES}")
 class InsulinPatientHistoryEntriesController(
     private val patientHistoryEntriesService: PatientHistoryEntriesService
 ) {
@@ -29,6 +30,6 @@ class InsulinPatientHistoryEntriesController(
         "/{insulinPatientId}",
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun getInsulinPatientHistoryEntries(insulinPatientId: Long): List<InsulinPatientHistoryEntryDtoOut> =
+    fun getInsulinPatientHistoryEntries(@PathVariable insulinPatientId: Long): List<InsulinPatientHistoryEntryDtoOut> =
         patientHistoryEntriesService.getInsulinPatientHistoryEntries(insulinPatientId)
 }

@@ -17,8 +17,6 @@ object Libs {
     const val springDataJpa = "org.springframework.boot:spring-boot-starter-data-jpa:${Versions.springBoot}"
     const val springfoxSwagger = "io.springfox:springfox-boot-starter:${Versions.springfox}"
     const val springfoxSwaggerUi = "io.springfox:springfox-swagger-ui:${Versions.springfox}"
-    const val springThymeleaf = "org.springframework.boot:spring-boot-starter-thymeleaf:${Versions.springBoot}"
-    const val javaxXmlJaxb = "javax.xml.bind:jaxb-api:${Versions.javaxXmlJaxb}"
 
     const val jaxbRuntime = "org.glassfish.jaxb:jaxb-runtime:${Versions.jaxbRuntime}"
     const val postgresDriver = "org.postgresql:postgresql:${Versions.postgresDriver}"
@@ -33,9 +31,7 @@ object Libs {
 
     const val slf4j = "org.slf4j:slf4j-api:${Versions.slf4j}"
 
-    const val gson = "io.gsonfire:gson-fire:${Versions.gson}"
-
-    const val ktoolz = "ai.blindspot.ktoolz:ktoolz:${Versions.ktoolz}"
+    const val katlib = "pw.forst.tools:katlib:${Versions.katlib}"
 
     const val jsonwebtoken = "io.jsonwebtoken:jjwt:${Versions.jsonwebtoken}"
 

@@ -12,11 +12,15 @@ plugins {
     id("net.nemerosa.versioning") version Versions.nemerosaVersioning
 }
 
-val mainClass = "blue.mild.breviary.backend.BackendApplicationKt"
+val mClass = "blue.mild.breviary.backend.BackendApplicationKt"
+val codeVersion = versioning.info?.tag ?: versioning.info?.lastTag ?: "development"
+
+version = codeVersion
 
 application {
-    mainClassName = mainClass.toString()
+    mainClass.set(mClass)
 }
+
 
 repositories {
     mavenCentral()
@@ -28,60 +32,37 @@ dependencies {
     implementation(Libs.kotlinStdlib)
     implementation(Libs.kotlinReflection)
     implementation(Libs.kotlinCoroutines)
+
     implementation(Libs.jackson)
 
     implementation(Libs.springBootWeb) {
         exclude("org.springframework.boot", "spring-boot-starter-logging")
     }
+
     implementation(Libs.springBootValidation)
     implementation(Libs.springBootLog4j2)
     implementation(Libs.springBootSecurity)
     implementation(Libs.springBootActuator)
     implementation(Libs.springDataJpa)
-    implementation(Libs.springThymeleaf)
 
     implementation(Libs.springfoxSwagger)
     implementation(Libs.springfoxSwaggerUi)
 
-    implementation(Libs.javaxXmlJaxb)
-
     implementation(Libs.flyway)
-
     implementation(Libs.hibernateTypes)
-
     implementation(Libs.jacksonDataformat)
-
-    implementation(Libs.gson)
-
     implementation(Libs.slf4j)
+    implementation(Libs.jsonwebtoken)
+    implementation(Libs.kotlinLogging)
+    implementation(Libs.okHttp3)
 
-    implementation(Libs.ktoolz)
-
-    runtimeOnly(Libs.jaxbRuntime)
     runtimeOnly(Libs.postgresDriver)
 
     testImplementation(TestLibs.springTest)
     testImplementation(TestLibs.springSecurityTest)
-
     testImplementation(TestLibs.springMockK)
 
     testRuntimeOnly(Libs.postgresDriver)
-
-    implementation(Libs.jsonwebtoken)
-
-    implementation(Libs.kotlinLogging)
-
-    implementation(Libs.okHttp3)
-
-    // testing
-    testImplementation(TestLibs.kotlinTest) // kotlin idiomatic testing
-    testImplementation(TestLibs.mockk) // mock framework
-
-    testImplementation(TestLibs.junitApi) // junit testing framework
-    testImplementation(TestLibs.junitParams) // generated parameters for tests
-
-    testRuntime(TestLibs.junitEngine) // testing runtime
-    implementation(kotlin("stdlib"))
 }
 
 configurations {
@@ -103,15 +84,17 @@ tasks {
             includeTestsMatching("GenerateSwaggerTest")
         }
     }
-}
 
-val version: String = versioning.info?.tag ?: versioning.info?.lastTag ?: "development"
-
-task("createVersionFile") {
-    val resources = requireNotNull(sourceSets.main.get().output.resourcesDir) { "Could not access resources." }
-    resources.mkdirs()
-    val properties = Properties().apply {
-        setProperty("app", version)
+    register("createVersionFile") {
+        val resources = requireNotNull(sourceSets.main.get().output.resourcesDir) { "Could not access resources." }
+        resources.mkdirs()
+        val properties = Properties().apply {
+            setProperty("app", codeVersion)
+        }
+        properties.store(File(resources, "version.properties").outputStream(), null)
     }
-    properties.store(File(resources, "version.properties").outputStream(), null)
+
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        dependsOn("createVersionFile")
+    }
 }

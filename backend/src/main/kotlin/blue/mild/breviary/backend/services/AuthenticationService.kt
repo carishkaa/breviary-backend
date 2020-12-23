@@ -1,6 +1,5 @@
 package blue.mild.breviary.backend.services
 
-import ai.blindspot.ktoolz.extensions.mapToSet
 import blue.mild.breviary.backend.config.WebSecurityConfig
 import blue.mild.breviary.backend.db.entities.UserEntity
 import blue.mild.breviary.backend.db.repositories.UserRepository
@@ -16,6 +15,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
+import pw.forst.tools.katlib.mapToSet
 
 /**
  * AuthenticationService.
