@@ -753,7 +753,8 @@
   "definitions" : {
     "HeparinPatientDtoIn" : {
       "type" : "object",
-      "required" : [ "patient", "solutionHeparinUnits", "solutionMl", "targetApttHigh", "targetApttLow", "weight" ],
+      "required" : [ "patient", "solutionHeparinUnits",
+        "solutionMilliliters", "targetApttHigh", "targetApttLow", "weight" ],
       "properties" : {
         "patient" : {
           "$ref" : "#/definitions/PatientDtoIn"
@@ -762,7 +763,7 @@
           "type" : "number",
           "format" : "float"
         },
-        "solutionMl" : {
+        "solutionMilliliters": {
           "type" : "number",
           "format" : "float"
         },
@@ -783,7 +784,7 @@
     },
     "HeparinPatientDtoOut" : {
       "type" : "object",
-      "required" : [ "id", "patient", "solutionHeparinUnits", "solutionMl", "targetApttHigh", "targetApttLow", "weight" ],
+      "required" : [ "id", "patient", "solutionHeparinUnits", "solutionMilliliters", "targetApttHigh", "targetApttLow", "weight" ],
       "properties" : {
         "id" : {
           "type" : "string"
@@ -795,7 +796,7 @@
           "type" : "number",
           "format" : "float"
         },
-        "solutionMl" : {
+        "solutionMilliliters": {
           "type" : "number",
           "format" : "float"
         },

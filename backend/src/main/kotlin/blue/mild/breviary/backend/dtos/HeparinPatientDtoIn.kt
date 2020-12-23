@@ -19,7 +19,7 @@ data class HeparinPatientDtoIn(
     val solutionHeparinUnits: Float,
 
     @JsonProperty(required = true)
-    val solutionMl: Float,
+    val solutionMilliliters: Float,
 
     @JsonProperty(required = true)
     val weight: Float

@@ -83,7 +83,6 @@ class InsulinRecommendationService(
 
         val now = instantTimeProvider.now()
 
-        @Suppress("MagicNumber")
         val latestPossibleRemainingInsulin =
             now.minus(INSULIN_EFFECT_IN_HOURS[insulinPatientEntity.insulinType]!!.toLong(), ChronoUnit.HOURS)
         val appliedDosages =
@@ -128,7 +127,7 @@ class InsulinRecommendationService(
                 it.dosage,
                 it.created,
                 fromDate,
-                Instant.now(),
+                instantTimeProvider.now(),
                 EXPONENTIAL_ALMOST_ZERO_VALUE[INSULIN_EFFECT_IN_HOURS[insulinType]]!!
             )
         }.sum(), 0f)

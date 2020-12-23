@@ -91,7 +91,7 @@ class HeparinRecommendationService(
             currentAptt = currentAptt,
             previousAptt = previousAptt?.value,
             solutionHeparinUnits = heparinPatientEntity.solutionHeparinUnits,
-            solutionMilliliters = heparinPatientEntity.solutionMl,
+            solutionMilliliters = heparinPatientEntity.solutionMilliliters,
             currentContinuousDosage = currentDosage?.dosageContinuous,
             previousContinuousDosage = previousDosage?.dosageContinuous
         )

@@ -15,6 +15,6 @@ fun HeparinPatientEntity.toDtoOut(): HeparinPatientDtoOut = HeparinPatientDtoOut
     targetApttLow = this.targetApttLow,
     targetApttHigh = this.targetApttHigh,
     solutionHeparinUnits = this.solutionHeparinUnits,
-    solutionMl = this.solutionMl,
+    solutionMilliliters = this.solutionMilliliters,
     weight = this.weight
 )
