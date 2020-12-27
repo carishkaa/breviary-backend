@@ -27,7 +27,7 @@ import javax.validation.Valid
 class HeparinPatientController(
     private val heparinPatientService: HeparinPatientService,
 
-) {
+    ) {
     /**
      * Gets list of active heparin patients.
      *

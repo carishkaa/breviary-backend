@@ -9,19 +9,19 @@ interface ApttValueRepository : CrudRepository<ApttValueEntity, Long> {
 
     @Query(
         value = "SELECT av.* " +
-            "FROM aptt_values av " +
-            "WHERE av.heparin_patient_id = :heparinPatientId " +
-            "ORDER BY av.created DESC LIMIT 1",
+                "FROM aptt_values av " +
+                "WHERE av.heparin_patient_id = :heparinPatientId " +
+                "ORDER BY av.created DESC LIMIT 1",
         nativeQuery = true
     )
     fun getNewestByHeparinPatientId(heparinPatientId: Long): ApttValueEntity?
 
     @Query(
         value = "SELECT av.* " +
-            "FROM aptt_values av " +
-            "WHERE av.heparin_patient_id = :heparinPatientId " +
-            "AND av.created < (SELECT MAX(created) FROM aptt_values) " +
-            "ORDER BY av.created DESC LIMIT 1",
+                "FROM aptt_values av " +
+                "WHERE av.heparin_patient_id = :heparinPatientId " +
+                "AND av.created < (SELECT MAX(created) FROM aptt_values) " +
+                "ORDER BY av.created DESC LIMIT 1",
         nativeQuery = true
     )
     fun getSecondsNewestByHeparinPatientId(heparinPatientId: Long): ApttValueEntity?

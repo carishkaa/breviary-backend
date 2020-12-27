@@ -8,9 +8,11 @@ import java.time.Instant
 interface InsulinDosageRepository : CrudRepository<InsulinDosageEntity, Long> {
     fun getByInsulinPatientId(insulinPatientId: Long): Collection<InsulinDosageEntity>
 
-    @Query("SELECT ido " +
-        "FROM InsulinDosageEntity ido " +
-        "WHERE ido.insulinPatient.id = :insulinPatientId AND ido.created >= :datetime " +
-        "ORDER BY ido.id DESC")
+    @Query(
+        "SELECT ido " +
+                "FROM InsulinDosageEntity ido " +
+                "WHERE ido.insulinPatient.id = :insulinPatientId AND ido.created >= :datetime " +
+                "ORDER BY ido.id DESC"
+    )
     fun getDosagesAppliedAfterDatetime(insulinPatientId: Long, datetime: Instant): Collection<InsulinDosageEntity>
 }

@@ -14,7 +14,6 @@ import blue.mild.breviary.backend.extensions.toDtoOut
 import org.springframework.stereotype.Service
 import java.time.temporal.ChronoUnit
 import javax.transaction.Transactional
-import kotlin.jvm.Throws
 
 /**
  * InsulinPatientService.
