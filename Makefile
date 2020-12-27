@@ -56,7 +56,5 @@ book-pdf: book-init
 	rm -f "${PWD}/book/book.pdf" && \
 	open "${PWD}/book/breviary.pdf"
 
-# generate client stubs
-generate-stubs:
-	openapi-generator-cli generate -g typescript-angular \
-		-i swagger.json -o client-stubs --additional-properties npmName=@mildblue/breviary-api,snapshot=true,ngVersion=10.0.0
+docker-build:
+	docker build -t breviary-api -f Dockerfile.backend .

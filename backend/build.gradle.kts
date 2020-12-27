@@ -21,18 +21,11 @@ application {
     mainClass.set(mClass)
 }
 
-
 repositories {
-    mavenCentral()
-    google()
     jcenter()
 }
 
 dependencies {
-    implementation(Libs.kotlinStdlib)
-    implementation(Libs.kotlinReflection)
-    implementation(Libs.kotlinCoroutines)
-
     implementation(Libs.jackson)
 
     implementation(Libs.springBootWeb) {
@@ -65,14 +58,12 @@ dependencies {
     testRuntimeOnly(Libs.postgresDriver)
 }
 
-configurations {
-    all {
-        exclude("org.springframework.boot", "spring-boot-starter-logging")
-        exclude("ch.qos.logback", "logback-classic")
+configurations.all {
+    exclude("org.springframework.boot", "spring-boot-starter-logging")
+    exclude("ch.qos.logback", "logback-classic")
 
-        resolutionStrategy {
-            force(Libs.slf4j)
-        }
+    resolutionStrategy {
+        force(Libs.slf4j)
     }
 }
 
@@ -96,5 +87,9 @@ tasks {
 
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         dependsOn("createVersionFile")
+    }
+
+    bootDistZip {
+        archiveFileName.set("backend.zip")
     }
 }

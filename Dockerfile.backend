@@ -1,47 +1,49 @@
-FROM alpine:3.11.2 as build-worker
+FROM adoptopenjdk/openjdk11:jdk-11.0.9.1_1-alpine AS build-worker
 
 ENV PROJECT_ROOT .
 RUN mkdir $PROJECT_ROOT
-RUN mkdir -p /tmp && chmod 777 /tmp
 WORKDIR /$PROJECT_ROOT
 
-RUN apk --no-cache add openjdk11-jdk
-
+# copy gradle stuff for caching
 COPY ./gradle /gradle
 
 COPY ./buildSrc /buildSrc
 COPY ./build.gradle.kts \
     ./gradle.properties \
     ./settings.gradle.kts \
-    ./gradlew.bat \
     ./detekt-config.yml \
     ./gradlew /
 
 COPY ./backend/build.gradle.kts \
     /backend/
 
+# download gradle
+RUN ./gradlew --version --no-daemon
+# build buildSrc
 RUN ./gradlew assemble --no-daemon
+# download and cache dependencies
+RUN ./gradlew resolveDependencies --info --no-daemon
 
+# until this line, the docker cache should hit almost always
+# we need to copy .git because we use version.properties file...
 COPY ./.git /.git
 COPY ./backend/ /backend/
 
-#### first only processResources to prevent deleting version.properties
-RUN ./gradlew :backend:processResources --no-daemon
+# first only processResources to prevent deleting version.properties
+RUN ./gradlew :backend:processResources --info --no-daemon
+# build dist for the spring boot
+RUN ./gradlew :backend:bootDistZip --info --no-daemon
 
-RUN ./gradlew :backend:bootDistZip --no-daemon
+### run phase
+FROM adoptopenjdk/openjdk11:jre-11.0.9.1_1-alpine
+# copy build
+COPY --from=build-worker /backend/build/distributions/backend.zip /app/backend.zip
+# unzip and prepare zip
+RUN unzip /app/backend.zip -d /app && \
+    rm /app/backend.zip
 
-### Run
-FROM alpine:3.11.2
-
-RUN apk --no-cache add openjdk11-jre-headless
-
-COPY --from=build-worker /backend/build/distributions/backend-boot-*.zip /app/backend-boot.zip
-RUN unzip /app/backend-boot.zip -d /app && \
-    mv /app/backend-boot-* /app/backend-boot && \
-    rm /app/backend-boot.zip
-
-WORKDIR /app/backend-boot/bin
+WORKDIR /app/backend/bin
 
 EXPOSE 8080
 
-CMD /app/backend-boot/bin/backend
+CMD /app/backend/bin/backend
