@@ -1,3 +1,9 @@
+// because springfox deprecated ResponseMessage, but that one is needed
+// by an Operation and Operation is needed to define the output of login and logout...
+
+// long live consistency
+@file:Suppress("DEPRECATION")
+
 package blue.mild.breviary.backend.config
 
 import org.springframework.context.annotation.Bean
@@ -109,104 +115,104 @@ class LogoutApiListing : ApiListingBuilderPlugin {
                         null,
                         "logoutUsingPOST",
                         0,
-                        hashSetOf("logout-controller"),
-                        hashSetOf(),
-                        hashSetOf(),
-                        hashSetOf(),
-                        listOf(),
-                        listOf(),
-                        hashSetOf(
+                        setOf("logout-controller"),
+                        emptySet(),
+                        emptySet(),
+                        emptySet(),
+                        emptyList(),
+                        emptyList(),
+                        setOf(
                             ResponseMessage(
                                 HttpStatus.OK.value(),
                                 HttpStatus.OK.reasonPhrase,
                                 ModelRef("String"),
-                                listOf(),
-                                mapOf(),
-                                listOf()
+                                emptyList(),
+                                emptyMap(),
+                                emptyList()
                             ),
                             ResponseMessage(
                                 HttpStatus.BAD_REQUEST.value(),
                                 HttpStatus.BAD_REQUEST.reasonPhrase,
                                 null,
-                                listOf(),
-                                mapOf(),
-                                listOf()
+                                emptyList(),
+                                emptyMap(),
+                                emptyList()
                             ),
                             ResponseMessage(
                                 HttpStatus.UNAUTHORIZED.value(),
                                 HttpStatus.UNAUTHORIZED.reasonPhrase,
                                 null,
-                                listOf(),
-                                mapOf(),
-                                listOf()
+                                emptyList(),
+                                emptyMap(),
+                                emptyList()
                             ),
                             ResponseMessage(
                                 HttpStatus.FORBIDDEN.value(),
                                 HttpStatus.FORBIDDEN.reasonPhrase,
                                 null,
-                                listOf(),
-                                mapOf(),
-                                listOf()
+                                emptyList(),
+                                emptyMap(),
+                                emptyList()
                             ),
                             ResponseMessage(
                                 HttpStatus.NOT_FOUND.value(),
                                 HttpStatus.NOT_FOUND.reasonPhrase,
                                 null,
-                                listOf(),
-                                mapOf(),
-                                listOf()
+                                emptyList(),
+                                emptyMap(),
+                                emptyList()
                             )
                         ),
                         "false",
                         false,
-                        listOf(),
-                        setOf(),
+                        emptyList(),
+                        emptySet(),
                         null,
                         setOf(
                             Response(
                                 HttpStatus.OK.value().toString(),
                                 HttpStatus.OK.reasonPhrase,
                                 true,
-                                setOf(),
-                                listOf(),
-                                listOf(),
-                                listOf()
+                                emptySet(),
+                                emptyList(),
+                                emptyList(),
+                                emptyList()
                             ),
                             Response(
                                 HttpStatus.BAD_REQUEST.value().toString(),
                                 HttpStatus.BAD_REQUEST.reasonPhrase,
                                 false,
-                                setOf(),
-                                listOf(),
-                                listOf(),
-                                listOf()
+                                emptySet(),
+                                emptyList(),
+                                emptyList(),
+                                emptyList()
                             ),
                             Response(
                                 HttpStatus.UNAUTHORIZED.value().toString(),
                                 HttpStatus.UNAUTHORIZED.reasonPhrase,
                                 false,
-                                setOf(),
-                                listOf(),
-                                listOf(),
-                                listOf()
+                                emptySet(),
+                                emptyList(),
+                                emptyList(),
+                                emptyList()
                             ),
                             Response(
                                 HttpStatus.FORBIDDEN.value().toString(),
                                 HttpStatus.FORBIDDEN.reasonPhrase,
                                 false,
-                                setOf(),
-                                listOf(),
-                                listOf(),
-                                listOf()
+                                emptySet(),
+                                emptyList(),
+                                emptyList(),
+                                emptyList()
                             ),
                             Response(
                                 HttpStatus.NOT_FOUND.value().toString(),
                                 HttpStatus.NOT_FOUND.reasonPhrase,
                                 false,
-                                setOf(),
-                                listOf(),
-                                listOf(),
-                                listOf()
+                                emptySet(),
+                                emptyList(),
+                                emptyList(),
+                                emptyList()
                             )
                         )
                     )

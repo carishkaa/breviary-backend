@@ -38,5 +38,5 @@ fun <T> getEmptyPageDtoOut(
         totalElements = 0,
         totalPages = 0
     ),
-    elements = emptyList<T>()
+    elements = emptyList()
 )
