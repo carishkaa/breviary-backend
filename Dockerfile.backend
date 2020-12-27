@@ -17,15 +17,8 @@ COPY ./build.gradle.kts \
     ./detekt-config.yml \
     ./gradlew /
 
-COPY ./common/src /common/src
-COPY ./common/build.gradle.kts \
-     /common/
-
 COPY ./backend/build.gradle.kts \
     /backend/
-
-COPY ./model/build.gradle.kts \
-    /model/
 
 RUN ./gradlew assemble --no-daemon
 
@@ -42,9 +35,13 @@ FROM alpine:3.11.2
 
 RUN apk --no-cache add openjdk11-jre-headless
 
-COPY --from=build-worker /backend/build/distributions/backend-boot.zip /app/
-RUN unzip /app/backend-boot.zip -d /app && rm /app/backend-boot.zip
+COPY --from=build-worker /backend/build/distributions/backend-boot-*.zip /app/backend-boot.zip
+RUN unzip /app/backend-boot.zip -d /app && \
+    mv /app/backend-boot-* /app/backend-boot && \
+    rm /app/backend-boot.zip
 
 WORKDIR /app/backend-boot/bin
+
+EXPOSE 8080
 
 CMD /app/backend-boot/bin/backend
