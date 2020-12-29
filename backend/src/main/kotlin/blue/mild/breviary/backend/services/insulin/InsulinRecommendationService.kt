@@ -21,7 +21,6 @@ import javax.transaction.Transactional
 import kotlin.math.exp
 import kotlin.math.pow
 
-
 /**
  * InsulinRecommendationService.
  *

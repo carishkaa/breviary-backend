@@ -3,7 +3,6 @@
 
 package blue.mild.breviary.backend.services.heparin
 
-
 const val LOWEST_APTT = 1.2f
 const val LOW_APTT = 1.5f
 const val STANDARD_APTT = 2.3f
