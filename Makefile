@@ -2,7 +2,7 @@
 export
 
 pipeline-local:
-	docker build . -f ./backend/Dockerfile --target build-worker -t breviary-backend
+	docker build . -f Dockerfile.backend --target build-worker -t breviary-backend
 	docker run --rm breviary-backend ./gradlew detekt
 	docker-compose -f docker-compose.pipeline.yml -f docker-compose.pipeline.local.yml up --abort-on-container-exit backend
 	docker-compose -f docker-compose.pipeline.yml -f docker-compose.pipeline.local.yml down
@@ -58,3 +58,6 @@ book-pdf: book-init
 
 docker-build:
 	docker build -t breviary-backend -f Dockerfile.backend .
+
+db:
+	docker-compose up -d db

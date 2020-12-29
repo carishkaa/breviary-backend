@@ -6,8 +6,8 @@ plugins {
     application
     id("org.springframework.boot") version Versions.springBoot
     kotlin("plugin.spring") version Versions.kotlin
-    id("org.jetbrains.kotlin.plugin.noarg") version Versions.kotlin // JPA default constructors plugin
-    id("org.jetbrains.kotlin.plugin.jpa") version Versions.kotlin
+    kotlin("plugin.noarg") version Versions.kotlin // JPA default constructors plugin
+    kotlin("plugin.jpa") version Versions.kotlin
     id("com.adarshr.test-logger") version "1.7.0"
     id("net.nemerosa.versioning") version Versions.nemerosaVersioning
 }
