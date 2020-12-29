@@ -42,7 +42,7 @@ data class HeparinPatientEntity(
     @Column(name = "solution_heparin_units", nullable = false)
     val solutionHeparinUnits: Float,
 
-    @Column(name = "solution_ml", nullable = false)
+    @Column(name = "solution_milliliters", nullable = false)
     val solutionMilliliters: Float,
 
     @Column(name = "weight", nullable = false)

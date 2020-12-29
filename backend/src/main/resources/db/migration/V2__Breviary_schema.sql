@@ -54,7 +54,7 @@ CREATE TABLE heparin_patients
     target_aptt_low        NUMERIC     NOT NULL,
     target_aptt_high       NUMERIC     NOT NULL,
     solution_heparin_units NUMERIC     NOT NULL,
-    solution_ml            NUMERIC     NOT NULL,
+    solution_milliliters   NUMERIC     NOT NULL,
     weight                 NUMERIC     NOT NULL,
     patient_id             BIGINT      NOT NULL,
     created                timestamptz NOT NULL,
