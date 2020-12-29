@@ -13,7 +13,7 @@ plugins {
 }
 
 val mClass = "blue.mild.breviary.backend.BackendApplicationKt"
-val codeVersion = versioning.info?.tag ?: versioning.info?.lastTag ?: "development"
+val codeVersion = versioning.info?.tag ?: versioning.info?.lastTag ?: versioning.info?.build ?: "development"
 
 version = codeVersion
 
