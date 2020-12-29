@@ -3,7 +3,7 @@ services:
   db:
     environment:
       POSTGRES_PASSWORD: breviary-db-pass
-  breviary-api:
+  backend:
     environment:
       VERSION: $GIT_HEAD
       GIT_BRANCH: $GIT_BRANCH

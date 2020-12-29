@@ -8,9 +8,9 @@ services:
     networks:
       - breviary
 
-  breviary-api:
-    image: breviary-api
-    container_name: breviary-api
+  backend:
+    image: breviary-backend
+    container_name: breviary-backend
     environment:
       PORT: 8080
     depends_on:
