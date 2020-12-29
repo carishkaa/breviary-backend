@@ -1,18 +1,18 @@
 # Development
 
-This document contains some basic information about project (Mild Blue) infrastructure, best practises and *must have* project parts.
+This document contains some basic information about project (Mild Blue) infrastructure, best practices and *must have* project parts.
 
-Ask [Marek](marek.polak@mild.blue) or [Lukas](lukas.forst@mild.blue) to gie you all required accesses.
+Ask [Marek](marek.polak@mild.blue) or [Lukas](lukas.forst@mild.blue) to give you all required accesses.
 
 ## MildBlue Infrastructure
 
 ### Project Repository
 
-Source code is hosted in [MildBlue GitHub](https://github.com/mild-blue/breviary).
+Source code is hosted in [MildBlue GitHub](https://github.com/mild-blue/breviary-backend-private).
 
 #### Code Review
 
-For code review of this project we are using [MildBlue GitHub](https://github.com/mild-blue/breviary).
+For code review of this project we are using [MildBlue GitHub](https://github.com/mild-blue/breviary-backend-private).
 
 #### DevOps and Pipelines
 
@@ -20,7 +20,7 @@ For automatic tests, we are using GitHub Actions. Definition files are `.github`
 
 ### Task Management
 
-Task management is provided via  [MildBlue Trello](https://trello.com).
+Task management is provided via  [MildBlue Trello](https://trello.com/b/l1MzTsVB/breviary).
 Access can be given by some project administrator, but better is to ask anybody
 to add you into project group `breviary`.
 
@@ -89,7 +89,7 @@ To be able to develop and run project locally, some prerequisites must be satisf
 
 ### backend/src/main/resources/application.properties file
 
-To be able to run `beckend` application, you need to have set all required properties.
+To be able to run `backend` application, you need to have set all required properties.
 You can create `application.propeties` file or use `.env.template` file.
 
 * Copy `.env.template` to `.env` file.
@@ -105,12 +105,12 @@ You can create `application.propeties` file or use `.env.template` file.
 
 ### Run Local DB
 
-To run local DB, there is prepared make task.
+To run DB locally, there is prepared make task.
 To start DB in Docker running on port `5433` execute `make docker-start-local-db`. To stop DB, run `make docker-stop-local-db`.
 
 ### Run Backend Locally
 
-Just run app in your IDE.
+Just run app in your IDE. You have to run it twice on the first run.
 
 ### Run Detekt
 
@@ -121,7 +121,7 @@ To run Detekt code style check, run `make detekt`.
 [Github Actions](https://github.com/mild-blue/breviary/action) are defined in `.github`.
 All builds and tests run in `Docker` and uses `Docker compose`. For more details see this file.
 
-With each PR, pipeline executing unit test is being run.
+With each PR, pipeline executing unit test is run.
 When pipeline of `master` branch successes, the code is pushed into [GitHub](https://dev.azure.com/breviary/_git/breviary).
 
 ### Actions

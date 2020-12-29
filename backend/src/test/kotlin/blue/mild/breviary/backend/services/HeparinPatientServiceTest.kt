@@ -34,7 +34,7 @@ class HeparinPatientServiceTest(
                 targetApttLow = 4.5f,
                 targetApttHigh = 500f,
                 solutionHeparinUnits = 600f,
-                solutionMl = 10f,
+                solutionMilliliters = 10f,
                 weight = 98f
             )
         )
@@ -106,7 +106,7 @@ class HeparinPatientServiceTest(
         assertEquals(expected.targetApttLow, actual.targetApttLow)
         assertEquals(expected.targetApttHigh, actual.targetApttHigh)
         assertEquals(expected.solutionHeparinUnits, actual.solutionHeparinUnits)
-        assertEquals(expected.solutionMl, actual.solutionMl)
+        assertEquals(expected.solutionMilliliters, actual.solutionMilliliters)
         assertEquals(expected.weight, actual.weight)
     }
 }

@@ -69,7 +69,7 @@ class HeparinPatientService(
                 targetApttLow = heparinPatient.targetApttLow,
                 targetApttHigh = heparinPatient.targetApttHigh,
                 solutionHeparinUnits = heparinPatient.solutionHeparinUnits,
-                solutionMl = heparinPatient.solutionMl,
+                solutionMilliliters = heparinPatient.solutionMilliliters,
                 weight = heparinPatient.weight,
                 createdBy = user
             )

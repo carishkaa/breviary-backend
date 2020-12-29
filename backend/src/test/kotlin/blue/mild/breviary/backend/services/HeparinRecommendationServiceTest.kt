@@ -64,7 +64,7 @@ class HeparinRecommendationServiceTest(
                 targetApttLow = 1.5f,
                 targetApttHigh = 2f,
                 solutionHeparinUnits = 25_000f,
-                solutionMl = 500f,
+                solutionMilliliters = 500f,
                 weight = 83f
             )
         )

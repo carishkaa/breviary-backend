@@ -16,17 +16,23 @@ import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import javax.transaction.Transactional
+import kotlin.math.pow
 
 const val CARBS_RATIO_NUMERATOR = 350
 const val INSULIN_SENSIBILITY_NUMERATOR = 110
 
 @Suppress("MagicNumber")
 val INSULIN_EFFECT_IN_HOURS = mapOf(
-    Pair(InsulinType.HUMALOG, 5),
-    Pair(InsulinType.NOVORAPID, 5),
-    Pair(InsulinType.APIDRA, 5),
-    Pair(InsulinType.FIASP, 5),
-    Pair(InsulinType.LYUMJEV, 4)
+    Pair(InsulinType.HUMALOG, 6),
+    Pair(InsulinType.NOVORAPID, 6),
+    Pair(InsulinType.APIDRA, 6),
+    Pair(InsulinType.FIASP, 6),
+    Pair(InsulinType.LYUMJEV, 5)
+)
+
+val EXPONENTIAL_ALMOST_ZERO_VALUE = mapOf(
+    Pair(6, 1.8),
+    Pair(5, 1.5)
 )
 
 /**
@@ -76,9 +82,11 @@ class InsulinRecommendationService(
         )
 
         val now = instantTimeProvider.now()
-        @Suppress("MagicNumber")
-        val fiveHoursBack = now.minus(5, ChronoUnit.HOURS)
-        val appliedDosages = insulinDosageRepository.getDosagesAppliedAfterDatetime(insulinPatientId, fiveHoursBack)
+
+        val latestPossibleRemainingInsulin =
+            now.minus(INSULIN_EFFECT_IN_HOURS[insulinPatientEntity.insulinType]!!.toLong(), ChronoUnit.HOURS)
+        val appliedDosages =
+            insulinDosageRepository.getDosagesAppliedAfterDatetime(insulinPatientId, latestPossibleRemainingInsulin)
 
         val calculatedInsulinRecommendation = calculateInsulinRecommendation(
             tddi = insulinPatientEntity.tddi,
@@ -87,7 +95,7 @@ class InsulinRecommendationService(
             expectedCarbohydrateIntake = expectedCarbohydrateIntake,
             insulinType = insulinPatientEntity.insulinType,
             appliedDosages = appliedDosages,
-            fromDate = fiveHoursBack
+            fromDate = latestPossibleRemainingInsulin
         )
 
         insulinDosageRepository.save(
@@ -119,7 +127,8 @@ class InsulinRecommendationService(
                 it.dosage,
                 it.created,
                 fromDate,
-                fromDate.plus(INSULIN_EFFECT_IN_HOURS[insulinType]!!.toLong(), ChronoUnit.HOURS)
+                instantTimeProvider.now(),
+                EXPONENTIAL_ALMOST_ZERO_VALUE[INSULIN_EFFECT_IN_HOURS[insulinType]]!!
             )
         }.sum(), 0f)
     }
@@ -128,11 +137,12 @@ class InsulinRecommendationService(
         insulinDosage: Float,
         appliedAt: Instant,
         fromDate: Instant,
-        toDate: Instant
+        toDate: Instant,
+        exponentialAlmostZero: Double
     ): Float {
         val wholeInterval = Duration.between(fromDate, toDate).seconds.toFloat()
         val applicationInterval = Duration.between(appliedAt, toDate).seconds
         val intervalRatio = applicationInterval / wholeInterval
-        return insulinDosage * kotlin.math.cos(Math.PI / 2 * intervalRatio).toFloat()
+        return insulinDosage * kotlin.math.exp(-intervalRatio.pow(2) / (2 * exponentialAlmostZero.pow(2))).toFloat()
     }
 }

@@ -996,7 +996,7 @@
         "required": [
           "patient",
           "solutionHeparinUnits",
-          "solutionMl",
+          "solutionMilliliters",
           "targetApttHigh",
           "targetApttLow",
           "weight"
@@ -1010,7 +1010,7 @@
             "type": "number",
             "format": "float"
           },
-          "solutionMl": {
+          "solutionMilliliters": {
             "type": "number",
             "format": "float"
           },
@@ -1034,7 +1034,7 @@
           "id",
           "patient",
           "solutionHeparinUnits",
-          "solutionMl",
+          "solutionMilliliters",
           "targetApttHigh",
           "targetApttLow",
           "weight"
@@ -1051,7 +1051,7 @@
             "type": "number",
             "format": "float"
           },
-          "solutionMl": {
+          "solutionMilliliters": {
             "type": "number",
             "format": "float"
           },
