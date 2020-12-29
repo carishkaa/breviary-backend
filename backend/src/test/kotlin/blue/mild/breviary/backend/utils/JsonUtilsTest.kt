@@ -26,7 +26,6 @@ class JsonFunctionsTest {
         assertEquals(input, deserialized)
     }
 
-
     @Test
     fun `should pretty print json`() {
         val lineSeparator = System.lineSeparator()

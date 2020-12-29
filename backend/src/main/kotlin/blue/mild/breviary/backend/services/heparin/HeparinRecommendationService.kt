@@ -208,6 +208,7 @@ class HeparinRecommendationService(
         unitsPerKg: Float
     ): Float = unitsPerKg * weight * solutionMilliliters / solutionHeparinUnits
 
+    @Suppress("UnnecessaryParentheses") // we want to be as explicit as possible
     private fun getNewDosage(
         weight: Float,
         currentDosage: Float,
@@ -215,7 +216,6 @@ class HeparinRecommendationService(
         solutionMilliliters: Float,
         unitsPerKg: Float
     ): Float =
-        @Suppress("UnnecessaryParentheses") // we want to be as explicit as possible
         currentDosage + (unitsPerKg * weight * solutionMilliliters / solutionHeparinUnits)
 
     @Suppress("LongParameterList")
@@ -264,7 +264,7 @@ class HeparinRecommendationService(
         )
     }
 
-    @Suppress("ReturnCount")
+    @Suppress("ComplexMethod")
     private fun getDoctorWarning(
         currentAptt: Float?,
         previousAptt: Float?,
