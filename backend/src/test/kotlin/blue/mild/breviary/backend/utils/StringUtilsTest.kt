@@ -10,20 +10,6 @@ import kotlin.test.assertTrue
 class StringUtilsTest {
 
     @Test
-    fun `should test if string is null empty`() {
-        assertTrue(isNullOrEmpty(null))
-        assertTrue(isNullOrEmpty(""))
-        assertFalse(isNullOrEmpty("something"))
-    }
-
-    @Test
-    fun `should test if string is not null or empty`() {
-        assertFalse(isNotNullOrEmpty(null))
-        assertFalse(isNotNullOrEmpty(""))
-        assertTrue(isNotNullOrEmpty("something"))
-    }
-
-    @Test
     fun `should test valid email address`() {
         assertTrue("testee@example.org".isEmail())
         assertTrue("testee+me1@example.org".isEmail())

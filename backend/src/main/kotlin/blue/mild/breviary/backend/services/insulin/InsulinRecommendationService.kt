@@ -10,6 +10,7 @@ import blue.mild.breviary.backend.db.repositories.InsulinPatientRepository
 import blue.mild.breviary.backend.db.repositories.extensions.findByIdOrThrow
 import blue.mild.breviary.backend.dtos.InsulinRecommendationDtoOut
 import blue.mild.breviary.backend.enums.InsulinType
+import blue.mild.breviary.backend.extensions.sumByFloat
 import blue.mild.breviary.backend.services.AuthenticationService
 import blue.mild.breviary.backend.services.InstantTimeProvider
 import org.springframework.stereotype.Service
@@ -94,9 +95,7 @@ class InsulinRecommendationService(
             )
         )
 
-        return InsulinRecommendationDtoOut(
-            dosage = calculatedInsulinRecommendation
-        )
+        return InsulinRecommendationDtoOut(calculatedInsulinRecommendation)
     }
 
     private fun calculateInsulinRecommendation(
@@ -110,15 +109,18 @@ class InsulinRecommendationService(
     ): Float {
         val dosageCarbohydrateIntake = expectedCarbohydrateIntake / (CARBS_RATIO_NUMERATOR / tddi)
         val dosageTargetGlycemia = (currentGlycemia - targetGlycemia) / (INSULIN_SENSIBILITY_NUMERATOR / tddi)
-        return max(dosageCarbohydrateIntake + dosageTargetGlycemia - appliedDosages.map {
+
+        val sumAppliedDosage = appliedDosages.sumByFloat {
             getInsulinResiduumEffect(
-                it.dosage,
-                it.created,
-                fromDate,
-                instantTimeProvider.now(),
-                EXPONENTIAL_ALMOST_ZERO_VALUE.getValue(INSULIN_EFFECT_IN_HOURS.getValue(insulinType))
+                insulinDosage = it.dosage,
+                appliedAt = it.created,
+                fromDate = fromDate,
+                toDate = instantTimeProvider.now(),
+                exponentialAlmostZero = EXPONENTIAL_ALMOST_ZERO_VALUE.getValue(INSULIN_EFFECT_IN_HOURS.getValue(insulinType))
             )
-        }.sum(), 0f)
+        }
+
+        return max(dosageCarbohydrateIntake + dosageTargetGlycemia - sumAppliedDosage, 0f)
     }
 
     private fun getInsulinResiduumEffect(
@@ -131,6 +133,7 @@ class InsulinRecommendationService(
         val wholeInterval = Duration.between(fromDate, toDate).seconds.toFloat()
         val applicationInterval = Duration.between(appliedAt, toDate).seconds
         val intervalRatio = applicationInterval / wholeInterval
+
         return insulinDosage * exp(-intervalRatio.pow(2) / (2 * exponentialAlmostZero.pow(2))).toFloat()
     }
 }

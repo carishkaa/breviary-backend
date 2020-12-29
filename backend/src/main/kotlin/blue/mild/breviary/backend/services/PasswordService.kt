@@ -47,11 +47,9 @@ class PasswordService(
      * @return
      */
     @Transactional
-    @Throws(EntityNotFoundBreviaryException::class, InvalidArgumentBreviaryException::class)
     fun resetPassword(passwordReset: PasswordResetDtoIn): String {
         val resetPasswordEntity =
-            resetPasswordResetRepository
-                .findByToken(passwordReset.token)
+            resetPasswordResetRepository.findByToken(passwordReset.token)
                 ?: throw EntityNotFoundBreviaryException("Could not find password reset token ${passwordReset.token}.")
 
         val now = instantTimeProvider.now()
@@ -61,8 +59,10 @@ class PasswordService(
         }
 
         validatePasswordComplexity(passwordReset.newPassword)
+
         val user = userRepository.findByUsernameOrThrow(resetPasswordEntity.user.username)
         val updatedUser = user.copy(password = bCryptPasswordEncoder.encode(passwordReset.newPassword))
+
         userRepository.save(updatedUser)
         resetPasswordResetRepository.delete(resetPasswordEntity)
 
@@ -76,9 +76,7 @@ class PasswordService(
      * @return
      */
     @Transactional
-    @Throws(EntityNotFoundBreviaryException::class, InvalidArgumentBreviaryException::class)
     fun changePassword(passwordChange: PasswordChangeDtoIn): String {
-
         val currentUser = authenticationService.getUser()
 
         if (passwordChange.newPassword != passwordChange.newPasswordAgain) {
@@ -110,7 +108,6 @@ class PasswordService(
      * @param username
      */
     @Transactional
-    @Throws(EntityNotFoundBreviaryException::class)
     fun createPasswordResetRequest(username: String) {
         val user = userRepository.findByUsernameOrThrow(username)
         val alreadyExistingRequests = resetPasswordResetRepository.findByUserId(user.id)
@@ -119,7 +116,7 @@ class PasswordService(
             logger.warn { "Removing existing reset password requests for user with email ${user.username}." }
             resetPasswordResetRepository.deleteAll(alreadyExistingRequests)
         }
-
+        // TODO generate crypto-secure tokens, don't use uuid
         val token = UUID.randomUUID().toString()
         resetPasswordResetRepository.save(
             PasswordResetEntity(
@@ -132,7 +129,6 @@ class PasswordService(
         // TODO: Send some information to user.
     }
 
-    @Throws(InvalidArgumentBreviaryException::class)
     private fun validatePasswordComplexity(password: String) {
         if (password.length < MIN_PASSWORD_LENGTH) {
             throw InvalidArgumentBreviaryException(

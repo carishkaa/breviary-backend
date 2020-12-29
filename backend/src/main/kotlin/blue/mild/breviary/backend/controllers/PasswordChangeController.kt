@@ -40,7 +40,9 @@ class PasswordChangeController(
     )
     fun changePassword(@Valid @RequestBody passwordChange: PasswordChangeDtoIn): ResponseEntity<Any> {
         val username = passwordService.changePassword(passwordChange)
+        // put auth to the session context
         SecurityContextHolder.getContext().authentication = authenticationService.createdAuthenticationToken(username)
+
         return authenticationService.createResponseWithJsonWebTokenInHeaders(
             username,
             HttpStatus.OK

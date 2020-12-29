@@ -9,7 +9,6 @@ import blue.mild.breviary.backend.enums.UserRole
 import blue.mild.breviary.backend.errors.EntityAlreadyExistsBreviaryException
 import blue.mild.breviary.backend.errors.EntityNotFoundBreviaryException
 import blue.mild.breviary.backend.errors.InvalidArgumentBreviaryException
-import blue.mild.breviary.backend.utils.isNullOrEmpty
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -157,13 +156,13 @@ class UserServiceTest : ServiceTestWithDb() {
         // Activate user1 back
         val activeUser = userService.activateUser(createdUser1.id, TEST_USERNAME)
         assertEquals(TEST_USERNAME, activeUser.email)
-        assertTrue(!isNullOrEmpty(activeUser.password))
+        assertTrue(activeUser.password.isNotEmpty())
         assertTrue(activeUser.active)
 
         // Activate user again
         val activeUser2 = userService.activateUser(createdUser1.id, TEST_USERNAME)
         assertEquals(TEST_USERNAME, activeUser2.email)
-        assertTrue(!isNullOrEmpty(activeUser2.password))
+        assertTrue(activeUser2.password.isNotEmpty())
         assertTrue(activeUser2.active)
 
         // Create inactive user
@@ -172,7 +171,7 @@ class UserServiceTest : ServiceTestWithDb() {
             false
         )
         assertEquals(EMPTY_USERNAME, createdUser3.email)
-        assertTrue(!isNullOrEmpty(createdUser3.password))
+        assertTrue(createdUser3.password.isNotEmpty())
         assertFalse(createdUser3.active)
     }
 

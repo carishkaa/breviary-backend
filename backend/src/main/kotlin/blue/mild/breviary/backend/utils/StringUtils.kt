@@ -6,22 +6,6 @@ import java.util.regex.Pattern.compile
 import kotlin.random.Random
 
 /**
- * Check if string is null or empty.
- *
- * @param str
- * @return
- */
-fun isNullOrEmpty(str: String?): Boolean = str == null || str == ""
-
-/**
- * Check if string is not null or empty.
- *
- * @param str
- * @return
- */
-fun isNotNullOrEmpty(str: String?): Boolean = !isNullOrEmpty(str)
-
-/**
  * Check if string is valid email address.
  *
  * @return

@@ -17,9 +17,8 @@ class UserDataConfig(
     @Value("classpath:version.properties") private val versionResource: Resource
 ) {
 
-    private val properties = Properties().apply {
-        load(versionResource.inputStream)
-    }
+    private val properties = Properties()
+        .apply { load(versionResource.inputStream) }
 
     /**
      * Creates version.

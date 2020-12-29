@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service
 class DbUserDetailsService(
     private val userRepository: UserRepository,
     private val authenticationService: AuthenticationService
-
 ) : UserDetailsService {
+
     override fun loadUserByUsername(username: String): UserDetails {
         val user = userRepository.findByUsernameOrThrow(username)
         return User(user.username, user.password, authenticationService.getAuthorities(user.username))

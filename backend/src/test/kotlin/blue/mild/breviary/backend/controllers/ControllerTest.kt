@@ -10,7 +10,6 @@ import blue.mild.breviary.backend.dtos.UserDtoOut
 import blue.mild.breviary.backend.dtos.UserSignupDtoIn
 import blue.mild.breviary.backend.services.AuthenticationService
 import blue.mild.breviary.backend.services.JWTAuthenticationFilter
-import blue.mild.breviary.backend.utils.parseJson
 import mu.KLogging
 import org.flywaydb.core.Flyway
 import org.junit.jupiter.api.BeforeEach
@@ -28,6 +27,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
+import pw.forst.tools.katlib.parseJson
 import java.net.URI
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -39,7 +39,7 @@ import kotlin.test.assertTrue
 )
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @ActiveProfiles("test")
-open class ControllerTest {
+class ControllerTest {
 
     companion object : KLogging() {
         fun getAuthHeaders(): HttpHeaders =
@@ -135,7 +135,7 @@ open class ControllerTest {
         val body = result.body
         assertNotNull(body)
         val items = parseJson<List<T>>(body)
-        assertEquals(expectedCount, items!!.size)
+        assertEquals(expectedCount, items?.size)
         return body
     }
 

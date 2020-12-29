@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import javax.transaction.Transactional
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 /**
@@ -91,7 +94,7 @@ class HeparinRecommendationService(
         )
     }
 
-    @Suppress("LongParameterList", "LongMethod", "ComplexMethod", "ReturnCount")
+    @Suppress("LongParameterList", "LongMethod", "ComplexMethod")
     private fun calculateRecommendedDosage(
         weight: Float,
         targetApttLow: Float,
@@ -102,97 +105,100 @@ class HeparinRecommendationService(
         currentContinuousDosage: Float?,
         previousContinuousDosage: Float?,
     ): RecommendedHeparinDosage {
-        if (currentAptt == null || currentContinuousDosage == null) {
+        // TODO rewrite that to multiple methods and to when switch
+        return if (currentAptt == null || currentContinuousDosage == null) {
             // initial setup, no measurements yet
-            return RecommendedHeparinDosage(
-                defaultHeparinContinuousDosage(weight, solutionHeparinUnits, solutionMilliliters),
-                0f
-            )
-        }
-
-        if (currentContinuousDosage == 0f) {
-            return RecommendedHeparinDosage(
-                getNewDosage(
-                    requireNotNull(previousContinuousDosage) { "previousContinuousDosage was null even though currentContinuousDosage is 0!" },
-                    weight,
-                    HIGHEST_APTT_DOSAGE_PER_KG_CHANGE,
-                    solutionHeparinUnits,
-                    solutionMilliliters
+            RecommendedHeparinDosage(
+                defaultHeparinContinuousDosage(
+                    weight = weight,
+                    solutionHeparinUnits = solutionHeparinUnits,
+                    solutionMilliliters = solutionMilliliters
                 ),
-                0f
+                heparinBolusDosage = 0f
             )
-        }
-
-        if (currentAptt < LOWEST_APTT) {
-            return RecommendedHeparinDosage(
+        } else if (currentContinuousDosage == 0f) {
+            RecommendedHeparinDosage(
                 getNewDosage(
-                    currentContinuousDosage,
-                    weight,
-                    LOWEST_APTT_DOSAGE_PER_KG_CHANGE,
-                    solutionHeparinUnits,
-                    solutionMilliliters
+                    weight = weight,
+                    currentDosage = requireNotNull(previousContinuousDosage) {
+                        "previousContinuousDosage was null even though currentContinuousDosage is 0!"
+                    },
+                    solutionHeparinUnits = solutionHeparinUnits,
+                    solutionMilliliters = solutionMilliliters,
+                    unitsPerKg = HIGHEST_APTT_DOSAGE_PER_KG_CHANGE
                 ),
-                calculateBolus(weight, solutionHeparinUnits, solutionMilliliters, LOWEST_APTT_BOLUS)
+                heparinBolusDosage = 0f
             )
-        }
-
-        if (currentAptt < LOW_APTT) {
-            return RecommendedHeparinDosage(
+        } else if (currentAptt < LOWEST_APTT) {
+            RecommendedHeparinDosage(
                 getNewDosage(
-                    currentContinuousDosage,
-                    weight,
-                    LOW_APTT_DOSAGE_PER_KG_CHANGE,
-                    solutionHeparinUnits,
-                    solutionMilliliters
+                    weight = weight,
+                    currentDosage = currentContinuousDosage,
+                    solutionHeparinUnits = solutionHeparinUnits,
+                    solutionMilliliters = solutionMilliliters,
+                    unitsPerKg = LOWEST_APTT_DOSAGE_PER_KG_CHANGE
                 ),
-                calculateBolus(weight, solutionHeparinUnits, solutionMilliliters, LOW_APTT_BOLUS)
+                calculateBolus(
+                    weight = weight,
+                    solutionHeparinUnits = solutionHeparinUnits,
+                    solutionMilliliters = solutionMilliliters,
+                    unitsPerKg = LOWEST_APTT_BOLUS
+                )
             )
-        }
-
-        if (currentAptt < targetApttLow) {
-            return RecommendedHeparinDosage(
+        } else if (currentAptt < LOW_APTT) {
+            RecommendedHeparinDosage(
                 getNewDosage(
-                    currentContinuousDosage,
-                    weight,
-                    BELOW_STANDARD_APTT_DOSAGE_PER_KG_CHANGE,
-                    solutionHeparinUnits,
-                    solutionMilliliters
+                    weight = weight,
+                    currentDosage = currentContinuousDosage,
+                    solutionHeparinUnits = solutionHeparinUnits,
+                    solutionMilliliters = solutionMilliliters,
+                    unitsPerKg = LOW_APTT_DOSAGE_PER_KG_CHANGE
                 ),
-                0f
+                calculateBolus(
+                    weight = weight,
+                    solutionHeparinUnits = solutionHeparinUnits,
+                    solutionMilliliters = solutionMilliliters,
+                    unitsPerKg = LOW_APTT_BOLUS
+                )
             )
-        }
-
-        if (currentAptt < targetApttHigh) {
-            return RecommendedHeparinDosage(currentContinuousDosage, 0f)
-        }
-
-        if (currentAptt < STANDARD_APTT) {
-            return RecommendedHeparinDosage(
+        } else if (currentAptt < targetApttLow) {
+            RecommendedHeparinDosage(
                 getNewDosage(
-                    currentContinuousDosage,
-                    weight,
-                    ABOVE_STANDARD_APTT_DOSAGE_PER_KG_CHANGE,
-                    solutionHeparinUnits,
-                    solutionMilliliters
+                    weight = weight,
+                    currentDosage = currentContinuousDosage,
+                    solutionHeparinUnits = solutionHeparinUnits,
+                    solutionMilliliters = solutionMilliliters,
+                    unitsPerKg = BELOW_STANDARD_APTT_DOSAGE_PER_KG_CHANGE
                 ),
-                0f
+                heparinBolusDosage = 0f
             )
-        }
-
-        if (currentAptt <= HIGH_APTT) {
-            return RecommendedHeparinDosage(
+        } else if (currentAptt < targetApttHigh) {
+            RecommendedHeparinDosage(currentContinuousDosage, 0f)
+        } else if (currentAptt < STANDARD_APTT) {
+            RecommendedHeparinDosage(
                 getNewDosage(
-                    currentContinuousDosage,
-                    weight,
-                    HIGH_APTT_DOSAGE_PER_KG_CHANGE,
-                    solutionHeparinUnits,
-                    solutionMilliliters
+                    weight = weight,
+                    currentDosage = currentContinuousDosage,
+                    solutionHeparinUnits = solutionHeparinUnits,
+                    solutionMilliliters = solutionMilliliters,
+                    unitsPerKg = ABOVE_STANDARD_APTT_DOSAGE_PER_KG_CHANGE
                 ),
-                0f
+                heparinBolusDosage = 0f
             )
+        } else if (currentAptt <= HIGH_APTT) {
+            RecommendedHeparinDosage(
+                getNewDosage(
+                    weight = weight,
+                    currentDosage = currentContinuousDosage,
+                    solutionHeparinUnits = solutionHeparinUnits,
+                    solutionMilliliters = solutionMilliliters,
+                    unitsPerKg = HIGH_APTT_DOSAGE_PER_KG_CHANGE
+                ),
+                heparinBolusDosage = 0f
+            )
+        } else {
+            RecommendedHeparinDosage(0f, 0f)
         }
-
-        return RecommendedHeparinDosage(0f, 0f)
     }
 
     private fun calculateBolus(
@@ -200,17 +206,17 @@ class HeparinRecommendationService(
         solutionHeparinUnits: Float,
         solutionMilliliters: Float,
         unitsPerKg: Float
-    ): Float =
-        unitsPerKg * weight * solutionMilliliters / solutionHeparinUnits
+    ): Float = unitsPerKg * weight * solutionMilliliters / solutionHeparinUnits
 
-    @Suppress("UnnecessaryParentheses")
     private fun getNewDosage(
-        currentDosage: Float,
         weight: Float,
-        unitsPerKg: Float,
+        currentDosage: Float,
         solutionHeparinUnits: Float,
-        solutionMilliliters: Float
-    ): Float = currentDosage + (unitsPerKg * weight * solutionMilliliters / solutionHeparinUnits)
+        solutionMilliliters: Float,
+        unitsPerKg: Float
+    ): Float =
+        @Suppress("UnnecessaryParentheses") // we want to be as explicit as possible
+        currentDosage + (unitsPerKg * weight * solutionMilliliters / solutionHeparinUnits)
 
     @Suppress("LongParameterList")
     private fun calculateHeparinRecommendation(
@@ -226,24 +232,28 @@ class HeparinRecommendationService(
     ): HeparinRecommendationDto {
 
         val recommendedHeparinDosage = calculateRecommendedDosage(
-            weight,
-            targetApttLow,
-            targetApttHigh,
-            currentAptt,
-            solutionHeparinUnits,
-            solutionMilliliters,
-            currentContinuousDosage,
-            previousContinuousDosage
+            weight = weight,
+            targetApttLow = targetApttLow,
+            targetApttHigh = targetApttHigh,
+            currentAptt = currentAptt,
+            solutionHeparinUnits = solutionHeparinUnits,
+            solutionMilliliters = solutionMilliliters,
+            currentContinuousDosage = currentContinuousDosage,
+            previousContinuousDosage = previousContinuousDosage
         )
 
-        val nextRemainder = getNextRemainder(currentAptt, recommendedHeparinDosage.heparinContinuousDosage)
+        val nextRemainder = getNextRemainder(
+            currentAptt = currentAptt,
+            heparinContinuousDosage = recommendedHeparinDosage.heparinContinuousDosage
+        )
+
         val doctorWarning = getDoctorWarning(
-            currentAptt,
-            previousAptt,
-            recommendedHeparinDosage.heparinContinuousDosage,
-            weight,
-            solutionHeparinUnits,
-            solutionMilliliters
+            weight = weight,
+            currentAptt = currentAptt,
+            previousAptt = previousAptt,
+            solutionHeparinUnits = solutionHeparinUnits,
+            solutionMilliliters = solutionMilliliters,
+            heparinContinuousDosage = recommendedHeparinDosage.heparinContinuousDosage
         )
 
         return HeparinRecommendationDto(
@@ -263,33 +273,29 @@ class HeparinRecommendationService(
         solutionHeparinUnits: Float,
         solutionMilliliters: Float
     ): String {
-        val dosageDiff = kotlin.math.abs(
+        val dosageDiff = abs(
             heparinContinuousDosage - defaultHeparinContinuousDosage(
-                weight,
-                solutionHeparinUnits,
-                solutionMilliliters
+                weight = weight,
+                solutionHeparinUnits = solutionHeparinUnits,
+                solutionMilliliters = solutionMilliliters
             )
         )
 
-        if (currentAptt == null || previousAptt == null) {
-            return ""
-        }
+        return when {
+            currentAptt == null || previousAptt == null -> ""
 
-        if (currentAptt < LOWEST_APTT && previousAptt < LOWEST_APTT) {
-            return "APTT below $LOWEST_APTT for 2 consecutive measurements."
-        }
+            currentAptt < LOWEST_APTT && previousAptt < LOWEST_APTT ->
+                "APTT below $LOWEST_APTT for 2 consecutive measurements."
 
-        if (currentAptt > HIGHEST_APTT && previousAptt > HIGHEST_APTT) {
-            return "APTT above $HIGHEST_APTT for 2 consecutive measurements."
-        }
+            currentAptt > HIGHEST_APTT && previousAptt > HIGHEST_APTT ->
+                "APTT above $HIGHEST_APTT for 2 consecutive measurements."
 
-        if (dosageDiff >= EXTREME_DOSAGE_DIFF && heparinContinuousDosage > 0) {
-            return "Current continuous heparin dosage differs from default weight based dosage by ${
-                dosageDiff.roundToInt()
-            }."
-        }
+            dosageDiff >= EXTREME_DOSAGE_DIFF && heparinContinuousDosage > 0 ->
+                "Current continuous heparin dosage differs from default weight " +
+                        "based dosage by ${dosageDiff.roundToInt()}."
 
-        return ""
+            else -> ""
+        }
     }
 
     private fun defaultHeparinContinuousDosage(
@@ -297,7 +303,7 @@ class HeparinRecommendationService(
         solutionHeparinUnits: Float,
         solutionMilliliters: Float
     ): Float {
-        val patientWeight = kotlin.math.min(kotlin.math.max(weight, MIN_WEIGHT_KG), MAX_WEIGHT_KG)
+        val patientWeight = min(max(weight, MIN_WEIGHT_KG), MAX_WEIGHT_KG)
         return patientWeight * DEFAULT_UNITS_PER_KG * solutionMilliliters / solutionHeparinUnits
     }
 
@@ -306,10 +312,13 @@ class HeparinRecommendationService(
         heparinContinuousDosage: Float
     ): Instant = when {
         // initial setup, measure after 4 hours
-        currentAptt == null -> instantTimeProvider.now().plus(REMAINDER_FIRST_HOURS.toLong(), ChronoUnit.HOURS)
+        currentAptt == null ->
+            instantTimeProvider.now().plus(REMAINDER_FIRST_HOURS.toLong(), ChronoUnit.HOURS)
         // stop heparin for one hour
-        heparinContinuousDosage == 0f -> instantTimeProvider.now().plus(REMINDER_NON_COAGULATING_HOURS.toLong(), ChronoUnit.HOURS)
+        heparinContinuousDosage == 0f ->
+            instantTimeProvider.now().plus(REMINDER_NON_COAGULATING_HOURS.toLong(), ChronoUnit.HOURS)
         // TODO what is this case?
-        else -> instantTimeProvider.now().plus(REMAINDER_STANDARD_HOURS.toLong(), ChronoUnit.HOURS)
+        else ->
+            instantTimeProvider.now().plus(REMAINDER_STANDARD_HOURS.toLong(), ChronoUnit.HOURS)
     }
 }

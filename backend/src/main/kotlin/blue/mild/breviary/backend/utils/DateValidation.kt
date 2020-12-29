@@ -12,7 +12,6 @@ import java.time.temporal.ChronoUnit
  * @param startTime
  * @param endTime
  */
-@Throws(InvalidArgumentBreviaryException::class)
 fun validateStartTimeBeforeEndTime(startTime: Instant, endTime: Instant) {
     if (startTime >= endTime) {
         throw InvalidArgumentBreviaryException(
@@ -33,7 +32,6 @@ fun validateStartTimeBeforeEndTime(startTime: Instant, endTime: Instant) {
  * @param startTime
  * @param validUntil
  */
-@Throws(InvalidArgumentBreviaryException::class)
 fun validateStartTimeNotAfterValidUntil(startTime: Instant, validUntil: Instant) {
     if (startTime.truncatedTo(ChronoUnit.DAYS) > validUntil.truncatedTo(ChronoUnit.DAYS)) {
         throw InvalidArgumentBreviaryException(

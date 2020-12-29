@@ -42,7 +42,9 @@ class PasswordResetController(
     )
     fun resetPassword(@Valid @RequestBody passwordReset: PasswordResetDtoIn): ResponseEntity<Any> {
         val username = passwordService.resetPassword(passwordReset)
+
         SecurityContextHolder.getContext().authentication = authenticationService.createdAuthenticationToken(username)
+
         return authenticationService.createResponseWithJsonWebTokenInHeaders(
             username,
             HttpStatus.OK

@@ -27,31 +27,20 @@ class JWTAuthorizationFilter(
         res: HttpServletResponse,
         chain: FilterChain
     ) {
-        if (req.cookies == null) {
-            chain.doFilter(req, res)
-            return
-        }
-        val cookie = req.cookies.find { it.name == AUTH_COOKIE_NAME }
+        // set cookie in session context if exists and it is not blank
+        req.cookies
+            ?.find { it.name == AUTH_COOKIE_NAME }
+            ?.takeIf { it.value.isNotBlank() }
+            ?.also { SecurityContextHolder.getContext().authentication = getAuthentication(it) }
 
-        if (cookie == null || cookie.value.isBlank()) {
-            chain.doFilter(req, res)
-            return
-        }
-
-        val authentication = getAuthentication(cookie)
-        SecurityContextHolder.getContext().authentication = authentication
+        // resume chain
         chain.doFilter(req, res)
     }
 
-    private fun getAuthentication(cookie: Cookie): UsernamePasswordAuthenticationToken? {
-        val user = Jwts.parser()
+    private fun getAuthentication(cookie: Cookie): UsernamePasswordAuthenticationToken? =
+        Jwts.parser()
             .setSigningKey(SECRET.toByteArray())
             .parseClaimsJws(cookie.value)
-            .body
-            .subject
-
-        return if (user != null) {
-            authenticationService.createdAuthenticationToken(user)
-        } else null
-    }
+            .body.subject
+            ?.let { authenticationService.createdAuthenticationToken(it) }
 }
