@@ -19,6 +19,16 @@ inline fun <reified T, ID : Any> CrudRepository<T, ID>.findByIdOrThrow(id: ID): 
     findById(id).orElseThrow { EntityNotFoundBreviaryException("${T::class.simpleName} with id $id not found.") }
 
 /**
+ * Ensures, that the entity with given ID actually exists.
+ *
+ * @param id The ID of the requested entity.
+ * @throws blue.mild.breviary.backend.errors.EntityNotFoundBreviaryException The entity with the given id was not present in the database.
+ */
+inline fun <reified T, ID : Any> CrudRepository<T, ID>.assertEntityExists(id: ID) {
+    findById(id).orElseThrow { EntityNotFoundBreviaryException("${T::class.simpleName} with id $id not found.") }
+}
+
+/**
  * Maps deleted entities to null.
  */
 fun <T : BaseEntity> BaseEntity.mapDeletedToNull(): T? {

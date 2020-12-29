@@ -1,4 +1,4 @@
-package blue.mild.breviary.backend.services
+package blue.mild.breviary.backend.services.heparin
 
 import blue.mild.breviary.backend.db.entities.HeparinPatientEntity
 import blue.mild.breviary.backend.db.entities.PatientEntity
@@ -13,6 +13,7 @@ import blue.mild.breviary.backend.dtos.HeparinPatientWithDataDtoOut
 import blue.mild.breviary.backend.dtos.PatientDtoIn
 import blue.mild.breviary.backend.errors.EntityNotFoundBreviaryException
 import blue.mild.breviary.backend.extensions.toDtoOut
+import blue.mild.breviary.backend.services.AuthenticationService
 import org.springframework.stereotype.Service
 import java.time.temporal.ChronoUnit
 import javax.transaction.Transactional

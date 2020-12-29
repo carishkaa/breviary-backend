@@ -5,7 +5,7 @@ import blue.mild.breviary.backend.dtos.InsulinPatientDtoIn
 import blue.mild.breviary.backend.dtos.InsulinPatientDtoOut
 import blue.mild.breviary.backend.dtos.InsulinPatientWithDataDtoOut
 import blue.mild.breviary.backend.dtos.PatientDtoIn
-import blue.mild.breviary.backend.services.InsulinPatientService
+import blue.mild.breviary.backend.services.insulin.InsulinPatientService
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping

@@ -88,9 +88,9 @@ class LogoutApiListing : ApiListingBuilderPlugin {
      *
      * @param apiListingContext
      */
-    override fun apply(apiListingContext: ApiListingContext?) {
+    override fun apply(apiListingContext: ApiListingContext) {
         // This reflection hell must be done to be able to just append generated operations, not rewrite them.
-        val builder = apiListingContext!!.apiListingBuilder()
+        val builder = apiListingContext.apiListingBuilder()
         val field = org.springframework.util.ReflectionUtils.findField(builder.javaClass, "apis")!!
         org.springframework.util.ReflectionUtils.makeAccessible(field)
         val value = Optional.ofNullable(org.springframework.util.ReflectionUtils.getField(field, builder))

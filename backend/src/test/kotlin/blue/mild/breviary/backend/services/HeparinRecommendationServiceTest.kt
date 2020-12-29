@@ -10,6 +10,9 @@ import blue.mild.breviary.backend.db.repositories.HeparinPatientRepository
 import blue.mild.breviary.backend.dtos.HeparinPatientDtoIn
 import blue.mild.breviary.backend.dtos.PatientDtoIn
 import blue.mild.breviary.backend.enums.Sex
+import blue.mild.breviary.backend.services.heparin.HIGHEST_APTT
+import blue.mild.breviary.backend.services.heparin.HeparinPatientService
+import blue.mild.breviary.backend.services.heparin.HeparinRecommendationService
 import blue.mild.breviary.backend.utils.decodeID
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.clearAllMocks

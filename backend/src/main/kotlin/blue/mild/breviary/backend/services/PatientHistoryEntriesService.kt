@@ -7,11 +7,11 @@ import blue.mild.breviary.backend.db.repositories.HeparinDosageRepository
 import blue.mild.breviary.backend.db.repositories.HeparinPatientRepository
 import blue.mild.breviary.backend.db.repositories.InsulinDosageRepository
 import blue.mild.breviary.backend.db.repositories.InsulinPatientRepository
-import blue.mild.breviary.backend.db.repositories.extensions.findByIdOrThrow
+import blue.mild.breviary.backend.db.repositories.extensions.assertEntityExists
 import blue.mild.breviary.backend.dtos.HeparinPatientHistoryEntryDtoOut
 import blue.mild.breviary.backend.dtos.InsulinPatientHistoryEntryDtoOut
+import blue.mild.breviary.backend.extensions.zip
 import org.springframework.stereotype.Service
-import kotlin.math.min
 
 /**
  * PatientHistoryEntriesService.
@@ -35,14 +35,12 @@ class PatientHistoryEntriesService(
      * @return
      */
     fun getHeparinPatientHistoryEntries(heparinPatientId: Long): List<HeparinPatientHistoryEntryDtoOut> {
-        heparinPatientRepository.findByIdOrThrow(heparinPatientId)
+        heparinPatientRepository.assertEntityExists(heparinPatientId)
+
         val heparinDosages = heparinDosageRepository.getByHeparinPatientId(heparinPatientId)
         val apttValues = apttValueRepository.getByHeparinPatientId(heparinPatientId)
 
-        val minLen = min(heparinDosages.size, apttValues.size)
-        return (0..minLen).map { i ->
-            val heparinDosage = heparinDosages.elementAt(i)
-            val apttValue = apttValues.elementAt(i)
+        return heparinDosages.zip(apttValues) { heparinDosage, apttValue ->
             HeparinPatientHistoryEntryDtoOut(
                 date = heparinDosage.created,
                 aptt = apttValue.value,
@@ -59,16 +57,13 @@ class PatientHistoryEntriesService(
      * @return
      */
     fun getInsulinPatientHistoryEntries(insulinPatientId: Long): List<InsulinPatientHistoryEntryDtoOut> {
-        insulinPatientRepository.findByIdOrThrow(insulinPatientId)
+        insulinPatientRepository.assertEntityExists(insulinPatientId)
+
         val insulinDosages = insulinDosageRepository.getByInsulinPatientId(insulinPatientId)
         val carbohydrateIntakeValues = carbohydrateIntakeValueRepository.getByInsulinPatientId(insulinPatientId)
         val glycemiaValues = glycemiaValueRepository.getByInsulinPatientId(insulinPatientId)
 
-        val minLen = min(min(insulinDosages.size, carbohydrateIntakeValues.size), glycemiaValues.size)
-        return (0..minLen).map { i ->
-            val insulinDosage = insulinDosages.elementAt(i)
-            val carbohydrateIntakeValue = carbohydrateIntakeValues.elementAt(i)
-            val glycemiaValue = glycemiaValues.elementAt(i)
+        return insulinDosages.zip(carbohydrateIntakeValues, glycemiaValues) { insulinDosage, carbohydrateIntakeValue, glycemiaValue ->
             InsulinPatientHistoryEntryDtoOut(
                 date = insulinDosage.created,
                 dosage = insulinDosage.dosage,

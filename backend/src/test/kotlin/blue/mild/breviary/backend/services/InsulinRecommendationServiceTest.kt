@@ -6,6 +6,8 @@ import blue.mild.breviary.backend.dtos.InsulinPatientDtoIn
 import blue.mild.breviary.backend.dtos.PatientDtoIn
 import blue.mild.breviary.backend.enums.InsulinType
 import blue.mild.breviary.backend.enums.Sex
+import blue.mild.breviary.backend.services.insulin.InsulinPatientService
+import blue.mild.breviary.backend.services.insulin.InsulinRecommendationService
 import blue.mild.breviary.backend.utils.decodeID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

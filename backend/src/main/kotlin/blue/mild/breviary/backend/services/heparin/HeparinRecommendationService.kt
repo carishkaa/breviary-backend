@@ -1,4 +1,4 @@
-package blue.mild.breviary.backend.services
+package blue.mild.breviary.backend.services.heparin
 
 import blue.mild.breviary.backend.db.entities.ApttValueEntity
 import blue.mild.breviary.backend.db.entities.HeparinDosageEntity
@@ -8,38 +8,13 @@ import blue.mild.breviary.backend.db.repositories.HeparinPatientRepository
 import blue.mild.breviary.backend.db.repositories.extensions.findByIdOrThrow
 import blue.mild.breviary.backend.dtos.HeparinRecommendationDto
 import blue.mild.breviary.backend.dtos.HeparinRecommendationDtoOut
+import blue.mild.breviary.backend.services.AuthenticationService
+import blue.mild.breviary.backend.services.InstantTimeProvider
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import javax.transaction.Transactional
 import kotlin.math.roundToInt
-
-const val LOWEST_APTT = 1.2f
-const val LOW_APTT = 1.5f
-const val STANDARD_APTT = 2.3f
-const val HIGH_APTT = 3f
-const val HIGHEST_APTT = 3.5f
-
-const val LOWEST_APTT_DOSAGE_PER_KG_CHANGE = 4f
-const val LOW_APTT_DOSAGE_PER_KG_CHANGE = 2f
-const val BELOW_STANDARD_APTT_DOSAGE_PER_KG_CHANGE = 1f
-const val ABOVE_STANDARD_APTT_DOSAGE_PER_KG_CHANGE = -1f
-const val HIGH_APTT_DOSAGE_PER_KG_CHANGE = -2f
-const val HIGHEST_APTT_DOSAGE_PER_KG_CHANGE = -3f
-
-const val LOWEST_APTT_BOLUS = 80f
-const val LOW_APTT_BOLUS = 40f
-
-const val REMAINDER_STANDARD_HOURS = 6
-const val REMAINDER_FIRST_HOURS = 4
-const val REMINDER_NON_COAGULATING_HOURS = 1
-
-const val EXTREME_DOSAGE_DIFF = 15f
-
-const val MIN_WEIGHT_KG = 50f
-const val MAX_WEIGHT_KG = 100f
-
-const val DEFAULT_UNITS_PER_KG = 18f
 
 /**
  * Helper data structure for heparin recommendation.
@@ -51,6 +26,7 @@ data class RecommendedHeparinDosage(val heparinContinuousDosage: Float, val hepa
 
 /**
  * HeparinRecommendationService.
+ * TODO this is a crucial service, we need to add a lot of documentation why do we do what
  */
 @Service
 class HeparinRecommendationService(
@@ -137,7 +113,7 @@ class HeparinRecommendationService(
         if (currentContinuousDosage == 0f) {
             return RecommendedHeparinDosage(
                 getNewDosage(
-                    previousContinuousDosage!!,
+                    requireNotNull(previousContinuousDosage) { "previousContinuousDosage was null even though currentContinuousDosage is 0!" },
                     weight,
                     HIGHEST_APTT_DOSAGE_PER_KG_CHANGE,
                     solutionHeparinUnits,
@@ -325,21 +301,15 @@ class HeparinRecommendationService(
         return patientWeight * DEFAULT_UNITS_PER_KG * solutionMilliliters / solutionHeparinUnits
     }
 
-    @Suppress("ReturnCount")
     private fun getNextRemainder(
         currentAptt: Float?,
         heparinContinuousDosage: Float
-    ): Instant {
-        if (currentAptt == null) {
-            // initial setup, measure after 4 hours
-            return instantTimeProvider.now().plus(REMAINDER_FIRST_HOURS.toLong(), ChronoUnit.HOURS)
-        }
-
-        if (heparinContinuousDosage == 0f) {
-            // stop heparin for one hour
-            return instantTimeProvider.now().plus(REMINDER_NON_COAGULATING_HOURS.toLong(), ChronoUnit.HOURS)
-        }
-
-        return instantTimeProvider.now().plus(REMAINDER_STANDARD_HOURS.toLong(), ChronoUnit.HOURS)
+    ): Instant = when {
+        // initial setup, measure after 4 hours
+        currentAptt == null -> instantTimeProvider.now().plus(REMAINDER_FIRST_HOURS.toLong(), ChronoUnit.HOURS)
+        // stop heparin for one hour
+        heparinContinuousDosage == 0f -> instantTimeProvider.now().plus(REMINDER_NON_COAGULATING_HOURS.toLong(), ChronoUnit.HOURS)
+        // TODO what is this case?
+        else -> instantTimeProvider.now().plus(REMAINDER_STANDARD_HOURS.toLong(), ChronoUnit.HOURS)
     }
 }
