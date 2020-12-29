@@ -5,6 +5,7 @@ import blue.mild.breviary.backend.dtos.HeparinPatientDtoOut
 import blue.mild.breviary.backend.dtos.PatientDtoIn
 import blue.mild.breviary.backend.enums.Sex
 import blue.mild.breviary.backend.errors.EntityNotFoundBreviaryException
+import blue.mild.breviary.backend.services.heparin.HeparinPatientService
 import blue.mild.breviary.backend.utils.decodeID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

@@ -5,5 +5,9 @@ import blue.mild.breviary.backend.dtos.PayloadDto
 /**
  * EntityNotFound exception.
  */
-class EntityNotFoundBreviaryException(message: String, causes: List<Throwable> = listOf(), override val payload: PayloadDto = PayloadDto()) :
+class EntityNotFoundBreviaryException(
+    message: String,
+    causes: List<Throwable> = listOf(),
+    override val payload: PayloadDto = PayloadDto()
+) :
     FormFieldErrorInput, DataBreviaryException(message, causes)

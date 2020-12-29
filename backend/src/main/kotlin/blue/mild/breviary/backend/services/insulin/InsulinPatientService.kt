@@ -1,4 +1,4 @@
-package blue.mild.breviary.backend.services
+package blue.mild.breviary.backend.services.insulin
 
 import blue.mild.breviary.backend.db.entities.InsulinPatientEntity
 import blue.mild.breviary.backend.db.entities.PatientEntity
@@ -11,10 +11,10 @@ import blue.mild.breviary.backend.dtos.InsulinPatientWithDataDtoOut
 import blue.mild.breviary.backend.dtos.PatientDtoIn
 import blue.mild.breviary.backend.errors.EntityNotFoundBreviaryException
 import blue.mild.breviary.backend.extensions.toDtoOut
+import blue.mild.breviary.backend.services.AuthenticationService
 import org.springframework.stereotype.Service
 import java.time.temporal.ChronoUnit
 import javax.transaction.Transactional
-import kotlin.jvm.Throws
 
 /**
  * InsulinPatientService.

@@ -3,7 +3,7 @@ package blue.mild.breviary.backend.controllers
 import blue.mild.breviary.backend.ApiRoutes
 import blue.mild.breviary.backend.dtos.HeparinRecommendationDtoIn
 import blue.mild.breviary.backend.dtos.HeparinRecommendationDtoOut
-import blue.mild.breviary.backend.services.HeparinRecommendationService
+import blue.mild.breviary.backend.services.heparin.HeparinRecommendationService
 import blue.mild.breviary.backend.utils.decodeID
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.MediaType

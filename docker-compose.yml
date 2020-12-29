@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   db:
-    image: postgres:13.0
+    image: postgres:13.1
     container_name: breviary-db
     env_file: .env
     environment:
@@ -16,12 +16,12 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
 
-  api:
+  backend:
     build:
       context: .
       dockerfile: ./Dockerfile.backend
-    image: breviary-api
-    container_name: breviary-api
+    image: breviary-backend
+    container_name: breviary-backend
     env_file: .env
     environment:
       PORT: 80

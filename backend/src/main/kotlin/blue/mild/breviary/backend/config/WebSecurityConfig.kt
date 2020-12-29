@@ -144,7 +144,7 @@ class WebSecurityConfig(
      *
      * @param auth
      */
-    public override fun configure(auth: AuthenticationManagerBuilder?) {
-        auth!!.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder)
+    public override fun configure(auth: AuthenticationManagerBuilder) {
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder)
     }
 }

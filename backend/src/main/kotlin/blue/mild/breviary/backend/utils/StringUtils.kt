@@ -86,8 +86,7 @@ fun ByteArray.toEncodedByteBuffer(): ByteBuffer = ByteBuffer.wrap(this)
  *
  * @return
  */
-@Suppress("MagicNumber")
-fun generateRandomString(): String = (1..16)
-    .map { _ -> kotlin.random.Random.nextInt(0, charPool.size) }
+fun generateRandomString(len: Int = 16): String = (1..len)
+    .map { Random.nextInt(0, charPool.size) }
     .map(charPool::get)
     .joinToString("")

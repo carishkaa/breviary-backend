@@ -205,6 +205,7 @@ class UserService(
         val userEntity = userRepository.findByIdOrThrow(userId)
         val updatedUserEntity = userEntity.copy(
             username = username,
+            // TODO this must be replaced by cryptographically secure random string generator
             password = bCryptPasswordEncoder.encode(generateRandomString()),
             active = true
         )

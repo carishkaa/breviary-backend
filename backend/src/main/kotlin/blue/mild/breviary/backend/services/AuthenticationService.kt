@@ -83,7 +83,7 @@ class AuthenticationService(
      *
      * @return
      */
-    fun isScheduler(): Boolean = getRoles().contains(UserRole.DOCTOR)
+    fun isDoctor(): Boolean = getRoles().contains(UserRole.DOCTOR)
 
     /**
      * Check if user is an administrator.

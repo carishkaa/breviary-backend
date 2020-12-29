@@ -3,7 +3,7 @@ package blue.mild.breviary.backend.controllers
 import blue.mild.breviary.backend.ApiRoutes
 import blue.mild.breviary.backend.dtos.InsulinRecommendationDtoIn
 import blue.mild.breviary.backend.dtos.InsulinRecommendationDtoOut
-import blue.mild.breviary.backend.services.InsulinRecommendationService
+import blue.mild.breviary.backend.services.insulin.InsulinRecommendationService
 import blue.mild.breviary.backend.utils.decodeID
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.MediaType

@@ -5,7 +5,7 @@ import blue.mild.breviary.backend.dtos.HeparinPatientDtoIn
 import blue.mild.breviary.backend.dtos.HeparinPatientDtoOut
 import blue.mild.breviary.backend.dtos.HeparinPatientWithDataDtoOut
 import blue.mild.breviary.backend.dtos.PatientDtoIn
-import blue.mild.breviary.backend.services.HeparinPatientService
+import blue.mild.breviary.backend.services.heparin.HeparinPatientService
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
@@ -26,7 +26,6 @@ import javax.validation.Valid
 @RequestMapping("${ApiRoutes.BASE_PATH}/${ApiRoutes.HEPARIN_PATIENTS}")
 class HeparinPatientController(
     private val heparinPatientService: HeparinPatientService,
-
 ) {
     /**
      * Gets list of active heparin patients.

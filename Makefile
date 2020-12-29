@@ -2,9 +2,9 @@
 export
 
 pipeline-local:
-	docker build . -f ./backend/Dockerfile --target build-worker -t breviary-api
-	docker run --rm breviary-api ./gradlew detekt
-	docker-compose -f docker-compose.pipeline.yml -f docker-compose.pipeline.local.yml up --abort-on-container-exit breviary-api
+	docker build . -f ./backend/Dockerfile --target build-worker -t breviary-backend
+	docker run --rm breviary-backend ./gradlew detekt
+	docker-compose -f docker-compose.pipeline.yml -f docker-compose.pipeline.local.yml up --abort-on-container-exit backend
 	docker-compose -f docker-compose.pipeline.yml -f docker-compose.pipeline.local.yml down
 
 detekt:
@@ -20,8 +20,8 @@ docker-prune:
 	docker-compose down
 	docker volume rm breviary_breviary-db
 
-api-up: docker-login
-	docker-compose up api
+backend-up: docker-login
+	docker-compose up backend
 
 docker-start-local-db:
 	 docker-compose -f docker-compose.yml up -d db
@@ -56,7 +56,5 @@ book-pdf: book-init
 	rm -f "${PWD}/book/book.pdf" && \
 	open "${PWD}/book/breviary.pdf"
 
-# generate client stubs
-generate-stubs:
-	openapi-generator-cli generate -g typescript-angular \
-		-i swagger.json -o client-stubs --additional-properties npmName=@mildblue/breviary-api,snapshot=true,ngVersion=10.0.0
+docker-build:
+	docker build -t breviary-backend -f Dockerfile.backend .
