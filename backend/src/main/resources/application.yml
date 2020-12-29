@@ -1,0 +1,64 @@
+springfox.documentation.swagger.v3.path: /v3/api-docs
+
+# Enable response compression
+server:
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json,image/jpeg,image/png,image/gif
+    min-response-size: 1024
+  port: ${PORT:8080}
+  error.whitelabel.enabled: false # Disable Whitelabel Error Page
+
+#######################
+# Spring
+#######################
+spring:
+  #######################
+  # FLYWAY properties
+  #######################
+  flyway:
+    enabled: true
+    baselineOnMigrate: true
+
+  #######################
+  # DB properties
+  #######################
+  datasource:
+    url: ${DB_URL:}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  #######################
+  # App properties
+  #######################
+  application:
+    name: ${APPLICATION_NAME:breviary}
+    email: ${APPLICATION_EMAIL:}
+    allowedOrigins: ${ALLOWED_ORIGINS:}
+
+  #######################
+  # JPA properties
+  #######################
+  jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+
+  #######################
+  # Servlet properties
+  #######################
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+
+  #######################
+  # REST properties
+  #######################
+  data:
+    rest:
+      base-path: /api
+
+management.endpoints.web.exposure.include: health
+management.endpoint.health.show-details: when_authorized
+

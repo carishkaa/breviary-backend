@@ -1,0 +1,16 @@
+{
+  "name": "breviary-documentation",
+  "version": "2020.06.26.01",
+  "dependencies": {
+    "gitbook-cli": "^2.3",
+    "gitbook-plugin-katex": "^1.1.4",
+    "safe-buffer": "^5.1.2"
+  },
+  "scripts": {
+    "serve": "gitbook serve --port 4003",
+    "serve-no-live": "gitbook serve --port 4003 --no-live",
+    "build": "gitbook build --timing",
+    "gitbook-install": "gitbook install",
+    "pdf": "gitbook pdf ./ ./breviary.pdf"
+  }
+}
