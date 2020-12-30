@@ -1,51 +1,63 @@
-.PHONY: help
+-include .env
+export
 
-.DEFAULT: help
-help:
-	@echo "TODO"
+pipeline-local:
+	docker build . -f Dockerfile.backend --target build-worker -t breviary-backend
+	docker run --rm breviary-backend ./gradlew detekt
+	docker-compose -f docker-compose.pipeline.yml -f docker-compose.pipeline.local.yml up --abort-on-container-exit backend
+	docker-compose -f docker-compose.pipeline.yml -f docker-compose.pipeline.local.yml down
 
-CONDA_ENV=breviary
+detekt:
+	./gradlew detekt
 
-# creates environment from the file
-conda-create:
-	conda env create -f conda.yml --name $(CONDA_ENV)
+docker-login:
+	docker login
 
-# exports all changes made locally - then one must copy the changes to conda.yml
-conda-export:
-	conda env export --from-history
+docker-up: docker-login
+	docker-compose up --build
 
-# updates environment when some changes were applied to the file
-conda-update:
-	conda env update --file conda.yml --prune --name $(CONDA_ENV)
+docker-prune:
+	docker-compose down
+	docker volume rm breviary_breviary-db
 
-# does not actually work, has to be called manually
-conda-activate:
-	conda activate $(CONDA_ENV)
+backend-up: docker-login
+	docker-compose up backend
+
+docker-start-local-db:
+	 docker-compose -f docker-compose.yml up -d db
+
+docker-stop-local-db:
+	 docker-compose -f docker-compose.yml down db
+
+regenerate-types:
+	./gradlew --no-daemon :backend:cleanTest :backend:test --tests "blue.mild.breviary.backend.generators.GenerateSwaggerTest"
+
+regenerate-localization-messages:
+	./gradlew --no-daemon :backend:cleanTest :backend:test --tests "blue.mild.breviary.backend.generators.GenerateLocalizationTest"
+
+# Gitbook helper scripts.
+# Initialize Gitbook.
+book-init:
+	docker run -t -i --rm -v "${PWD}":/gitbook -w /gitbook/book billryan/gitbook:latest gitbook install
+
+# Kill Gitbook
+book-kill:
+	docker kill breviary-gitbook
+
+# Run Gitbook as a website.
+book-serve: book-init
+	docker run -t -i --rm --name breviary-gitbook -v "${PWD}":/gitbook -p 4000:4000 -p 35729:35729 -w /gitbook/book \
+		billryan/gitbook:latest gitbook serve
+
+# Generates Gitbook PDF version.
+book-pdf: book-init
+	docker run -t -i --rm -v "${PWD}":/gitbook -w /gitbook/book billryan/gitbook:latest gitbook pdf && \
+	cp "${PWD}/book/book.pdf" "${PWD}/book/breviary.pdf" && \
+	rm -f "${PWD}/book/book.pdf" && \
+	open "${PWD}/book/breviary.pdf"
+
+docker-build:
+	docker build -t breviary-backend -f Dockerfile.backend .
 
 db:
 	docker-compose up -d db
-
-run:
-	export FLASK_APP=backend.app:app; \
-	export FLASK_ENV=development; \
-	export FLASK_DEBUG=true; \
-	flask run --port=8080 --host=localhost
-
-# get logs from the running service
-logs:
-	docker-compose -f docker-compose.yml logs --follow backend
-
-clean-db:
-	docker-compose stop db || true
-	docker-compose rm -f db || true
-	docker volume rm breviary_breviary-db || true
-	docker-compose up -d db
-
-build_and_push_worker:
-	. ./devops/build_and_push_to_dockerhub.sh && build_and_push_worker
-
-build_and_push_backend:
-	. ./devops/build_and_push_to_dockerhub.sh && build_and_push_backend
-
-redeploy_staging:
-	. ./devops/redeploy_staging.sh

@@ -1,0 +1,7 @@
+_book/
+assets/
+node_modules/
+*.log
+*lock*
+*.pdf
+!breviary.pdf

@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:13.1
+    container_name: breviary-db
+    expose:
+      - 5433
+    networks:
+      - breviary
+
+  backend:
+    image: breviary-backend
+    container_name: breviary-backend
+    environment:
+      PORT: 8080
+    depends_on:
+      - db
+    networks:
+      - breviary
+    command:
+      - ./gradlew
+      - --no-daemon
+      - --stacktrace
+      - :backend:test
+
+networks:
+  breviary:
+    driver: bridge
