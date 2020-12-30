@@ -26,7 +26,8 @@ RUN ./gradlew resolveDependencies --info --no-daemon
 
 # until this line, the docker cache should hit almost always
 # we need to copy .git because we use version.properties file...
-COPY ./.git /.git
+# TODO temporary commenting that as github actions don't include .git in the cloned repo
+#COPY ./.git /.git
 COPY ./backend/ /backend/
 
 # first only processResources to prevent deleting version.properties
