@@ -29,4 +29,4 @@ The function that calculates insulin bolus for patient takes as parameters:
 - Amount of remaining_rapid_insulin is calculated from the properties of given rapid insulin type that we take from: 
   https://www.ikem.cz/UserFiles/Image/1604920379L%C3%A9%C4%8Dba_inzulinem_u_diabetu_1._typu.pdf. The remaining rapid 
   insulin level is calculated based on the graphs in the pdf and time from the previous bolus(es). We assume that if 
-  we have no data that current rapid insulin level is 0).
+  we have no data that current rapid insulin level is 0.
