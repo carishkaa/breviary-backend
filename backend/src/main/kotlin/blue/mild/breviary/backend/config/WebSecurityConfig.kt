@@ -55,15 +55,17 @@ class WebSecurityConfig(
          * @return
          */
         fun createCookie(value: String, expiration: Int = EXPIRATION_TIME): String {
-            val cookie = Cookie(AUTH_COOKIE_NAME, value).apply {
-                secure = true
-                isHttpOnly = true
-                maxAge = expiration
-            }
+            val cookie = Cookie(AUTH_COOKIE_NAME, value)
+                .apply {
+                    secure = true
+                    isHttpOnly = true
+                    maxAge = expiration
+                }
 
-            val processor = Rfc6265CookieProcessor()
-            processor.setSameSiteCookies("None")
-            return processor.generateHeader(cookie)
+            @Suppress("DEPRECATION") // TODO fix me
+            return Rfc6265CookieProcessor()
+                .apply { setSameSiteCookies("None") }
+                .generateHeader(cookie)
         }
     }
 
@@ -77,11 +79,13 @@ class WebSecurityConfig(
             response: HttpServletResponse,
             authentication: Authentication?
         ) {
-            response.setHeader(SET_COOKIE_KEY, createCookie("", 0))
-            response.contentType = MediaType.APPLICATION_JSON.toString()
-            response.writer.let {
-                it.println(createJson(ResponseDto("You have been logged out.", HttpStatus.OK.value())))
-                it.flush()
+            with(response) {
+                setHeader(SET_COOKIE_KEY, createCookie("", 0))
+                contentType = MediaType.APPLICATION_JSON.toString()
+                writer.let {
+                    it.println(createJson(ResponseDto("You have been logged out.", HttpStatus.OK.value())))
+                    it.flush()
+                }
             }
         }
     }

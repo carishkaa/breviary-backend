@@ -8,7 +8,6 @@ import blue.mild.breviary.backend.dtos.PayloadDto
 import blue.mild.breviary.backend.errors.InvalidArgumentBreviaryException
 import blue.mild.breviary.backend.services.AuthenticationService
 import blue.mild.breviary.backend.services.UserService
-import blue.mild.breviary.backend.utils.isNullOrEmpty
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -47,39 +46,39 @@ class LoginController(
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun login(@Valid @RequestBody user: LoginDtoIn): ResponseEntity<Any> {
-        if (isNullOrEmpty(user.email)) {
-            return getErrorResponse(
+    fun login(@Valid @RequestBody user: LoginDtoIn): ResponseEntity<Any> =
+        when {
+            @Suppress("UselessCallOnNotNull")
+            // because this is deserialization, so in theory it might be a null
+            user.email.isNullOrBlank() -> getErrorResponse(
                 InvalidArgumentBreviaryException(
                     "Email must not be empty.",
                     payload = PayloadDto(hashMapOf(PropertiesNames.EMAIL to "Email must not be empty."))
                 ),
-                HttpStatus.BAD_REQUEST
+                statusCode = HttpStatus.BAD_REQUEST
             )
-        }
-
-        if (!usersService.userExists(user.email)) {
-            return getErrorResponse(
+            // check if the user exists
+            !usersService.userExists(user.email) -> getErrorResponse(
                 InvalidArgumentBreviaryException(
                     "Email '${user.email}' not found.",
                     payload = PayloadDto(hashMapOf(PropertiesNames.EMAIL to "Email not found."))
                 ),
-                HttpStatus.NOT_FOUND
+                statusCode = HttpStatus.NOT_FOUND
             )
-        }
-
-        val dbUser = usersService.getUserByUsername(user.email)
-        if (!bCryptPasswordEncoder.matches(user.password, dbUser.password)) {
-            return getErrorResponse(
+            // verify passwords
+            !bCryptPasswordEncoder.matches(user.password, usersService.getUserByUsername(user.email).password) -> getErrorResponse(
                 InvalidArgumentBreviaryException(
                     "Invalid password.",
                     payload = PayloadDto(hashMapOf(PropertiesNames.PASSWORD to "Invalid password."))
                 ),
-                HttpStatus.UNAUTHORIZED
+                statusCode = HttpStatus.UNAUTHORIZED
             )
+            // all good, user exists and passwords match
+            else -> {
+                // put auth to the session context
+                SecurityContextHolder.getContext().authentication = authenticationService.createdAuthenticationToken(user.email)
+                // and return response
+                authenticationService.createResponseWithJsonWebTokenInHeaders(user.email, HttpStatus.OK)
+            }
         }
-
-        SecurityContextHolder.getContext().authentication = authenticationService.createdAuthenticationToken(user.email)
-        return authenticationService.createResponseWithJsonWebTokenInHeaders(user.email, HttpStatus.OK)
-    }
 }

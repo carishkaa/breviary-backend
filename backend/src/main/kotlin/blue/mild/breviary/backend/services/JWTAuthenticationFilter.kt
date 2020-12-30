@@ -55,15 +55,10 @@ class JWTAuthenticationFilter(
          * @param username
          * @return
          */
-        fun createHeadersWithJsonWebToken(username: String, cookieKey: String): HttpHeaders {
-            createJsonWebToken(
-                username, getCookieDuration()
-            ).apply {
-                val headers = HttpHeaders()
-                headers.add(cookieKey, createCookie(this))
-                return headers
+        fun createHeadersWithJsonWebToken(username: String, cookieKey: String): HttpHeaders =
+            createJsonWebToken(username, getCookieDuration()).let {
+                HttpHeaders().apply { add(cookieKey, createCookie(it)) }
             }
-        }
 
         /**
          * Gets cookie duration.
@@ -112,8 +107,6 @@ class JWTAuthenticationFilter(
         createJsonWebToken(
             (auth.principal as User).username,
             getCookieDuration()
-        ).apply {
-            res.setHeader(SET_COOKIE_KEY, createCookie(this))
-        }
+        ).also { res.setHeader(SET_COOKIE_KEY, createCookie(it)) }
     }
 }

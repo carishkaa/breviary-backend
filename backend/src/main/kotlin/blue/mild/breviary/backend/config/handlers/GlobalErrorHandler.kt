@@ -48,15 +48,11 @@ class GlobalErrorHandler {
          */
         fun getErrorResponse(ex: Exception, statusCode: HttpStatus, message: String = ""): ResponseEntity<Any> {
             val headers = HttpHeaders()
-            headers.set(
-                CONTENT_TYPE,
-                MediaType.APPLICATION_JSON.toString()
-            )
+                .apply { set("Content-Type", MediaType.APPLICATION_JSON.toString()) }
 
-            val payload = if (ex is FormFieldErrorInput) {
-                ex.payload
-            } else {
-                PayloadDto()
+            val payload = when (ex) {
+                is FormFieldErrorInput -> ex.payload
+                else -> PayloadDto()
             }
 
             return ResponseEntity(
@@ -65,8 +61,6 @@ class GlobalErrorHandler {
                 statusCode
             )
         }
-
-        const val CONTENT_TYPE = "Content-Type"
     }
 
     /**
@@ -114,10 +108,7 @@ class GlobalErrorHandler {
         ex,
         HttpStatus.CONFLICT,
         "Resource is in conflict with the state of the system. Most probably, a resource with the same name already exists."
-    )
-        .also {
-            logger.error(ex) { "${HttpStatus.CONFLICT} returned." }
-        }
+    ).also { logger.error(ex) { "${HttpStatus.CONFLICT} returned." } }
 
     /**
      * Handle and process AccessDeniedException and AccessDeniedBreviaryException.
@@ -127,9 +118,7 @@ class GlobalErrorHandler {
      */
     @ExceptionHandler(AccessDeniedException::class, SecurityBreviaryException::class)
     fun accessDeniedHandler(ex: Exception): ResponseEntity<Any> = getErrorResponse(ex, HttpStatus.FORBIDDEN)
-        .also {
-            logger.error(ex) { "${HttpStatus.FORBIDDEN} returned." }
-        }
+        .also { logger.error(ex) { "${HttpStatus.FORBIDDEN} returned." } }
 
     /**
      * Handle and process ConstraintViolationException.
@@ -140,9 +129,7 @@ class GlobalErrorHandler {
     @ExceptionHandler(ConstraintViolationException::class)
     fun accessConstraintViolationHandler(ex: Exception): ResponseEntity<Any> =
         getErrorResponse(ex, HttpStatus.BAD_REQUEST)
-            .also {
-                logger.error(ex) { "${HttpStatus.BAD_REQUEST} returned." }
-            }
+            .also { logger.error(ex) { "${HttpStatus.BAD_REQUEST} returned." } }
 
     /**
      * Handle and process HttpMediaTypeNotSupportedException.
@@ -156,10 +143,7 @@ class GlobalErrorHandler {
             ex,
             HttpStatus.UNSUPPORTED_MEDIA_TYPE,
             "Only '${MediaType.APPLICATION_JSON}' content type is supported."
-        )
-            .also {
-                logger.error(ex) { "${HttpStatus.UNSUPPORTED_MEDIA_TYPE} returned." }
-            }
+        ).also { logger.error(ex) { "${HttpStatus.UNSUPPORTED_MEDIA_TYPE} returned." } }
 
     /**
      * Handle and process BadCredentialsException and UnauthenticatedBreviaryException.
@@ -169,9 +153,7 @@ class GlobalErrorHandler {
      */
     @ExceptionHandler(BadCredentialsException::class, UnauthenticatedBreviaryException::class)
     fun unauthorizedHandler(ex: Exception): ResponseEntity<Any> = getErrorResponse(ex, HttpStatus.UNAUTHORIZED)
-        .also {
-            logger.error(ex) { "${HttpStatus.UNAUTHORIZED} returned." }
-        }
+        .also { logger.error(ex) { "${HttpStatus.UNAUTHORIZED} returned." } }
 
     /**
      * Handle and process HttpRequestMethodNotSupportedException.
@@ -181,9 +163,7 @@ class GlobalErrorHandler {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
     fun unsupportedMethodHandler(ex: Exception): ResponseEntity<Any> = getErrorResponse(ex, HttpStatus.BAD_REQUEST)
-        .also {
-            logger.error(ex) { "${HttpStatus.BAD_REQUEST} returned." }
-        }
+        .also { logger.error(ex) { "${HttpStatus.BAD_REQUEST} returned." } }
 
     /**
      * Handle and process HttpRequestMethodNotSupportedException.
@@ -193,9 +173,7 @@ class GlobalErrorHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun notReadableExceptionHandler(ex: Exception): ResponseEntity<Any> = getErrorResponse(ex, HttpStatus.BAD_REQUEST)
-        .also {
-            logger.error(ex) { "${HttpStatus.BAD_REQUEST} returned." }
-        }
+        .also { logger.error(ex) { "${HttpStatus.BAD_REQUEST} returned." } }
 
     /**
      * Handle and process Exception.
@@ -206,9 +184,7 @@ class GlobalErrorHandler {
     @ExceptionHandler(Exception::class)
     fun otherErrorHandler(ex: Exception): ResponseEntity<Any> =
         getErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error. Please, contact support.")
-            .also {
-                logger.error(ex) { "${HttpStatus.INTERNAL_SERVER_ERROR} returned." }
-            }
+            .also { logger.error(ex) { "${HttpStatus.INTERNAL_SERVER_ERROR} returned." } }
 
     /**
      * Handle and process Exception.
@@ -217,8 +193,8 @@ class GlobalErrorHandler {
      * @return Error response
      */
     @ExceptionHandler(UndeclaredThrowableException::class)
-    fun undeclaredThrowableHandler(ex: Exception): ResponseEntity<Any> {
-        return when (val cause = ex.cause) {
+    fun undeclaredThrowableHandler(ex: Exception): ResponseEntity<Any> =
+        when (val cause = ex.cause) {
             is InvalidArgumentBreviaryException -> badRequestHandler(cause)
             is IllegalArgumentException -> badRequestHandler(cause)
             is CannotDeleteEntityBreviaryException -> badRequestHandler(cause)
@@ -236,5 +212,4 @@ class GlobalErrorHandler {
             is HttpMessageNotReadableException -> notReadableExceptionHandler(cause)
             else -> otherErrorHandler((cause ?: Exception("Unknown cause exception.")) as Exception)
         }
-    }
 }

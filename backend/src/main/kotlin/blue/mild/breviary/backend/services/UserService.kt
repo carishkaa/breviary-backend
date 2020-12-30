@@ -16,12 +16,10 @@ import blue.mild.breviary.backend.dtos.UserDtoOut
 import blue.mild.breviary.backend.dtos.UserSignupDtoIn
 import blue.mild.breviary.backend.enums.UserRole
 import blue.mild.breviary.backend.errors.EntityAlreadyExistsBreviaryException
-import blue.mild.breviary.backend.errors.EntityNotFoundBreviaryException
 import blue.mild.breviary.backend.errors.InvalidArgumentBreviaryException
 import blue.mild.breviary.backend.extensions.toDtoOut
 import blue.mild.breviary.backend.utils.generateRandomString
 import blue.mild.breviary.backend.utils.isEmail
-import blue.mild.breviary.backend.utils.isNotNullOrEmpty
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import pw.forst.tools.katlib.mapToSet
@@ -52,11 +50,8 @@ class UserService(
      * @param username
      * @return
      */
-    fun getUserByUsername(username: String): UserDtoOut {
-        val userEntity = userRepository.findByUsernameOrThrow(username)
-
-        return userEntity.toDtoOut()
-    }
+    fun getUserByUsername(username: String): UserDtoOut =
+        userRepository.findByUsernameOrThrow(username).toDtoOut()
 
     /**
      * Get user by id.
@@ -64,10 +59,8 @@ class UserService(
      * @param userId
      * @return
      */
-    fun getUserById(userId: Long): UserDtoOut {
-        val userEntity = userRepository.findByIdOrThrow(userId)
-        return userEntity.toDtoOut()
-    }
+    fun getUserById(userId: Long): UserDtoOut =
+        userRepository.findByIdOrThrow(userId).toDtoOut()
 
     /**
      * Checks if user exists.
@@ -86,24 +79,18 @@ class UserService(
      * @return
      */
     @Transactional
-    @Throws(
-        EntityAlreadyExistsBreviaryException::class,
-        InvalidArgumentBreviaryException::class,
-        EntityNotFoundBreviaryException::class
-    )
     fun addUser(user: UserDtoIn, active: Boolean): UserDtoOut {
         if (active) {
             validateUsername(user.email)
         }
 
-        val userEntity = userRepository.save(
+        return userRepository.save(
             UserEntity(
                 username = user.email.toLowerCase(),
                 password = bCryptPasswordEncoder.encode(user.password),
                 active = active
             )
-        )
-        return userEntity.toDtoOut()
+        ).toDtoOut()
     }
 
     /**
@@ -113,7 +100,6 @@ class UserService(
      * @return
      */
     @Transactional
-    @Throws(EntityAlreadyExistsBreviaryException::class)
     fun signUpUser(user: UserSignupDtoIn): UserDtoOut {
         val newUser = addUser(
             UserDtoIn(
@@ -133,7 +119,6 @@ class UserService(
      * @param roles
      */
     @Transactional
-    @Throws(EntityNotFoundBreviaryException::class)
     fun setUserRoles(userId: Long, roles: List<UserRole>): List<UserRoleEntity> {
         val userEntity = userRepository.findByIdOrThrow(userId)
         val stayUserRoles = userEntity.roles.filter { roles.contains(it.role.name) }
@@ -157,12 +142,11 @@ class UserService(
      * @return
      */
     @Transactional
-    @Throws(EntityNotFoundBreviaryException::class)
     fun updateUser(userId: Long, user: UserDtoIn): UserDtoOut {
         val userEntity = userRepository.findByIdOrThrow(userId)
-        val updatedUserEntity = userEntity.copy(password = bCryptPasswordEncoder.encode(user.password))
-        userRepository.save(updatedUserEntity)
-        return updatedUserEntity.toDtoOut()
+        return userRepository.save(
+            userEntity.copy(password = bCryptPasswordEncoder.encode(user.password))
+        ).toDtoOut()
     }
 
     /**
@@ -173,10 +157,10 @@ class UserService(
      * @return
      */
     @Transactional
-    @Throws(EntityNotFoundBreviaryException::class, EntityAlreadyExistsBreviaryException::class)
     fun updateUserNames(userId: Long, user: UserDtoIn): UserDtoOut {
         val userEntity = userRepository.findByIdOrThrow(userId)
-        if (isNotNullOrEmpty(user.email) &&
+
+        if (user.email.isNotBlank() &&
             userEntity.username != user.email &&
             userRepository.findByUsername(user.email) != null
         ) {
@@ -185,9 +169,7 @@ class UserService(
                 payload = PayloadDto(hashMapOf(PropertiesNames.EMAIL to "User with this email already exists."))
             )
         }
-        val updatedUserEntity = userEntity.copy(username = user.email)
-        userRepository.save(updatedUserEntity)
-        return updatedUserEntity.toDtoOut()
+        return userRepository.save(userEntity.copy(username = user.email)).toDtoOut()
     }
 
     /**
@@ -198,7 +180,6 @@ class UserService(
      * @return
      */
     @Transactional
-    @Throws(InvalidArgumentBreviaryException::class, EntityNotFoundBreviaryException::class)
     fun activateUser(userId: Long, username: String): UserDtoOut {
         validateUsername(username, userId)
 
@@ -209,8 +190,8 @@ class UserService(
             password = bCryptPasswordEncoder.encode(generateRandomString()),
             active = true
         )
-        userRepository.save(updatedUserEntity)
-        return updatedUserEntity.toDtoOut()
+
+        return userRepository.save(updatedUserEntity).toDtoOut()
     }
 
     /**
@@ -220,12 +201,9 @@ class UserService(
      * @return
      */
     @Transactional
-    @Throws(EntityNotFoundBreviaryException::class)
     fun deactivateUser(userId: Long): UserDtoOut {
         val userEntity = userRepository.findByIdOrThrow(userId)
-        val updatedUserEntity = userEntity.copy(password = EMPTY_PASSWORD, active = false)
-        userRepository.save(updatedUserEntity)
-        return updatedUserEntity.toDtoOut()
+        return userRepository.save(userEntity.copy(password = EMPTY_PASSWORD, active = false)).toDtoOut()
     }
 
     /**
@@ -234,7 +212,6 @@ class UserService(
      * @param userId
      */
     @Transactional
-    @Throws(EntityNotFoundBreviaryException::class)
     fun deleteUser(userId: Long) {
         val userEntity = userRepository.findByIdOrThrow(userId)
 
@@ -243,10 +220,6 @@ class UserService(
     }
 
     @Suppress("ThrowsCount")
-    @Throws(
-        InvalidArgumentBreviaryException::class,
-        EntityAlreadyExistsBreviaryException::class
-    )
     private fun validateUsername(username: String, userId: Long? = null) {
         if (!username.isEmail()) {
             throw InvalidArgumentBreviaryException(
@@ -264,7 +237,7 @@ class UserService(
                 )
             } else {
                 val userById = userRepository.findByIdOrThrow(userId)
-                if (isNotNullOrEmpty(userById.username) && userById.username != username) {
+                if (userById.username.isNotBlank() && userById.username != username) {
                     throw EntityAlreadyExistsBreviaryException(
                         "User with email '$username' already exists.",
                         payload = PayloadDto(hashMapOf(PropertiesNames.EMAIL to "User with this email already exists."))

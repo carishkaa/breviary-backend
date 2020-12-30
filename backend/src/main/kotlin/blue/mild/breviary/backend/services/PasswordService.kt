@@ -22,7 +22,7 @@ import javax.transaction.Transactional
  *
  * @property authenticationService
  * @property instantTimeProvider
- * @property resetPasswordResetRepository
+ * @property passwordResetRepository
  * @property userRepository
  * @property bCryptPasswordEncoder
  */
@@ -30,7 +30,7 @@ import javax.transaction.Transactional
 class PasswordService(
     private val authenticationService: AuthenticationService,
     private val instantTimeProvider: InstantTimeProvider,
-    private val resetPasswordResetRepository: PasswordResetRepository,
+    private val passwordResetRepository: PasswordResetRepository,
     private val userRepository: UserRepository,
     private val bCryptPasswordEncoder: BCryptPasswordEncoder
 ) {
@@ -46,25 +46,25 @@ class PasswordService(
      * @param passwordReset
      * @return
      */
-    @Transactional
-    @Throws(EntityNotFoundBreviaryException::class, InvalidArgumentBreviaryException::class)
+    @Transactional(dontRollbackOn = [InvalidArgumentBreviaryException::class])
     fun resetPassword(passwordReset: PasswordResetDtoIn): String {
         val resetPasswordEntity =
-            resetPasswordResetRepository
-                .findByToken(passwordReset.token)
+            passwordResetRepository.findByToken(passwordReset.token)
                 ?: throw EntityNotFoundBreviaryException("Could not find password reset token ${passwordReset.token}.")
 
         val now = instantTimeProvider.now()
         if (now != resetPasswordEntity.validUntil && now.isAfter(resetPasswordEntity.validUntil)) {
-            resetPasswordResetRepository.delete(resetPasswordEntity)
+            passwordResetRepository.delete(resetPasswordEntity)
             throw InvalidArgumentBreviaryException("Password reset token ${passwordReset.token} already expired.")
         }
 
         validatePasswordComplexity(passwordReset.newPassword)
+
         val user = userRepository.findByUsernameOrThrow(resetPasswordEntity.user.username)
         val updatedUser = user.copy(password = bCryptPasswordEncoder.encode(passwordReset.newPassword))
+
         userRepository.save(updatedUser)
-        resetPasswordResetRepository.delete(resetPasswordEntity)
+        passwordResetRepository.delete(resetPasswordEntity)
 
         return user.username
     }
@@ -76,9 +76,7 @@ class PasswordService(
      * @return
      */
     @Transactional
-    @Throws(EntityNotFoundBreviaryException::class, InvalidArgumentBreviaryException::class)
     fun changePassword(passwordChange: PasswordChangeDtoIn): String {
-
         val currentUser = authenticationService.getUser()
 
         if (passwordChange.newPassword != passwordChange.newPasswordAgain) {
@@ -99,9 +97,8 @@ class PasswordService(
 
         val user = userRepository.findByUsernameOrThrow(currentUser.username)
         val updatedUser = user.copy(password = bCryptPasswordEncoder.encode(passwordChange.newPassword))
-        userRepository.save(updatedUser)
 
-        return user.username
+        return userRepository.save(updatedUser).username
     }
 
     /**
@@ -110,18 +107,17 @@ class PasswordService(
      * @param username
      */
     @Transactional
-    @Throws(EntityNotFoundBreviaryException::class)
     fun createPasswordResetRequest(username: String) {
         val user = userRepository.findByUsernameOrThrow(username)
-        val alreadyExistingRequests = resetPasswordResetRepository.findByUserId(user.id)
+        val alreadyExistingRequests = passwordResetRepository.findByUserId(user.id)
 
         if (alreadyExistingRequests.any()) {
             logger.warn { "Removing existing reset password requests for user with email ${user.username}." }
-            resetPasswordResetRepository.deleteAll(alreadyExistingRequests)
+            passwordResetRepository.deleteAll(alreadyExistingRequests)
         }
-
+        // TODO generate crypto-secure tokens, don't use uuid
         val token = UUID.randomUUID().toString()
-        resetPasswordResetRepository.save(
+        passwordResetRepository.save(
             PasswordResetEntity(
                 token = token,
                 validUntil = instantTimeProvider.now().plus(TOKEN_VALIDATION_IN_HOURS, ChronoUnit.HOURS),
@@ -132,7 +128,6 @@ class PasswordService(
         // TODO: Send some information to user.
     }
 
-    @Throws(InvalidArgumentBreviaryException::class)
     private fun validatePasswordComplexity(password: String) {
         if (password.length < MIN_PASSWORD_LENGTH) {
             throw InvalidArgumentBreviaryException(

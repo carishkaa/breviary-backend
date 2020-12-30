@@ -26,11 +26,8 @@ class LocalizationConfig : WebMvcConfigurer {
      * @return
      */
     @Bean
-    fun localeResolver(): LocaleResolver {
-        val slr = SessionLocaleResolver()
-        slr.setDefaultLocale(Locale.US)
-        return slr
-    }
+    fun localeResolver(): LocaleResolver =
+        SessionLocaleResolver().apply { setDefaultLocale(Locale.US) }
 
     /**
      * LocaleChangeInterceptor bean.
@@ -38,11 +35,8 @@ class LocalizationConfig : WebMvcConfigurer {
      * @return
      */
     @Bean
-    fun localeChangeInterceptor(): LocaleChangeInterceptor {
-        val lci = LocaleChangeInterceptor()
-        lci.paramName = HEADER_NAME
-        return lci
-    }
+    fun localeChangeInterceptor(): LocaleChangeInterceptor =
+        LocaleChangeInterceptor().apply { paramName = HEADER_NAME }
 
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(localeChangeInterceptor())

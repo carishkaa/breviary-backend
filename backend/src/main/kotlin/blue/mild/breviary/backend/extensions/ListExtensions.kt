@@ -1,5 +1,7 @@
 package blue.mild.breviary.backend.extensions
 
+// TODO move this file to the katlib
+
 /**
  * List cartesian production.
  *
@@ -33,7 +35,6 @@ fun <T> List<List<T>>.lazyCartesianProduct(): Sequence<List<T>> =
     if (isEmpty()) emptySequence()
     else lazyCartesianProductAcc(this, emptyList())
 
-// TODO move this to katlib
 /**
  * Zip alternative for three collections.
  */
@@ -53,3 +54,16 @@ inline fun <A, B, C, V> Iterable<A>.zip(b: Iterable<B>, c: Iterable<C>, transfor
 
 @PublishedApi
 internal fun <T> Iterable<T>.collectionSizeOrDefault(default: Int): Int = if (this is Collection<*>) this.size else default
+
+/**
+ * Sum collection by float as this is missing in the stdlib...
+ *
+ * Not naming it sumOf in order to have easier imports.
+ */
+inline fun <T> Iterable<T>.sumByFloat(selector: (T) -> Float): Float {
+    var sum = 0f
+    for (element in this) {
+        sum += selector(element)
+    }
+    return sum
+}

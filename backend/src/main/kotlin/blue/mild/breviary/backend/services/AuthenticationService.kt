@@ -72,11 +72,8 @@ class AuthenticationService(
      * @param username
      * @return
      */
-    fun getAuthorities(username: String): List<GrantedAuthority> {
-        val userEntity = userRepository.findByUsernameOrThrow(username)
-
-        return getUserRoles(userEntity).map { SimpleGrantedAuthority(it.name) }
-    }
+    fun getAuthorities(username: String): List<GrantedAuthority> =
+        getUserRoles(username).map { SimpleGrantedAuthority(it.name) }
 
     /**
      * Check if user is a scheduler.
@@ -98,18 +95,16 @@ class AuthenticationService(
      * @param username
      * @return
      */
-    fun createResponseWithJsonWebTokenInHeaders(username: String, responseStatus: HttpStatus): ResponseEntity<Any> {
-        val user = userRepository.findByUsernameOrThrow(username)
-
-        return ResponseEntity(
+    fun createResponseWithJsonWebTokenInHeaders(username: String, responseStatus: HttpStatus): ResponseEntity<Any> =
+        ResponseEntity(
             UserDtoOut(
                 email = username,
-                roles = getUserRoles(user),
+                roles = getUserRoles(username),
             ),
             JWTAuthenticationFilter.createHeadersWithJsonWebToken(username, WebSecurityConfig.SET_COOKIE_KEY),
             responseStatus
         )
-    }
 
-    private fun getUserRoles(user: UserEntity): Set<UserRole> = user.roles.mapToSet { it.role.name }
+    private fun getUserRoles(username: String): Set<UserRole> =
+        userRepository.findByUsernameOrThrow(username).roles.mapToSet { it.role.name }
 }

@@ -19,7 +19,6 @@ import javax.transaction.Transactional
 /**
  * InsulinPatientService.
  */
-@Suppress("LongParameterList")
 @Service
 class InsulinPatientService(
     private val patientRepository: PatientRepository,
@@ -45,7 +44,6 @@ class InsulinPatientService(
         val user = authenticationService.getUser()
         val patientEntity = patientRepository.save(
             PatientEntity(
-                id = 0,
                 firstName = insulinPatient.patient.firstName,
                 lastName = insulinPatient.patient.lastName,
                 dateOfBirth = insulinPatient.patient.dateOfBirth.truncatedTo(ChronoUnit.DAYS),
@@ -59,7 +57,6 @@ class InsulinPatientService(
 
         return insulinPatientRepository.save(
             InsulinPatientEntity(
-                id = 0,
                 patient = patientEntity,
                 tddi = insulinPatient.tddi,
                 targetGlycemia = insulinPatient.targetGlycemia,
@@ -75,7 +72,6 @@ class InsulinPatientService(
      * @param insulinPatientId [Long]
      * @return [InsulinPatientDtoOut]
      */
-    @Throws(EntityNotFoundBreviaryException::class)
     fun getInsulinPatientById(insulinPatientId: Long): InsulinPatientDtoOut =
         insulinPatientRepository.findByIdOrThrow(insulinPatientId).toDtoOut()
 
@@ -86,13 +82,11 @@ class InsulinPatientService(
      * @return [InsulinPatientWithDataDtoOut]
      */
     @Throws(EntityNotFoundBreviaryException::class)
-    fun getInsulinPatientWithDataById(insulinPatientId: Long): InsulinPatientWithDataDtoOut {
-        val insulinPatient = insulinPatientRepository.findByIdOrThrow(insulinPatientId).toDtoOut()
-
-        return InsulinPatientWithDataDtoOut(
-            insulinPatient = insulinPatient
-        )
-    }
+    fun getInsulinPatientWithDataById(insulinPatientId: Long): InsulinPatientWithDataDtoOut =
+        insulinPatientRepository
+            .findByIdOrThrow(insulinPatientId)
+            .toDtoOut()
+            .let { InsulinPatientWithDataDtoOut(it) }
 
     /**
      * Update insulin patient.
@@ -102,7 +96,6 @@ class InsulinPatientService(
      * @return [InsulinPatientDtoOut]
      */
     @Transactional
-    @Throws(EntityNotFoundBreviaryException::class)
     fun updateInsulinPatient(insulinPatientId: Long, patient: PatientDtoIn): InsulinPatientDtoOut {
         val patientEntity = patientRepository.findByIdOrThrow(insulinPatientId)
         patientRepository.save(

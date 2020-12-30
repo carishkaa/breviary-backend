@@ -15,22 +15,6 @@ fun jacksonMapper(): ObjectMapper = jacksonObjectMapper().apply {
 }
 
 /**
- * Tries to create instance of T from provided [json], null is returned when it is not possible to parse it.
- */
-inline fun <reified T> parseJson(json: String): T? =
-    runCatching { jacksonMapper().readValue<T>(json) }
-//        .onFailure { jsonLogger.warn(it) { "Exception raised during JSON parsing:${System.lineSeparator()}$json" } }
-        .getOrNull()
-
-/**
- * Tries to create instance of T from provided [json], null is returned when it is not possible to parse it.
- */
-inline fun <reified T> parseJson(json: ByteArray): T? =
-    runCatching { jacksonMapper().readValue<T>(json) }
-//        .onFailure { jsonLogger.warn(it) { "Exception raised during JSON parsing:${System.lineSeparator()}$json" } }
-        .getOrNull()
-
-/**
  * Serializes given object to string.
  */
 fun <T : Any> createJson(value: T): String = jacksonMapper().writeValueAsString(value)
