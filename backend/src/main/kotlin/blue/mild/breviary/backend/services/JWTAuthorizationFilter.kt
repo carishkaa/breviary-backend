@@ -29,9 +29,9 @@ class JWTAuthorizationFilter(
     ) {
         // set cookie in session context if exists and it is not blank
         req.cookies
-            ?.find { it.name == AUTH_COOKIE_NAME }
-            ?.takeIf { it.value.isNotBlank() }
-            ?.also { SecurityContextHolder.getContext().authentication = getAuthentication(it) }
+            ?.find { cookie -> cookie.name == AUTH_COOKIE_NAME }
+            ?.takeIf { cookie -> cookie.value.isNotBlank() }
+            ?.also { cookie -> SecurityContextHolder.getContext().authentication = getAuthentication(cookie) }
 
         // resume chain
         chain.doFilter(req, res)
@@ -42,5 +42,5 @@ class JWTAuthorizationFilter(
             .setSigningKey(SECRET.toByteArray())
             .parseClaimsJws(cookie.value)
             .body.subject
-            ?.let { authenticationService.createdAuthenticationToken(it) }
+            ?.let { jwt -> authenticationService.createdAuthenticationToken(jwt) }
 }
