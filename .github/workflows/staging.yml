@@ -52,9 +52,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           file: ${{ env.DOCKER_FILE }}
-          # TODO change to commented version before merging
-          tags: latest
+          # TODO we might change that on the branch name
           # tags: ${{ steps.docker_meta.outputs.tags }}
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_ECR_REPOSITORY }}:latest
           labels: ${{ steps.docker_meta.outputs.labels }}
           push: true
           build-args: |
