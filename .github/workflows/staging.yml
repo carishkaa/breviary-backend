@@ -2,9 +2,9 @@ name: Staging Deployment
 
 env:
   DOCKER_FILE: Dockerfile.backend
-  AWS_ECR_REPOSITORY: breviary-backend
-  AWS_ECS_CLUSTER: breviary-backend
-  AWS_ECS_CLUSTER_SERVICE: breviary-backend-service
+  AWS_ECR_REPOSITORY: stg-breviary-backend
+  AWS_ECS_CLUSTER: stg-breviary-backend
+  AWS_ECS_CLUSTER_SERVICE: stg-breviary-backend-service
 
 on:
   push:
