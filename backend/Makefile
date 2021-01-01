@@ -7,6 +7,8 @@ detekt:
 test: clean make-version-file
 	../gradlew --no-daemon :backend:test
 
+check: check-all
+
 check-all:
 	../gradlew --no-daemon :backend:clean && ../gradlew :backend:test && ../gradlew :backend:check
 
