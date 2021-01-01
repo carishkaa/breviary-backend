@@ -43,6 +43,12 @@ COPY --from=build-worker /backend/build/distributions/backend.zip /app/backend.z
 RUN unzip /app/backend.zip -d /app && \
     rm /app/backend.zip
 
+# TODO remove this once .git issue above is solved
+# create version file
+ARG release_version=development
+ENV RELEASE_FILE_PATH=/app/backend/release.txt
+RUN echo $release_version > $RELEASE_FILE_PATH
+
 WORKDIR /app/backend/bin
 
 EXPOSE 8080
