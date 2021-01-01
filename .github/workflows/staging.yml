@@ -1,8 +1,11 @@
 name: Staging Deployment
 
 env:
-  ECR_REPOSITORY: breviary-backend
   DOCKER_FILE: Dockerfile.backend
+  AWS_ECR_REPOSITORY: breviary-backend
+  AWS_ECS_CLUSTER: breviary-backend
+  AWS_ECS_CLUSTER_SERVICE: breviary-backend-service
+
 on:
   push:
     branches:
@@ -36,7 +39,7 @@ jobs:
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1
         with:
-          images: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}
+          images: ${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_ECR_REPOSITORY }}
 
         # setup docker actions https://github.com/docker/build-push-action
       - name: Set up QEMU
@@ -56,3 +59,13 @@ jobs:
           push: true
           build-args: |
             release_version=${{ env.RELEASE_VERSION }}
+
+      - name: Redeploy the Service
+        env:
+          CLUSTER: ${{ env.AWS_ECS_CLUSTER }}
+          SERVICE: ${{ env.AWS_ECS_CLUSTER_SERVICE }}
+        run: |
+          aws ecs update-service \
+            --cluster "${CLUSTER}" \
+            --service "${SERVICE}" \
+            --force-new-deployment
