@@ -99,8 +99,8 @@
           "403": {
             "description": "Forbidden"
           },
-          "404" : {
-            "description" : "Not Found"
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -971,7 +971,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/VersionInfoDtoOut"
+                  "$ref": "#/components/schemas/ApplicationInfoDto"
                 }
               }
             }
@@ -991,6 +991,27 @@
   },
   "components": {
     "schemas": {
+      "ApplicationInfoDto": {
+        "title": "ApplicationInfoDto",
+        "required": [
+          "environment",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "environment": {
+            "type": "string",
+            "enum": [
+              "DEVELOPMENT",
+              "PRODUCTION",
+              "STAGING"
+            ]
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
       "HeparinPatientDtoIn": {
         "title": "HeparinPatientDtoIn",
         "required": [
@@ -1493,18 +1514,6 @@
             "type": "string"
           },
           "password": {
-            "type": "string"
-          }
-        }
-      },
-      "VersionInfoDtoOut": {
-        "title": "VersionInfoDtoOut",
-        "required": [
-          "app"
-        ],
-        "type": "object",
-        "properties": {
-          "app": {
             "type": "string"
           }
         }
