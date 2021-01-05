@@ -488,8 +488,10 @@ style:
     active: true
   PreferToOverPairSyntax:
     active: true
+  # because we're using all open plugin because of the Spring
+  # thus all classes are open and can be overridden in the tests
   ProtectedMemberInFinalClass:
-    active: true
+    active: false
   RedundantVisibilityModifierRule:
     active: true
   ReturnCount:
