@@ -100,13 +100,13 @@ You can create `application.propeties` file or use `.env.template` file.
 ```
     DB_USERNAME=postgres
     DB_PASSWORD=breviary-db-pass
-    DB_URL=jdbc:postgresql://localhost:5433/postgres
+    DB_URL=jdbc:postgresql://localhost:5432/postgres
 ```
 
 ### Run Local DB
 
-To run DB locally, there is prepared make task.
-To start DB in Docker running on port `5433` execute `make docker-start-local-db`. To stop DB, run `make docker-stop-local-db`.
+To run DB locally, there is prepared make task. To start DB in Docker running on port `5432` execute `make docker-start-local-db`. To stop
+DB, run `make docker-stop-local-db`.
 
 ### Run Backend Locally
 
