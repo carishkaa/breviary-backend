@@ -56,8 +56,3 @@ jobs:
       - name: Run Tests
         run: |
           ./gradlew test
-
-      - name: Stop Database
-        if: always()
-        run: |
-          docker-compose -f docker-compose.yml stop db
