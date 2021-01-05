@@ -10,7 +10,6 @@ import blue.mild.breviary.backend.errors.InvalidArgumentBreviaryException
 import blue.mild.breviary.backend.errors.InvalidStateBreviaryException
 import blue.mild.breviary.backend.errors.SecurityBreviaryException
 import blue.mild.breviary.backend.errors.UnauthenticatedBreviaryException
-import blue.mild.breviary.backend.utils.createJson
 import mu.KLogging
 import org.hibernate.exception.ConstraintViolationException
 import org.springframework.core.Ordered
@@ -27,6 +26,7 @@ import org.springframework.web.HttpMediaTypeNotSupportedException
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import pw.forst.tools.katlib.createJson
 import java.lang.reflect.UndeclaredThrowableException
 
 /**

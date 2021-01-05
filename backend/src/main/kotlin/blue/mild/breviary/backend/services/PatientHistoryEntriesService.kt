@@ -10,8 +10,8 @@ import blue.mild.breviary.backend.db.repositories.InsulinPatientRepository
 import blue.mild.breviary.backend.db.repositories.extensions.assertEntityExists
 import blue.mild.breviary.backend.dtos.HeparinPatientHistoryEntryDtoOut
 import blue.mild.breviary.backend.dtos.InsulinPatientHistoryEntryDtoOut
-import blue.mild.breviary.backend.extensions.zip
 import org.springframework.stereotype.Service
+import pw.forst.tools.katlib.zip
 
 /**
  * PatientHistoryEntriesService.
