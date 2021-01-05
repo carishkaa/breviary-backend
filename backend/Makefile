@@ -7,12 +7,12 @@ detekt:
 test: clean make-version-file
 	../gradlew --no-daemon :backend:test
 
-g-check:
+gradle-check:
 	../gradlew :backend:check
 
 check: check-all
 
-check-all: clean test g-check
+check-all: clean test gradle-check
 
 generate-swagger-json: clean make-version-file
 	../gradlew --no-daemon :backend:cleanTest :backend:test --tests "blue.mild.breviary.backend.generators.GenerateSwaggerTest"

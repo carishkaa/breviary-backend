@@ -9,7 +9,7 @@ pipeline-docker:
 	docker-compose -f docker-compose.pipeline.yml down; \
 	exit $RESULT;
 
-g-check:
+gradle-check:
 	./gradlew check
 
 detekt:
@@ -18,7 +18,7 @@ detekt:
 test:
 	./gradlew test
 
-check: g-check detekt test
+check: gradle-check test
 
 docker-login:
 	docker login
