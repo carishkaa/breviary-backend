@@ -3,16 +3,17 @@ services:
   db:
     image: postgres:13.1
     container_name: breviary-db
-    expose:
-      - 5433
+    env_file: .env
     networks:
       - breviary
 
   backend:
     image: breviary-backend
     container_name: breviary-backend
+    env_file: .env
     environment:
       PORT: 8080
+      DB_URL: jdbc:postgresql://db:5432/postgres
     depends_on:
       - db
     networks:
@@ -21,6 +22,7 @@ services:
       - ./gradlew
       - --no-daemon
       - --stacktrace
+      - --info
       - :backend:test
 
 networks:

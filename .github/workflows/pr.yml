@@ -1,0 +1,45 @@
+name: Check Pipeline
+
+on:
+  # manual dispatch
+  workflow_dispatch:
+  # run on PRs to master when - is opened,
+  # new commit is pushed or is set as ready for review
+  pull_request:
+    types: [ opened, synchronize, ready_for_review ]
+    branches:
+      - master
+
+jobs:
+  build_server:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11.0.9
+
+      - name: Prepare Links
+        run: |
+          ln -s .env backend/src/main/resources/application.properties
+
+      - name: Detekt Check
+        run: |
+          ./gradlew detekt --info
+
+      - name: Start Database
+        run: |
+          docker-compose -f docker-compose.yml -d up db
+
+      - name: Run Tests
+        run: |
+          ./gradlew test --info
+
+      - name: Stop Database
+        if: always()
+        run: |
+          docker-compose -f docker-compose.yml stop db
+
