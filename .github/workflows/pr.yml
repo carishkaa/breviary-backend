@@ -38,7 +38,7 @@ jobs:
 
       - name: Start Database
         run: |
-          docker-compose -f docker-compose.yml up -d db
+          docker-compose -f docker-compose.pipeline.yml up -d db
 
       - name: Run Tests
         run: |
