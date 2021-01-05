@@ -11,9 +11,11 @@ on:
       - master
 
 jobs:
-  build_server:
+  run_tests:
     runs-on: ubuntu-20.04
     timeout-minutes: 20
+    # disable run if the PR is draft (as our CLI creates PR as draft once the issue is in progress)
+    if: github.event.pull_request.draft == false
     steps:
       - uses: actions/checkout@v2
 
