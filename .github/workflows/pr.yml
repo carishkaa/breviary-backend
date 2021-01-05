@@ -30,7 +30,11 @@ jobs:
 
       - name: Detekt Check
         run: |
-          ./gradlew detekt --info
+          ./gradlew detekt
+
+      - name: Assemble Code
+        run: |
+          ./gradlew assemble
 
       - name: Start Database
         run: |
@@ -38,7 +42,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          ./gradlew test --info
+          ./gradlew test
 
       - name: Stop Database
         if: always()
