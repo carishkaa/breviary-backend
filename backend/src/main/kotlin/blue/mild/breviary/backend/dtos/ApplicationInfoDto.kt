@@ -16,4 +16,3 @@ data class ApplicationInfoDto(
 enum class ApplicationEnvironment {
     PRODUCTION, STAGING, DEVELOPMENT
 }
-

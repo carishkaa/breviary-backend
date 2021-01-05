@@ -4,13 +4,10 @@ services:
     image: postgres:13.1
     container_name: breviary-db
     env_file: .env
-    environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
     expose:
-      - 5433
+      - 5432
     ports:
-      - 5433:5432
+      - 5432:5432
     networks:
       - breviary
     volumes:
@@ -24,9 +21,10 @@ services:
     container_name: breviary-backend
     env_file: .env
     environment:
-      PORT: 80
+      PORT: 8080
+      DB_URL: jdbc:postgresql://db:5432/postgres
     ports:
-      - 8080:80
+      - 8080:8080
     depends_on:
       - db
     networks:

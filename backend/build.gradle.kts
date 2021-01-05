@@ -14,7 +14,7 @@ plugins {
 
 val mClass = "blue.mild.breviary.backend.BackendApplicationKt"
 val gitVersion = versioning.info?.tag ?: versioning.info?.lastTag ?: versioning.info?.commit ?: "development"
-val codeVersion = gitVersion + (if (versioning.info?.isDirty == true) "-dirty" else "")
+val codeVersion = gitVersion + if (versioning.info?.isDirty == true) "-dirty" else ""
 version = codeVersion
 
 application {

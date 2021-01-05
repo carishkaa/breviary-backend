@@ -1,14 +1,24 @@
 -include .env
 export
 
-pipeline-local:
-	docker build . -f Dockerfile.backend --target build-worker -t breviary-backend
-	docker run --rm breviary-backend ./gradlew detekt
-	docker-compose -f docker-compose.pipeline.yml -f docker-compose.pipeline.local.yml up --abort-on-container-exit backend
-	docker-compose -f docker-compose.pipeline.yml -f docker-compose.pipeline.local.yml down
+pipeline-docker:
+	docker build . -f Dockerfile.backend --target build-worker -t breviary-backend; \
+	docker run --rm breviary-backend ./gradlew detekt; \
+	docker-compose -f docker-compose.pipeline.yml up --abort-on-container-exit backend; \
+	RESULT=$$?; \
+	docker-compose -f docker-compose.pipeline.yml down; \
+	exit $RESULT;
+
+gradle-check:
+	./gradlew check
 
 detekt:
 	./gradlew detekt
+
+test:
+	./gradlew test
+
+check: gradle-check test
 
 docker-login:
 	docker login

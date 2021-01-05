@@ -5,7 +5,6 @@ import blue.mild.breviary.backend.dtos.ResponseDto
 import blue.mild.breviary.backend.services.AuthenticationService
 import blue.mild.breviary.backend.services.JWTAuthenticationFilter
 import blue.mild.breviary.backend.services.JWTAuthorizationFilter
-import blue.mild.breviary.backend.utils.createJson
 import org.apache.tomcat.util.http.Rfc6265CookieProcessor
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Configuration
@@ -21,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.logout.LogoutHandler
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import pw.forst.tools.katlib.createJson
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse

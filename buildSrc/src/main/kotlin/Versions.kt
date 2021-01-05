@@ -14,7 +14,7 @@ object Versions {
     const val flyway = "7.3.1"
     const val hibernateTypes = "2.10.0"
     const val jacksonDataformatVersion = "2.12.0"
-    const val katlib = "1.1.2"
+    const val katlib = "1.2.1"
     const val jsonwebtoken = "0.9.1"
     const val kotlinLogging = "2.0.3"
     const val slf4j = "1.7.30"
