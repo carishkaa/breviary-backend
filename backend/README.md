@@ -10,7 +10,7 @@ Project structure follows common patterns for such application type, i.e., IoC, 
 
 ## Gradle
 
-Application uses Gradle as a build tool. All tasks such as `buidl`, `test`, `buildDistZip`, etc., are managed via Gradle.
+Application uses Gradle as a build tool. All tasks such as `build`, `test`, `buildDistZip`, etc., are managed via Gradle.
 
 ## Configuration
 
@@ -39,5 +39,5 @@ To run the application, do the following steps:
 
 1. Create `.env` file based on template `.env.template` and set proper variables.
 1. Execute `make docker-start-local-db` in root directory to start the database in Docker.
-1. Run make `make-version-file` in **backend** folder to generate version file before first application run.
+1. Run `make make-version-file` in **backend** folder to generate version file before first application run.
 1. Run the backend application in Idea (`BackendApplication.kt`) or other IDE.

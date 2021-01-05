@@ -56,7 +56,7 @@ class LoginControllerTest : ControllerTest() {
 
     @Test
     @DirtiesContext
-    fun `should not log in and return UNAUTHORIZED when user is not signed`() {
+    fun `should not log in and return UNAUTHORIZED when user is not signed up`() {
         // Log in
         executeClientPost(
             "$apiPrefix/${ApiRoutes.LOGIN}",
@@ -74,7 +74,7 @@ class LoginControllerTest : ControllerTest() {
 
     @Test
     @DirtiesContext
-    fun `should not log in and return NOT_FOUND when authentication is missing`() {
+    fun `should not log in and return NOT_FOUND when authentication header is missing`() {
         // Log in
         executeClientPost(
             "$apiPrefix/${ApiRoutes.LOGIN}",
