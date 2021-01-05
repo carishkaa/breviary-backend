@@ -16,6 +16,13 @@ jobs:
     timeout-minutes: 20
     # disable run if the PR is draft (as our CLI creates PR as draft once the issue is in progress)
     if: github.event.pull_request.draft == false
+    # enable postgres
+    services:
+      db:
+        image: postgres:13.1
+        env:
+          POSTGRES_PASSWORD: postgres
+
     steps:
       - uses: actions/checkout@v2
 
@@ -27,6 +34,12 @@ jobs:
       - name: Prepare Links
         run: |
           ln -s $(pwd)/.env backend/src/main/resources/application.properties
+
+      - name: Setup Environment Variables
+        run: |
+          echo "DB_USERNAME=postgres" >> $GITHUB_ENV
+          echo "DB_PASSWORD=postgres" >> $GITHUB_ENV
+          echo "DB_URL=jdbc:postgresql://db:5432/postgres?prepareThreshold=0" >> $GITHUB_ENV
 
       - name: Detekt Check
         run: |
