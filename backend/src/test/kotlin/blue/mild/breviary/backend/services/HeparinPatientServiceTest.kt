@@ -28,14 +28,14 @@ class HeparinPatientServiceTest(
                     firstName = "Heparin",
                     lastName = "Patient",
                     dateOfBirth = Instant.now(),
-                    height = 158,
+                    height = 188,
                     sex = Sex.MALE,
                     otherParams = hashMapOf(Pair("key", "value"))
                 ),
-                targetApttLow = 4.5f,
-                targetApttHigh = 500f,
-                solutionHeparinUnits = 600f,
-                solutionMilliliters = 10f,
+                targetApttLow = 2.2f,
+                targetApttHigh = 2.4f,
+                solutionHeparinUnits = 25_000f,
+                solutionMilliliters = 500f,
                 weight = 98f
             )
         )
