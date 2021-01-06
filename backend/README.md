@@ -21,9 +21,9 @@ in [Development](../book/development/README.md).
 
 ## DB Migration
 
-As a DB migration tool is used `Flyway` library. Migrations are stored in `resources/application.yml`. Name of the
-migration must follow name pattern `V[MIGRATION_NUMBER]__[MIGRATION_DESCRITPION_UNDESCORED].sql`. Migration is executed
-during each application start. So in case of invalid migration, application can fail to start.
+As a DB migration tool is used `Flyway` library. Migrations are stored in `backend/src/main/resources/db.migration`.
+Name of the migration must follow name pattern `V[MIGRATION_NUMBER]__[MIGRATION_DESCRITPION_UNDESCORED].sql`. Migration
+is executed during each application start. So in case of invalid migration, application can fail to start.
 
 ## Tests
 

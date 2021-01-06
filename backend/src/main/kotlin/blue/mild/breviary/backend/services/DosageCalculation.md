@@ -2,8 +2,8 @@
 
 ## Heparin
 
-The function that calculates heparin recommendation (`calculateHeparinRecommendation`) for patients is based on this
-table:
+The function that calculates heparin recommendation (`HeparinRecommendationService.calculateHeparinRecommendation`) for
+patients is based on this table:
 
 ![img.png](HeparinCalculation.png).
 
@@ -17,9 +17,9 @@ Initial dosage is based on the following data and uses fixed constant `DEFAULT_U
 
 Heparin is not applied in its pure form, but in a solution. The actual heparin concentration is calculated using
 parameters `solutionMilliliters` and `solutionHeparinUnits` stored in the database. The recommended dosage is always
-in `milliliters` or `milliliters per hour`. The first check is scheduled 4 hours after the initial dosage,
-then checks repeat in 6 hour intervals. One exception occurs if the aPTT value gets over 3. The continuous dosage is
-then stopped for one hour and resumed afterwards.
+in `milliliters` or `milliliters per hour`. The first check is scheduled 4 hours after the initial dosage, then checks
+repeat in 6 hour intervals. One exception occurs if the *aPTT* value gets over 3. The continuous dosage is then stopped
+for one hour and resumed afterwards.
 
 ## Insulin
 
@@ -45,7 +45,7 @@ The function that calculates insulin bolus for patient takes as parameters:
   amount of insulin intake from the previous day.
 - Current glycemia should be measured before every insulin application.
 - Target glycemia is provided by the doctor.
-- Amount of remaining_rapid_insulin is calculated from the properties of given rapid insulin type that we take from:
-  https://www.ikem.cz/UserFiles/Image/1604920379L%C3%A9%C4%8Dba_inzulinem_u_diabetu_1._typu.pdf. The remaining rapid
-  insulin level is calculated based on the graphs in the pdf and time from the previous bolus(es). We assume that if we
-  have no data that current rapid insulin level is 0.
+- Amount of remaining_rapid_insulin is calculated from the properties of given rapid insulin type that we take
+  from [IKEM](https://www.ikem.cz/UserFiles/Image/1604920379L%C3%A9%C4%8Dba_inzulinem_u_diabetu_1._typu.pdf). The
+  remaining rapid insulin level is calculated based on the graphs in the pdf and time from the previous bolus(es). We
+  assume that if we have no data that current rapid insulin level is 0.
