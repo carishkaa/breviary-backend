@@ -13,7 +13,5 @@ check:
 generate-swagger-json: clean make-version-file
 	../gradlew :backend:cleanTest :backend:test --tests "blue.mild.breviary.backend.generators.GenerateSwaggerTest"
 
-run-pipeline: check
-
 make-version-file:
 	../gradlew :backend:createVersionFile
