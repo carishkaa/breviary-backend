@@ -27,7 +27,7 @@ detekt:
 test:
 	./gradlew test
 
-check: gradle-check test
+check: gradle-check
 
 docker-login:
 	docker login

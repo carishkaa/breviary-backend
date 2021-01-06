@@ -12,7 +12,7 @@ gradle-check:
 
 check: check-all
 
-check-all: clean test gradle-check
+check-all: clean gradle-check
 
 generate-swagger-json: clean make-version-file
 	../gradlew --no-daemon :backend:cleanTest :backend:test --tests "blue.mild.breviary.backend.generators.GenerateSwaggerTest"
