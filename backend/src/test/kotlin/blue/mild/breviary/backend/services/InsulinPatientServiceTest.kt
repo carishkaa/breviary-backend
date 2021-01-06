@@ -29,12 +29,12 @@ class InsulinPatientServiceTest(
                     firstName = "Insulin",
                     lastName = "Patient",
                     dateOfBirth = Instant.now(),
-                    height = 158,
+                    height = 188,
                     sex = Sex.MALE,
                     otherParams = hashMapOf(Pair("key", "value"))
                 ),
                 targetGlycemia = 4.5f,
-                tddi = 500f,
+                tddi = 50f,
                 insulinType = InsulinType.HUMALOG
             )
         )
