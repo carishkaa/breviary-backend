@@ -1,20 +1,19 @@
 package blue.mild.breviary.backend.controllers
 
 import blue.mild.breviary.backend.ApiRoutes
-import blue.mild.breviary.backend.dtos.VersionInfoDtoOut
+import blue.mild.breviary.backend.dtos.ApplicationInfoDto
+import blue.mild.breviary.backend.services.ApplicationInfoService
 import org.junit.jupiter.api.Test
-import org.springframework.core.io.Resource
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.annotation.DirtiesContext
-import java.util.Properties
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class VersionControllerTest : ControllerTest() {
 
-    @Value("classpath:version.properties")
-    lateinit var versionResource: Resource
+    @Autowired
+    lateinit var appInfoService: ApplicationInfoService
 
     @Test
     @DirtiesContext
@@ -23,15 +22,13 @@ class VersionControllerTest : ControllerTest() {
         val versionResult = executeClientGet(
             "$apiPrefix/${ApiRoutes.VERSION}",
             setOf(HttpStatus.OK),
-            typeReference<VersionInfoDtoOut>()
+            typeReference<ApplicationInfoDto>()
         )
+        val body = versionResult.body
+        assertNotNull(body)
 
-        assertNotNull(versionResult.body)
-
-        val properties = Properties().apply {
-            load(versionResource.inputStream)
-        }
-
-        assertEquals(properties.getProperty("app"), versionResult.body!!.app)
+        val appInfo = appInfoService.getApplicationInfo()
+        assertEquals(appInfo.version, body.version)
+        assertEquals(appInfo.environment, body.environment)
     }
 }

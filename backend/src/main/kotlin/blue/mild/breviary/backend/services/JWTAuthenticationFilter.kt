@@ -4,7 +4,6 @@ import blue.mild.breviary.backend.config.WebSecurityConfig
 import blue.mild.breviary.backend.config.WebSecurityConfig.Companion.SECRET
 import blue.mild.breviary.backend.config.WebSecurityConfig.Companion.SET_COOKIE_KEY
 import blue.mild.breviary.backend.config.WebSecurityConfig.Companion.createCookie
-import blue.mild.breviary.backend.utils.jacksonMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -15,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import pw.forst.tools.katlib.jacksonMapper
 import java.util.Date
 import java.util.UUID
 import javax.servlet.FilterChain

@@ -24,9 +24,9 @@ spring:
   # DB properties
   #######################
   datasource:
-    url: ${DB_URL:}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:breviary-db-pass}
     driver-class-name: org.postgresql.Driver
 
   #######################
@@ -34,8 +34,8 @@ spring:
   #######################
   application:
     name: ${APPLICATION_NAME:breviary}
-    email: ${APPLICATION_EMAIL:}
-    allowedOrigins: ${ALLOWED_ORIGINS:}
+    email: ${APPLICATION_EMAIL:breviary@mild.blue}
+    allowedOrigins: ${ALLOWED_ORIGINS:localhost,127.0.0.1}
 
   #######################
   # JPA properties

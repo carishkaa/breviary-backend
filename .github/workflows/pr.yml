@@ -1,0 +1,53 @@
+name: Check Pipeline
+
+on:
+  # manual dispatch
+  workflow_dispatch:
+  # run on PRs to master when - is opened,
+  # new commit is pushed or is set as ready for review
+  pull_request:
+    types: [ opened, synchronize, ready_for_review ]
+    branches:
+      - master
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 20
+    # disable run if the PR is draft (as our CLI creates PR as draft once the issue is in progress)
+    if: github.event.pull_request.draft == false
+    # use container to run the code as we need to use postgres
+    container: adoptopenjdk/openjdk11:jdk-11.0.9.1_1-alpine
+    # enable postgres
+    services:
+      postgres:
+        image: postgres:13.1
+        env:
+          POSTGRES_PASSWORD: postgres
+    # and run the pipeline
+    steps:
+      - uses: actions/checkout@v2
+
+      # use default template as application.properties and override some values in the next step
+      - name: Prepare Links
+        run: |
+          ln -s $(pwd)/.env.template backend/src/main/resources/application.properties
+
+      # override template environment variables
+      - name: Setup Environment Variables
+        run: |
+          echo "DB_USERNAME=postgres" >> $GITHUB_ENV
+          echo "DB_PASSWORD=postgres" >> $GITHUB_ENV
+          echo "DB_URL=jdbc:postgresql://postgres:5432/postgres?prepareThreshold=0" >> $GITHUB_ENV
+
+      - name: Assemble Code
+        run: |
+          ./gradlew assemble
+
+      - name: Detekt Check
+        run: |
+          ./gradlew detekt
+
+      - name: Run Tests
+        run: |
+          ./gradlew test

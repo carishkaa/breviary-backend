@@ -10,10 +10,10 @@ import blue.mild.breviary.backend.db.repositories.InsulinPatientRepository
 import blue.mild.breviary.backend.db.repositories.extensions.findByIdOrThrow
 import blue.mild.breviary.backend.dtos.InsulinRecommendationDtoOut
 import blue.mild.breviary.backend.enums.InsulinType
-import blue.mild.breviary.backend.extensions.sumByFloat
 import blue.mild.breviary.backend.services.AuthenticationService
 import blue.mild.breviary.backend.services.InstantTimeProvider
 import org.springframework.stereotype.Service
+import pw.forst.tools.katlib.sumByFloat
 import java.lang.Float.max
 import java.time.Duration
 import java.time.Instant

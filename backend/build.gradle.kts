@@ -13,8 +13,8 @@ plugins {
 }
 
 val mClass = "blue.mild.breviary.backend.BackendApplicationKt"
-val codeVersion = versioning.info?.tag ?: versioning.info?.lastTag ?: versioning.info?.build ?: "development"
-
+val gitVersion = versioning.info?.tag ?: versioning.info?.lastTag ?: versioning.info?.commit ?: "development"
+val codeVersion = gitVersion + if (versioning.info?.isDirty == true) "-dirty" else ""
 version = codeVersion
 
 application {
@@ -80,7 +80,7 @@ tasks {
         val resources = requireNotNull(sourceSets.main.get().output.resourcesDir) { "Could not access resources." }
         resources.mkdirs()
         val properties = Properties().apply {
-            setProperty("app", codeVersion)
+            setProperty("codeVersion", codeVersion)
         }
         properties.store(File(resources, "version.properties").outputStream(), null)
     }
