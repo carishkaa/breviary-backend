@@ -2,19 +2,24 @@
 
 ## Heparin
 
-The function that calculates heparin recommendation (`calculateHeparinRecommendation`) for patients takes following
-parameters:
+The function that calculates heparin recommendation (`calculateHeparinRecommendation`) for patients is based on this
+table:
 
-        val calculatedHeparinRecommendation = calculateHeparinRecommendation(
-            weight = heparinPatientEntity.weight,
-            targetApttLow = heparinPatientEntity.targetApttLow,
-            targetApttHigh = heparinPatientEntity.targetApttHigh,
-            currentAptt = currentAptt,
-            previousAptt = previousAptt?.value,
-            solutionHeparinUnits = heparinPatientEntity.solutionHeparinUnits,
-            solutionMilliliters = heparinPatientEntity.solutionMilliliters,
-            currentContinuousDosage = currentDosage?.dosageContinuous,
-            previousContinuousDosage = previousDosage?.dosageContinuous
+![img.png](HeparinCalculation.png).
+
+Doctor's notifications are based on this logic:
+
+![img.png](HeparinDoctorNotification.png)
+
+Initial dosage is based on the following data and uses fixed constant `DEFAULT_UNITS_PER_KG = 18`:
+
+![img.png](HeparinDefaultDosage.png)
+
+Heparin is not applied in its pure form, but in a solution. The actual heparin concentration is calculated using
+parameters `solutionMilliliters` and `solutionHeparinUnits` stored in the database. The recommended dosage is always
+in `milliliters` or `milliliters per hour`. The first check is scheduled 4 hours after the initial dosage,
+then checks repeat in 6 hour intervals. One exception occurs if the aPTT value gets over 3. The continuous dosage is
+then stopped for one hour and resumed afterwards.
 
 ## Insulin
 
