@@ -219,6 +219,17 @@ class HeparinRecommendationService(
         currentDosage + (unitsPerKg * weight * solutionMilliliters / solutionHeparinUnits)
 
     @Suppress("LongParameterList")
+    /**
+     * @param weight in kg, stored in database
+     * @param targetApttLow set by the doctor, stored in database
+     * @param targetApttHigh set by the doctor, stored in database
+     * @param currentAptt measured before the calculation
+     * @param previousAptt result of previous measurement, stored in database
+     * @param solutionHeparinUnits used to calculate heparin concentration, stored in database
+     * @param solutionMilliliters used to calculate heparin concentration, stored in database
+     * @param currentContinuousDosage amount of heparin solution the patient is currently receiving
+     * @param previousContinuousDosage amount of heparin solution the patient was receiving before the previous measurement
+     */
     private fun calculateHeparinRecommendation(
         weight: Float,
         targetApttLow: Float,

@@ -4,7 +4,8 @@
 
 Documentation for this repository is managed by the Gitbook - see folder `book`.
 
-The technological stack is roughly following - Kotlin, Spring Boot, Hibernate, Gradle with Kotlin DSL, PostgreSQL, Docker.
+The technological stack is roughly following - Kotlin, Spring Boot, Hibernate, Gradle with Kotlin DSL, PostgreSQL,
+Docker.
 
 ## Summary
 

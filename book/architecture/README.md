@@ -4,7 +4,6 @@
 
 This section should describe base project structure and architecture.
 
-
 ## Project Structure
 
 Project can be separated into following parts (modules):

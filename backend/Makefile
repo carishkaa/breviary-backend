@@ -7,6 +7,9 @@ detekt:
 test: clean make-version-file
 	../gradlew  :backend:test
 
+clean-test:
+	../gradlew :backend:cleanTest :backend:test
+
 check:
 	../gradlew :backend:check
 
