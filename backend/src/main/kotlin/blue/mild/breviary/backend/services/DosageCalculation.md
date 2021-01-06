@@ -1,4 +1,4 @@
-# Calculation approach
+# Calculation Approach
 
 ## Heparin
 
