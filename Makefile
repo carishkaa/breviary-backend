@@ -1,6 +1,12 @@
 -include .env
 export
 
+prepare-repo:
+	cp .env.template .env; \
+	ln -s $(pwd)/.env backend/src/main/resources/application.properties; \
+	$(MAKE) gradle-build; \
+	$(MAKE) docker-build
+
 pipeline-docker:
 	docker build . -f Dockerfile.backend --target build-worker -t breviary-backend; \
 	docker run --rm breviary-backend ./gradlew detekt; \
@@ -11,6 +17,9 @@ pipeline-docker:
 
 gradle-check:
 	./gradlew check
+
+gradle-build:
+	./gradlew assemble
 
 detekt:
 	./gradlew detekt
