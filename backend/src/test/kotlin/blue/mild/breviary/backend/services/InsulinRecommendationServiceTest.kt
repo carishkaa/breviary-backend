@@ -36,7 +36,7 @@ class InsulinRecommendationServiceTest(
                     firstName = "Test",
                     lastName = "Patient",
                     dateOfBirth = Instant.now(),
-                    height = 180,
+                    height = 170,
                     sex = Sex.FEMALE,
                     otherParams = hashMapOf()
                 ),
@@ -52,6 +52,6 @@ class InsulinRecommendationServiceTest(
             expectedCarbohydrateIntake = 70f
         )
 
-        assertEquals(10.909091f, result.dosage, 0.005f)
+        assertEquals(10.91f, result.dosage, 0.005f)
     }
 }
