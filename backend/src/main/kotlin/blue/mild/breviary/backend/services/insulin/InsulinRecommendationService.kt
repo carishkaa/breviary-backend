@@ -25,7 +25,8 @@ import kotlin.math.pow
 /**
  * InsulinRecommendationService.
  *
- * TODO this is a crucial service, we need to add a lot of documentation why do we do what
+ * TODO this is a crucial service, we need to add a lot of documentation why do we do what.
+ * Calculation description can be found in <a href="file:.../dosage_calculation.md">Dosage calculation</a> readme.
  */
 @Service
 class InsulinRecommendationService(
