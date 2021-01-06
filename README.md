@@ -1,15 +1,21 @@
-# {{ book.projectName }} Project
+# Mild Blue Breviary
 
 *Version {{ book.version }}*
 
-TODO: Project description.
+Documentation for this repository is managed by the Gitbook - see folder `book`.
 
-## What This Repository Consists of
+The technological stack is roughly following - Kotlin, Spring Boot, Hibernate, Gradle with Kotlin DSL, PostgreSQL, Docker.
 
-The repository consists of the following parts:
+## Summary
 
-1. Code of {{ book.projectName }} including various modules - infrastructure deployment, backend service, client app.
-1. Github actions for testing the code by performing the unit tests of the platform.
-1. Technical overview of the framework. The documents and specification of {{ book.projectName }}, architecture and
-   various usage examples.
-1. This documentation.
+* [Development](book/development/README.md)
+* [Architecture](book/architecture/README.md)
+    * [Backend](backend/README.md)
+* [Deployment](book/deployment/README.md)
+* [Documentation of Documentation](book/documentation.md)
+* [Operational Manual](book/operation/README.md)
+* [Versions](book/versions.md)
+
+## Contact
+
+breviary@mild.blue

@@ -10,9 +10,9 @@ import blue.mild.breviary.backend.db.repositories.HeparinPatientRepository
 import blue.mild.breviary.backend.dtos.HeparinPatientDtoIn
 import blue.mild.breviary.backend.dtos.PatientDtoIn
 import blue.mild.breviary.backend.enums.Sex
-import blue.mild.breviary.backend.services.heparin.HIGHEST_APTT
 import blue.mild.breviary.backend.services.heparin.HeparinPatientService
 import blue.mild.breviary.backend.services.heparin.HeparinRecommendationService
+import blue.mild.breviary.backend.services.heparin.LOWEST_APTT
 import blue.mild.breviary.backend.utils.decodeID
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.clearAllMocks
@@ -78,7 +78,7 @@ class HeparinRecommendationServiceTest(
         // Previous APTT
         apttValueRepository.save(
             ApttValueEntity(
-                value = 3.6f,
+                value = 1f,
                 heparinPatient = heparinPatientEntity,
                 createdBy = user
             )
@@ -87,8 +87,8 @@ class HeparinRecommendationServiceTest(
         // Previous dosage
         heparinDosageRepository.save(
             HeparinDosageEntity(
-                dosageContinuous = 26f,
-                dosageBolus = 26f,
+                dosageContinuous = 24.9f,
+                dosageBolus = 0f,
                 heparinPatient = heparinPatientEntity,
                 createdBy = user
             )
@@ -97,8 +97,8 @@ class HeparinRecommendationServiceTest(
         // Current
         heparinDosageRepository.save(
             HeparinDosageEntity(
-                dosageContinuous = 25f,
-                dosageBolus = 25f,
+                dosageContinuous = 31.5f,
+                dosageBolus = 132.8f,
                 heparinPatient = heparinPatientEntity,
                 createdBy = user
             )
@@ -106,14 +106,14 @@ class HeparinRecommendationServiceTest(
 
         val result = heparinRecommendationService.createHeparinRecommendation(
             heparinPatientId = heparinPatient.id.decodeID(),
-            currentAptt = 3.8f
+            currentAptt = 1.1f
         )
 
-        assertEquals(0f, result.actualHeparinContinuousDosage, 0.005f)
-        assertEquals(25f, result.previousHeparinContinuousDosage!!, 0.005f)
-        assertEquals(0f, result.actualHeparinBolusDosage, 0.005f)
-        assertEquals(25f, result.previousHeparinBolusDosage!!, 0.005f)
-        kotlin.test.assertEquals(nexReminderTime.plus(1, ChronoUnit.HOURS), result.nextRemainder)
-        kotlin.test.assertEquals("APTT above $HIGHEST_APTT for 2 consecutive measurements.", result.doctorWarning)
+        assertEquals(38.14f, result.actualHeparinContinuousDosage, 0.005f)
+        assertEquals(31.5f, result.previousHeparinContinuousDosage!!, 0.005f)
+        assertEquals(132.8f, result.actualHeparinBolusDosage, 0.005f)
+        assertEquals(132.8f, result.previousHeparinBolusDosage!!, 0.005f)
+        kotlin.test.assertEquals(nexReminderTime.plus(6, ChronoUnit.HOURS), result.nextRemainder)
+        kotlin.test.assertEquals("APTT below $LOWEST_APTT for 2 consecutive measurements.", result.doctorWarning)
     }
 }

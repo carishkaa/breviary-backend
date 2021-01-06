@@ -1,23 +1,17 @@
 clean:
-	../gradlew --no-daemon :backend:clean
+	../gradlew :backend:clean
 
 detekt:
-	../gradlew --no-daemon detekt
+	../gradlew detekt
 
 test: clean make-version-file
-	../gradlew --no-daemon :backend:test
+	../gradlew  :backend:test
 
-gradle-check:
+check:
 	../gradlew :backend:check
 
-check: check-all
-
-check-all: clean test gradle-check
-
 generate-swagger-json: clean make-version-file
-	../gradlew --no-daemon :backend:cleanTest :backend:test --tests "blue.mild.breviary.backend.generators.GenerateSwaggerTest"
-
-run-pipeline: check-all
+	../gradlew :backend:cleanTest :backend:test --tests "blue.mild.breviary.backend.generators.GenerateSwaggerTest"
 
 make-version-file:
-	../gradlew --no-daemon :backend:createVersionFile
+	../gradlew :backend:createVersionFile
