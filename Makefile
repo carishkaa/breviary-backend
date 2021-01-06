@@ -4,7 +4,7 @@ export
 prepare-repo:
 	cp .env.template .env; \
 	ln -s $(pwd)/.env backend/src/main/resources/application.properties; \
-	$(MAKE) gradle-build; \
+	$(MAKE) build; \
 	$(MAKE) docker-build
 
 pipeline-docker:
@@ -15,10 +15,7 @@ pipeline-docker:
 	docker-compose -f docker-compose.pipeline.yml down; \
 	exit $RESULT;
 
-gradle-check:
-	./gradlew check
-
-gradle-build:
+build:
 	./gradlew assemble
 
 detekt:
@@ -27,7 +24,8 @@ detekt:
 test:
 	./gradlew test
 
-check: gradle-check
+check:
+	./gradlew check
 
 docker-login:
 	docker login
