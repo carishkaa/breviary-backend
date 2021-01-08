@@ -3,6 +3,7 @@ package blue.mild.breviary.backend.controllers
 import blue.mild.breviary.backend.ApiRoutes
 import blue.mild.breviary.backend.dtos.HeparinPatientHistoryEntryDtoOut
 import blue.mild.breviary.backend.services.PatientHistoryEntriesService
+import blue.mild.breviary.backend.utils.decodeID
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,6 +24,8 @@ class HeparinPatientHistoryEntriesController(
     /**
      * Returns list of heparin patients history entries.
      *
+     * @param heparinPatientId [String]
+     *
      * @return [List<HeparinPatientHistoryEntryDtoOut>]
      */
     @ApiOperation("Returns list of heparin patients history entries.")
@@ -30,6 +33,6 @@ class HeparinPatientHistoryEntriesController(
         "/{heparinPatientId}",
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun getHeparinPatientHistoryEntries(@PathVariable heparinPatientId: Long): List<HeparinPatientHistoryEntryDtoOut> =
-        patientHistoryEntriesService.getHeparinPatientHistoryEntries(heparinPatientId)
+    fun getHeparinPatientHistoryEntries(@PathVariable heparinPatientId: String): List<HeparinPatientHistoryEntryDtoOut> =
+        patientHistoryEntriesService.getHeparinPatientHistoryEntries(heparinPatientId.decodeID())
 }

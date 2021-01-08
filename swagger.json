@@ -138,8 +138,7 @@
           "required" : true,
           "style" : "simple",
           "schema" : {
-            "type" : "integer",
-            "format" : "int64"
+            "type" : "string"
           }
         } ],
         "responses" : {
@@ -175,8 +174,7 @@
           "required" : true,
           "style" : "simple",
           "schema" : {
-            "type" : "integer",
-            "format" : "int64"
+            "type" : "string"
           }
         } ],
         "requestBody" : {
@@ -226,8 +224,7 @@
           "required" : true,
           "style" : "simple",
           "schema" : {
-            "type" : "integer",
-            "format" : "int64"
+            "type" : "string"
           }
         } ],
         "responses" : {
@@ -291,8 +288,7 @@
           "required" : true,
           "style" : "simple",
           "schema" : {
-            "type" : "integer",
-            "format" : "int64"
+            "type" : "string"
           }
         } ],
         "responses" : {
@@ -442,8 +438,7 @@
           "required" : true,
           "style" : "simple",
           "schema" : {
-            "type" : "integer",
-            "format" : "int64"
+            "type" : "string"
           }
         } ],
         "responses" : {
@@ -479,8 +474,7 @@
           "required" : true,
           "style" : "simple",
           "schema" : {
-            "type" : "integer",
-            "format" : "int64"
+            "type" : "string"
           }
         } ],
         "requestBody" : {
@@ -530,8 +524,7 @@
           "required" : true,
           "style" : "simple",
           "schema" : {
-            "type" : "integer",
-            "format" : "int64"
+            "type" : "string"
           }
         } ],
         "responses" : {
@@ -569,8 +562,7 @@
           "required" : true,
           "style" : "simple",
           "schema" : {
-            "type" : "integer",
-            "format" : "int64"
+            "type" : "string"
           }
         } ],
         "responses" : {
