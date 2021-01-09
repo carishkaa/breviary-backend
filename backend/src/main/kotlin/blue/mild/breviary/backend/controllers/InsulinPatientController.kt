@@ -6,6 +6,7 @@ import blue.mild.breviary.backend.dtos.InsulinPatientDtoOut
 import blue.mild.breviary.backend.dtos.InsulinPatientWithDataDtoOut
 import blue.mild.breviary.backend.dtos.PatientDtoIn
 import blue.mild.breviary.backend.services.insulin.InsulinPatientService
+import blue.mild.breviary.backend.utils.decodeID
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
@@ -55,7 +56,7 @@ class InsulinPatientController(
     /**
      * Return insulin patient by its id.
      *
-     * @param insulinPatientId [Long]
+     * @param insulinPatientId [String]
      * @return [InsulinPatientDtoOut]
      */
     @ApiOperation("Return insulin patient by its id.")
@@ -63,13 +64,13 @@ class InsulinPatientController(
         "/{insulinPatientId}",
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun getInsulinPatientById(@PathVariable insulinPatientId: Long): InsulinPatientDtoOut =
-        insulinPatientService.getInsulinPatientById(insulinPatientId)
+    fun getInsulinPatientById(@PathVariable insulinPatientId: String): InsulinPatientDtoOut =
+        insulinPatientService.getInsulinPatientById(insulinPatientId.decodeID())
 
     /**
      * Return insulin patient with data by its id.
      *
-     * @param insulinPatientId [Long]
+     * @param insulinPatientId [String]
      * @return [InsulinPatientWithDataDtoOut]
      */
     @ApiOperation("Return insulin patient with data by its id.")
@@ -77,13 +78,13 @@ class InsulinPatientController(
         "/{insulinPatientId}/with-data",
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun getInsulinPatientWithDataById(@PathVariable insulinPatientId: Long): InsulinPatientWithDataDtoOut =
-        insulinPatientService.getInsulinPatientWithDataById(insulinPatientId)
+    fun getInsulinPatientWithDataById(@PathVariable insulinPatientId: String): InsulinPatientWithDataDtoOut =
+        insulinPatientService.getInsulinPatientWithDataById(insulinPatientId.decodeID())
 
     /**
      * Updates insulin patient with data by its id.
      *
-     * @param insulinPatientId [Long]
+     * @param insulinPatientId [String]
      * @param patient [PatientDtoIn]
      * @return [InsulinPatientDtoOut]
      */
@@ -94,8 +95,8 @@ class InsulinPatientController(
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun updateInsulinPatient(
-        @PathVariable insulinPatientId: Long,
+        @PathVariable insulinPatientId: String,
         @Valid @RequestBody patient: PatientDtoIn
     ): InsulinPatientDtoOut =
-        insulinPatientService.updateInsulinPatient(insulinPatientId, patient)
+        insulinPatientService.updateInsulinPatient(insulinPatientId.decodeID(), patient)
 }

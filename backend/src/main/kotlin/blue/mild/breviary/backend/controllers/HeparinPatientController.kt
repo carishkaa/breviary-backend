@@ -6,6 +6,7 @@ import blue.mild.breviary.backend.dtos.HeparinPatientDtoOut
 import blue.mild.breviary.backend.dtos.HeparinPatientWithDataDtoOut
 import blue.mild.breviary.backend.dtos.PatientDtoIn
 import blue.mild.breviary.backend.services.heparin.HeparinPatientService
+import blue.mild.breviary.backend.utils.decodeID
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
@@ -55,7 +56,7 @@ class HeparinPatientController(
     /**
      * Return heparin patient by its id.
      *
-     * @param heparinPatientId [Long]
+     * @param heparinPatientId [String]
      * @return [HeparinPatientDtoOut]
      */
     @ApiOperation("Return heparin patient by its id.")
@@ -63,13 +64,13 @@ class HeparinPatientController(
         "/{heparinPatientId}",
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun getHeparinPatientById(@PathVariable heparinPatientId: Long): HeparinPatientDtoOut =
-        heparinPatientService.getHeparinPatientById(heparinPatientId)
+    fun getHeparinPatientById(@PathVariable heparinPatientId: String): HeparinPatientDtoOut =
+        heparinPatientService.getHeparinPatientById(heparinPatientId.decodeID())
 
     /**
      * Return heparin patient with data by its id.
      *
-     * @param heparinPatientId [Long]
+     * @param heparinPatientId [String]
      * @return [HeparinPatientWithDataDtoOut]
      */
     @ApiOperation("Return heparin patient with data by its id.")
@@ -77,13 +78,13 @@ class HeparinPatientController(
         "/{heparinPatientId}/with-data",
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun getHeparinPatientWithDataById(@PathVariable heparinPatientId: Long): HeparinPatientWithDataDtoOut =
-        heparinPatientService.getHeparinPatientWithDataById(heparinPatientId)
+    fun getHeparinPatientWithDataById(@PathVariable heparinPatientId: String): HeparinPatientWithDataDtoOut =
+        heparinPatientService.getHeparinPatientWithDataById(heparinPatientId.decodeID())
 
     /**
      * Updates heparin patient with data by its id.
      *
-     * @param heparinPatientId [Long]
+     * @param heparinPatientId [String]
      * @param patient [PatientDtoIn]
      * @return [HeparinPatientDtoOut]
      */
@@ -94,8 +95,8 @@ class HeparinPatientController(
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun updateHeparinPatient(
-        @PathVariable heparinPatientId: Long,
+        @PathVariable heparinPatientId: String,
         @Valid @RequestBody patient: PatientDtoIn
     ): HeparinPatientDtoOut =
-        heparinPatientService.updateHeparinPatient(heparinPatientId, patient)
+        heparinPatientService.updateHeparinPatient(heparinPatientId.decodeID(), patient)
 }

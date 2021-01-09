@@ -59,6 +59,11 @@ spring:
     rest:
       base-path: /api
 
-management.endpoints.web.exposure.include: health
-management.endpoint.health.show-details: when_authorized
-
+management:
+  endpoint:
+    health:
+      show-details: when_authorized
+  endpoints:
+    web:
+      exposure:
+        include: health
