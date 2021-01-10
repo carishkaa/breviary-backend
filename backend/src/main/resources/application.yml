@@ -24,9 +24,9 @@ spring:
   # DB properties
   #######################
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:breviary-db-pass}
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:breviary-db-pass}
     driver-class-name: org.postgresql.Driver
 
   #######################

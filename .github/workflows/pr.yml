@@ -36,9 +36,9 @@ jobs:
       # override template environment variables
       - name: Setup Environment Variables
         run: |
-          echo "DB_USERNAME=postgres" >> $GITHUB_ENV
-          echo "DB_PASSWORD=postgres" >> $GITHUB_ENV
-          echo "DB_URL=jdbc:postgresql://postgres:5432/postgres?prepareThreshold=0" >> $GITHUB_ENV
+          echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
+          echo "POSTGRES_PASSWORD=postgres" >> $GITHUB_ENV
+          echo "POSTGRES_URL=jdbc:postgresql://postgres:5432/postgres?prepareThreshold=0" >> $GITHUB_ENV
 
       - name: Assemble Code
         run: |

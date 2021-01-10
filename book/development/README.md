@@ -97,9 +97,9 @@ create `application.propeties` file or use `.env.template` file.
 * Set appropriate variables in `.env`. for local run, correct *DB* variables are enough. Example:
 
 ```
-    DB_USERNAME=postgres
-    DB_PASSWORD=breviary-db-pass
-    DB_URL=jdbc:postgresql://localhost:5432/postgres
+    POSTGRES_USER=postgres
+    POSTGRES_PASSWORD=breviary-db-pass
+    POSTGRES_URL=jdbc:postgresql://localhost:5432/postgres
 ```
 
 ### Run Local DB
