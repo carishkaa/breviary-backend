@@ -4,7 +4,7 @@ export
 prepare-repo:
 	cp .env.template .env; \
 	ln -sf $(PWD)/.env backend/src/main/resources/application.properties; \
-	$(MAKE) build; \
+	$(MAKE) build || $(MAKE) build; \
 	$(MAKE) docker-build
 
 pipeline-docker:
@@ -13,7 +13,7 @@ pipeline-docker:
 	docker-compose -f docker-compose.pipeline.yml up --abort-on-container-exit backend; \
 	RESULT=$$?; \
 	docker-compose -f docker-compose.pipeline.yml down; \
-	exit $RESULT;
+	exit $$RESULT;
 
 build:
 	./gradlew assemble
