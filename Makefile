@@ -3,8 +3,7 @@ export
 
 prepare-repo:
 	cp .env.template .env; \
-	rm -rf backend/src/main/resources/application.properties || true; \
-	ln -s $(pwd)/.env backend/src/main/resources/application.properties; \
+	ln -sf $(PWD)/.env backend/src/main/resources/application.properties; \
 	$(MAKE) build; \
 	$(MAKE) docker-build
 
