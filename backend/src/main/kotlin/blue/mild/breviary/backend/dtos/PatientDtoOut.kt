@@ -13,7 +13,7 @@ import java.util.HashMap
 open class PatientDtoOut(
     @JsonProperty(required = false)
     @JsonIgnore
-    val id: String,
+    val id: String = "",
 
     @JsonProperty(required = true)
     val firstName: String,
