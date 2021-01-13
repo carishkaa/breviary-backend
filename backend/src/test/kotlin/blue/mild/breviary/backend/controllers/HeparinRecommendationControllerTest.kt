@@ -13,7 +13,7 @@ class HeparinRecommendationControllerTest : ControllerTest() {
 
     @Test
     @DirtiesContext
-    fun `should create heparin recommendation for new patient`(){
+    fun `should create heparin recommendation for new patient`() {
         signup()
         authenticateUser()
 
@@ -59,7 +59,7 @@ class HeparinRecommendationControllerTest : ControllerTest() {
 
     @Test
     @DirtiesContext
-    fun `should not create heparin recommendation and return NOT_FOUND when patient does not exist`(){
+    fun `should not create heparin recommendation and return NOT_FOUND when patient does not exist`() {
         signup()
         authenticateUser()
 
@@ -82,7 +82,7 @@ class HeparinRecommendationControllerTest : ControllerTest() {
 
     @Test
     @DirtiesContext
-    fun `should not create heparin recommendation and return UNAUTHORIZED when user is not signed up`(){
+    fun `should not create heparin recommendation and return UNAUTHORIZED when user is not signed up`() {
         executeClientPost(
             "$apiPrefix/${ApiRoutes.HEPARIN_RECOMMENDATION}",
             setOf(HttpStatus.UNAUTHORIZED),
@@ -98,7 +98,7 @@ class HeparinRecommendationControllerTest : ControllerTest() {
 
     @Test
     @DirtiesContext
-    fun `should not create heparin recommendation and return BAD_REQUEST when id is empty`(){
+    fun `should not create heparin recommendation and return BAD_REQUEST when id is empty`() {
         signup()
         authenticateUser()
 
@@ -116,5 +116,3 @@ class HeparinRecommendationControllerTest : ControllerTest() {
         )
     }
 }
-
-
