@@ -74,7 +74,7 @@ class HeparinRecommendationControllerTest : ControllerTest() {
     fun `should not create heparin recommendation and return NOT_FOUND when patient does not exist`() {
         signUpAndAuthenticateUser()
 
-        val invalidID = Random.nextLong(100L, 10000L)
+        val invalidID = Random.nextLong(100L, 10_000L)
 
         // create heparin recommendation
         val response = executeClientPost(

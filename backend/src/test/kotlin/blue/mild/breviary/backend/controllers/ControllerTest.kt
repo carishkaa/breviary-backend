@@ -162,7 +162,6 @@ class ControllerTest {
         SecurityContextHolder.getContext().authentication =
             authenticationService.createdAuthenticationToken(TEST_USERNAME)
     }
-
 }
 
 /**
