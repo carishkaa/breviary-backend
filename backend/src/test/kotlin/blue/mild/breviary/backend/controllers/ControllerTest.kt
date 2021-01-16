@@ -139,6 +139,11 @@ class ControllerTest {
         return body
     }
 
+    fun signUpAndAuthenticateUser() {
+        signup()
+        authenticateUser()
+    }
+
     fun signup() = executeClientPost(
         "$apiPrefix/signup",
         setOf(HttpStatus.CREATED),
@@ -157,6 +162,7 @@ class ControllerTest {
         SecurityContextHolder.getContext().authentication =
             authenticationService.createdAuthenticationToken(TEST_USERNAME)
     }
+
 }
 
 /**
